@@ -27,8 +27,8 @@ function App() {
                 {/* Role: admin */}
                 <Route path="/admin/manage" element={<ManageAccount />} />
 
-                {/* Role: giaodu */}
-                <Route path="/giaodu/manage" element={<ManageCourses />} />
+                {/* Role: giaovu */}
+                <Route path="/giaovu/manage" element={<ManageCourses />} />
 
             </Routes>
         </>
