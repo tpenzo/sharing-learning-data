@@ -6,7 +6,16 @@ module.exports = {
   ],
   mode: 'jit',
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        "primary-blue":"var(--primary-blue)",
+        "second-blue":"var(--second-blue)",
+        "third-blue":"var(--third-blue)",
+        "fourth-blue":"var(--fourth-blue)",
+        "light-gray":"var(--light-gray)",
+        "bold-gray":"var(--bold-gray)",
+      },
+    },
   },
   plugins: [],
 }

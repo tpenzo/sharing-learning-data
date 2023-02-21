@@ -1,3 +1,16 @@
 @tailwind base;
 @tailwind components;
-@tailwind utilities
+@tailwind utilities;
+
+#root {
+    --primary-blue: #1B2D70;
+    --second-blue: #2B3F82;
+    --third-blue: #41599D;
+    --fourth-blue: #617DBC;
+    --light-gray: #F9F9F9;
+    --bold-gray: #E8E8E8;
+    font-family: raleway, inter;
+}
+
+
+
