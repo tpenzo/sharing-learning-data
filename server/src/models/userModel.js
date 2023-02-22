@@ -4,15 +4,8 @@ import bcrypt from 'bcryptjs'
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-    numbercode: {
-        type: String,
-        require: true,
-        unique: true
-    },
-    password: {
-        type: String,
-        require: true,
-    }
+    email: { type: String, required: true, unique: true },
+    password: { type: String, require: true }
 },{timestamps: true});
 
 // Hash password here
