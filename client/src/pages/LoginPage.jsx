@@ -6,10 +6,10 @@ function LoginPage() {
   const [isShowPassWord, setIsShowPassWord] = useState(false);
   
   return (
-    <div className="container mx-auto mb-[6.5rem] mt-24 2xl:mt-44 w-full md:w-[60%] 2xl:w-[50%]  flex-row justify-center items-center rounded-xl px-12 py-10 shadow-2xl  bg-white border-gray-200 border-[1px]">
-      <div className="login-form w-full md:w-[45%] bg-white rounded-xl inline-block 2xl:-mt-48">
-        <div className="text-center text-3xl pt-4 2xl:pt-0">Đăng nhập</div>
-        <div className="form-container p-5  border-gray-400">
+    <div className="container w-[85%] mx-auto mb-6 xl:mb-[6.5rem] mt-16 sm:mt-20 xl:mt-24 md:w-[60%] 2xl:mt-48 2xl:w-[50%] flex-row justify-center items-center rounded-xl px-12 py-10 shadow-2xl  bg-white border-gray-200 border-[1px]">
+      <div className="login-form w-full xl:w-[45%] bg-white rounded-xl inline-block 2xl:-mt-48">
+        <div className="text-center text-2xl md:text-3xl pt-4 2xl:pt-0">Đăng nhập</div>
+        <div className="form-container p-1 xl:p-5  border-gray-400">
           <form action="" onSubmit={() => {alert(`submit login account ${email} with passwd ${password}`)}}>
             <div className="input-field mt-5">
               <label
@@ -64,7 +64,7 @@ function LoginPage() {
           </form>
         </div>
       </div>
-      <div className="illustration-pic hidden md:inline-block md:w-[55%] my-auto">
+      <div className="illustration-pic hidden xl:inline-block md:w-[55%] my-auto">
         <div className="w-full 2xl:translate-y-5">
           <img src="/assets/login-illustrate.png" alt="login-illu" />
         </div>
