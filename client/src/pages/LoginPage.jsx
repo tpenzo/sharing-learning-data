@@ -6,10 +6,10 @@ function LoginPage() {
   const [isShowPassWord, setIsShowPassWord] = useState(false);
   
   return (
-    <div className="container  mx-auto mb-[6.5rem] mt-24 flex-row justify-center items-center rounded-xl px-12 pb-14 shadow-2xl w-[60%] bg-white border-gray-200 border-[1px]">
-      <div className="login-form w-[45%] bg-white rounded-xl inline-block">
-        <div className="text-center text-3xl pt-4">Đăng nhập</div>
-        <div className="form-container p-5 border-gray-400">
+    <div className="container mx-auto mb-[6.5rem] mt-24 2xl:mt-44 w-full md:w-[60%] 2xl:w-[50%]  flex-row justify-center items-center rounded-xl px-12 py-10 shadow-2xl  bg-white border-gray-200 border-[1px]">
+      <div className="login-form w-full md:w-[45%] bg-white rounded-xl inline-block 2xl:-mt-48">
+        <div className="text-center text-3xl pt-4 2xl:pt-0">Đăng nhập</div>
+        <div className="form-container p-5  border-gray-400">
           <form action="" onSubmit={() => {alert(`submit login account ${email} with passwd ${password}`)}}>
             <div className="input-field mt-5">
               <label
@@ -48,7 +48,7 @@ function LoginPage() {
               />
               <i
               onClick={() => setIsShowPassWord(!isShowPassWord)}
-              className="block cursor-pointer bg-white px-1 absolute top-10 right-2">
+              className="block cursor-pointer bg-gray-50 px-1 absolute top-10 right-2">
               <box-icon 
                 title={isShowPassWord ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
                 name={isShowPassWord ? "hide" : "show"}
@@ -64,8 +64,8 @@ function LoginPage() {
           </form>
         </div>
       </div>
-      <div className="illustration-pic w-[55%] inline-block">
-        <div className="w-full translate-y-8">
+      <div className="illustration-pic hidden md:inline-block md:w-[55%] my-auto">
+        <div className="w-full 2xl:translate-y-5">
           <img src="/assets/login-illustrate.png" alt="login-illu" />
         </div>
       </div>
