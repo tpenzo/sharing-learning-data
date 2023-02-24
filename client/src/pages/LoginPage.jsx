@@ -1,16 +1,28 @@
 import React, { useState } from "react";
 import "boxicons";
+import { loginAPI } from '../Api/authAPI.js'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+
 function LoginPage() {
+  const dispatch = useDispatch()
+  const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [isShowPassWord, setIsShowPassWord] = useState(false);
-  
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    await loginAPI(email, password, dispatch) // [POST] api/auth/login
+    navigate('/')
+  }
+
   return (
     <div className="container mx-auto mb-[6.5rem] mt-24 2xl:mt-44 w-full md:w-[60%] 2xl:w-[50%]  flex-row justify-center items-center rounded-xl px-12 py-10 shadow-2xl  bg-white border-gray-200 border-[1px]">
       <div className="login-form w-full md:w-[45%] bg-white rounded-xl inline-block 2xl:-mt-48">
         <div className="text-center text-3xl pt-4 2xl:pt-0">Đăng nhập</div>
         <div className="form-container p-5  border-gray-400">
-          <form action="" onSubmit={() => {alert(`submit login account ${email} with passwd ${password}`)}}>
+          <form action="" onSubmit={handleLogin}>
             <div className="input-field mt-5">
               <label
                 htmlFor="email"
@@ -47,12 +59,12 @@ function LoginPage() {
                 required
               />
               <i
-              onClick={() => setIsShowPassWord(!isShowPassWord)}
-              className="block cursor-pointer bg-gray-50 px-1 absolute top-10 right-2">
-              <box-icon 
-                title={isShowPassWord ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
-                name={isShowPassWord ? "hide" : "show"}
-              ></box-icon>
+                onClick={() => setIsShowPassWord(!isShowPassWord)}
+                className="block cursor-pointer bg-gray-50 px-1 absolute top-10 right-2">
+                <box-icon
+                  title={isShowPassWord ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+                  name={isShowPassWord ? "hide" : "show"}
+                ></box-icon>
               </i>
             </div>
             <button
