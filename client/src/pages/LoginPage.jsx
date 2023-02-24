@@ -22,7 +22,7 @@ function LoginPage() {
       <div className="login-form w-full xl:w-[45%] bg-white rounded-xl inline-block 2xl:-mt-48">
         <div className="text-center text-2xl md:text-3xl pt-4 2xl:pt-0">Đăng nhập</div>
         <div className="form-container p-1 xl:p-5  border-gray-400">
-          <form action="" onSubmit={() => {handleLogin()}>
+          <form action="" onSubmit={() => {handleLogin()}}>
 
             <div className="input-field mt-5">
               <label
