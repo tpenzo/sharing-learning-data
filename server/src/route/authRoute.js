@@ -3,6 +3,7 @@ import authCtrl from '../controllers/authCtrl.js';
 import { check } from 'express-validator'
 import { verifyRefreshToken, verifyToken } from '../middlewares/auth.js';
 
+
 const router = express.Router();
 
 router.post( '/login',

@@ -20,6 +20,7 @@ class AuthControlller {
             }) 
             return res.status(400).json(errMessage);
         }
+        console.log(req.body)
         try {
             const user = await UserModel.findOne({email: req.body.email})
             if(!user){
@@ -31,13 +32,13 @@ class AuthControlller {
             }
             const { password, ...others } = user._doc;
             // Generate token
-            const accessToken = generateAccessToken(user._id,'120s')
-            const refreshToken = generateRefreshToken(user._id,'240s')
+            const accessToken = generateAccessToken(user._id,'10s')
+            const refreshToken = generateRefreshToken(user._id,'60s')
             res.cookie('refreshToken', refreshToken, {
                 httpOnly: true,
                 secure: false,
                 path: "/",
-                sameSite: "none",
+                sameSite: "strict",
             })
             return res.status(200).json({
                   message: 'Login Success',
