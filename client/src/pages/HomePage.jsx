@@ -1,6 +1,6 @@
 import React from "react";
 import SideNav from "../components/navigation/SideNav";
-import InfoPane from "../components/infomationPane/InfoPane";
+import InfoPane from "../components/sidepane/InfoPane";
 export default function HomePage() {
   return (
     <div className="container xl mx-auto h-screen items-center self-center flex flex-col">
