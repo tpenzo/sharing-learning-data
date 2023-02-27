@@ -11,17 +11,17 @@ import {
 function ListOfPopularUser() {
   return (
     <div>
-      <Accordion allowToggle>
+      <Accordion  defaultIndex={[0]} allowToggle>
         <AccordionItem border={0} >
           <h2>
-            <AccordionButton>
+            <AccordionButton className="hover:bg-inherit">
               <Box className="text-primary-blue text-lg font-semibold" as="span" flex="1" textAlign="left">
                 Người dùng nổi bật
               <AccordionIcon />
               </Box>
             </AccordionButton>
           </h2>
-          <AccordionPanel className="overflow-auto h-[180px] 2xl:h-[320px]">
+          <AccordionPanel className="overflow-hidden h-[180px] 2xl:h-[320px]">
             <PopularUserInfo />
             <PopularUserInfo />
             <PopularUserInfo />

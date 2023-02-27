@@ -3,7 +3,7 @@ import ListOfPopularUser from "./ListOfPopularUser";
 import PopularCoursesList from "./PopularCoursesList";
 function InfoPane() {
   return (
-    <div className="flex-col flex h-full max-h-full">
+    <div className="absolute flex-col flex h-full max-h-full -z-10">
       <div className="w-full h-1/5 bg-inherit scale-90 2xl:scale-100">
         <div className="flex mx-auto bg-third-blue w-[90%] mt-10 2xl:mt-14 p-2 text-center text-white rounded-xl shadow-lg hover:bg-fourth-blue hover:shadow-lg cursor-pointer">
           <span className="inline-block w-1/4 flex-1 px-1 mt-2 text-lg font-semibold">

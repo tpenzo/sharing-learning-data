@@ -4,7 +4,7 @@ function PostItem() {
   const [loved, setLoved] = useState(false);
   const [saved, setSaved] = useState(false);
   return (
-    <div className="w-full bg-light-gray py-8 px-6 rounded-lg mb-5">
+    <div className="w-[99%] bg-light-gray py-8 px-6 rounded-lg mb-5">
       <h1 className="text-2xl font-bold">Lecture Rescheduling</h1>
       <div className="flex items-center gap-4 justify-between mt-5 flex-wrap-reverse">
         <div className="flex items-center gap-4">
@@ -31,18 +31,6 @@ function PostItem() {
       </p>
       <div className="mt-5 flex gap-5 md:gap-3">
         <span
-          className="bg-gray-500/5 cursor-pointer pt-1 px-1 rounded-lg"
-          onClick={() => {
-            setSaved(!saved);
-          }}
-        >
-          <box-icon
-            name="bookmark"
-            type={saved ? "solid" : "regular"}
-            color={saved ? "yellow" : "black"}
-          ></box-icon>
-        </span>
-        <span
           className="bg-gray-500/5 cursor-pointer pt-1 px-1 rounded-lg "
           onClick={() => {
             setLoved(!loved);
@@ -52,6 +40,18 @@ function PostItem() {
             name="heart"
             type={loved ? "solid" : "regular"}
             color={loved ? "red" : "black"}
+          ></box-icon>
+        </span>
+        <span
+          className="bg-gray-500/5 cursor-pointer pt-1 px-1 rounded-lg"
+          onClick={() => {
+            setSaved(!saved);
+          }}
+        >
+          <box-icon
+            name="bookmark"
+            type={saved ? "solid" : "regular"}
+            // color={saved ? "yellow" : "black"}
           ></box-icon>
         </span>
         <span className="bg-gray-500/5 cursor-pointer py-1 px-1 rounded-lg flex items-center gap-2">

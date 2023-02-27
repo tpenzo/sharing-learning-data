@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import CourseList from "./courseList";
 function SideNav() {
   return (
@@ -8,7 +9,11 @@ function SideNav() {
           <span className="inline-block w-1/4 flex-1 px-1 mt-2 text-lg font-semibold">
             <box-icon size="md" color="white" name="home-alt"></box-icon>
           </span>
-        <div className="w-3/4 font-semibold text-xl pt-3 2xl:-ml-20 -ml-10 mr-3">Trang chủ</div>
+        <div className="w-3/4 font-semibold text-xl pt-3 2xl:-ml-20 -ml-5 mr-3">
+            <Link to={"/"}>
+              Trang chủ
+            </Link>
+        </div>
         </div>
       </div>
 
