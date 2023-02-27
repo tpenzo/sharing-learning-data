@@ -28,7 +28,7 @@ export default function HomePage() {
           <PostItem />
           <PostItem />
         </div>
-        <div className=" basis-1/5 h-full max-w-[20%] max-h-full sticky self-start bg-light-gray rounded-lg z-1">
+        <div className=" basis-1/5 h-full max-w-[20%] max-h-full sticky self-start bg-light-gray/70 rounded-lg z-1">
            <InfoPane />
         </div>
       </div>
