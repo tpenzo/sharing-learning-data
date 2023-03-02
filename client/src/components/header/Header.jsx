@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import headerLogo from "../../public/assets/header-logo.png";
+import headerLogo from "/assets/header-logo.png";
 
 function Header() {
   const [keyword, setKeyword] = useState("");
@@ -27,26 +27,26 @@ function Header() {
     }
   }, [keyword]);
   return (
-    <div className="xl:max-h-18 bg-light-gray flex items-center justify-between">
-      <figure className="w-32">
+    <div className="xl:max-h-full bg-light-gray flex items-center justify-between">
+      <figure className="w-32 sm:scale-50 xl:scale-100">
         <Link to={"/"}>
-          <img src={headerLogo} alt="" />
+          <img src={headerLogo} alt="logo" />
         </Link>
       </figure>
       <div className="xl:w-[50%] flex relative">
-        <span className="cursor-pointer absolute top-2 left-2">
+        <span className="cursor-pointer pl-1 absolute top-2 xl:top-3 left-2">
           <box-icon name="search-alt-2" color="gray"></box-icon>
         </span>
         <input
           value={keyword}
           onChange={handleSearching}
-          className="w-full  py-2 px-10 outline-none rounded-lg bg-bold-gray focus:outline-primary-blue peer"
+          className="w-full py-2 xl:py-3 px-10 outline-none rounded-lg bg-bold-gray focus:outline-primary-blue peer"
           type="text"
-          placeholder="vd:CT242,CT559"
+          placeholder="Tìm kiếm"
         />
         {closeX && (
           <span
-            className="cursor-pointer absolute top-2 right-2"
+            className="cursor-pointer absolute top-2 xl:top-3 right-2"
             onClick={() => {
               setKeyword("");
             }}
@@ -54,8 +54,8 @@ function Header() {
             <box-icon name="x" color="gray"></box-icon>
           </span>
         )}
-        <div className="absolute z-10 p-1 w-full top-12 left-0 bg-light-gray rounded-lg shadow-xl overflow-hidden invisible peer-focus:visible">
-          <h4 className="mt-2 ml-3 font-bold">Tìm kiếm gần đây</h4>
+        <div className="absolute z-10 p-1 w-full top-14 left-0 bg-light-gray rounded-lg shadow-xl overflow-hidden invisible peer-focus:visible">
+          <h4 className="mt-3 ml-3 font-bold">Tìm kiếm gần đây</h4>
           <ul className="mt-2">
             <li className="p-3 font-semibold rounded-lg hover:bg-bold-gray flex items-center justify-between cursor-pointer">
               <span>Profile</span>
@@ -63,7 +63,7 @@ function Header() {
           </ul>
         </div>
       </div>
-      <div className="flex items-center gap-2 relative">
+      <div className="flex items-center gap-2 relative pr-5">
         <div className="text-right">
           <p className="font-semibold">Duong Anh Thuong</p>
           <span className="text-sm text-gray-400">Captain</span>
@@ -84,21 +84,21 @@ function Header() {
           </p>
         </figure>
         {dropdown && (
-          <ul className="absolute z-10 bg-light-gray w-full top-12 left-0 rounded shadow-xl overflow-hidden">
+          <ul className="absolute z-[9999] bg-light-gray w-full top-12 left-0 rounded shadow-xl overflow-hidden">
             <Link to={"/profile"}>
               <li className="p-2 font-semibold hover:bg-bold-gray flex items-center justify-between cursor-pointer">
-                <span>Profile</span>
+                <span>Trang cá nhân</span>
                 <box-icon name="cog"></box-icon>
               </li>
             </Link>
             <Link>
               <li className="p-2 font-semibold hover:bg-bold-gray flex items-center justify-between cursor-pointer">
-                <span>Profile</span>
+                <span>Nhắn tin</span>
               </li>
             </Link>
             <Link>
               <li className="p-2 font-semibold hover:bg-bold-gray flex items-center justify-between cursor-pointer">
-                <span>Logout</span>
+                <span>Đăng xuất</span>
                 <box-icon name="log-out"></box-icon>
               </li>
             </Link>

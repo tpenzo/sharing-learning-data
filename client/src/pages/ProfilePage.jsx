@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import Header from "../components/Header";
-import PostItem from "../components/PostItem";
-import ProfilePane from "../components/ProfilePane";
+import Header from "../components/header/Header";
+import ProfilePane from "../components/profile/ProfilePane";
+import PostItem from "../components/post/PostItem";
+import SideNav from "../components/navigation/SideNav";
 export default function ProfilePage() {
   const [tab, setTab] = useState(false);
   const handleChangeTab = (e) => {
@@ -15,12 +16,14 @@ export default function ProfilePage() {
     }
   };
   return (
-    <main className="container mx-auto">
-      <div className="mx-auto md:w-[90%] xl:w-[80%]">
+    <main className="container mx-auto bg-white/70">
+      <div className="mx-auto md:w-[90%] xl:w-full">
         <Header />
         <div className="mt-8 flex gap-5">
-          <div className="xl:w-[30%] md:w-[30%] bg-gray-400">Nav</div>
-          <div className="xl:w-[70%] md:w-[70%] p-4 bg-black/5 rounded-xl">
+          <div className="xl:w-[25%] md:w-[25%] bg-inherit">
+            <SideNav />
+          </div>
+          <div className="xl:w-[75%] md:w-[75%] p-4 bg-white/90 rounded-xl">
             <ProfilePane />
             <div className="w-full h-[1px] bg-gray-300 mt-6"></div>
             <div className="flex justify-between">
@@ -34,7 +37,7 @@ export default function ProfilePage() {
                   " py-1 w-full text-center text-lg font-semibold cursor-pointer"
                 }
               >
-                Bài viết
+                Bài Viết
               </span>
               <span
                 id="saved-post"
@@ -53,7 +56,11 @@ export default function ProfilePage() {
               <box-icon name="plus-circle" color="white"></box-icon>
               <span>Đăng bài</span>
             </div>
-            <div className="mt-6 grid grid-cols-2 gap-5">
+            <div className="mt-6 grid grid-cols-2 gap-5 overflow-y-auto">
+              <PostItem />
+              <PostItem />
+              <PostItem />
+              <PostItem />
               <PostItem />
               <PostItem />
             </div>

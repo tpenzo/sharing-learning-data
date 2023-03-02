@@ -28,7 +28,7 @@ function LoginPage() {
             <div className="input-field mt-5">
               <label
                 htmlFor="email"
-                className="ml-1 block mb-2 text-base font-medium text-gray-900 dark:text-white"
+                className="ml-1 block mb-2 text-base font-medium text-gray-900 dark:text-white "
               >
                 E-mail
               </label>
