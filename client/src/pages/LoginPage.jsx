@@ -16,6 +16,7 @@ function LoginPage() {
     await loginAPI(email, password, dispatch) // [POST] api/auth/login
     navigate('/')
   }
+  
 
   return (
     <div className="container w-[85%] mx-auto mb-6 xl:mb-[6.5rem] mt-16 sm:mt-20 xl:mt-24 md:w-[60%] 2xl:mt-48 2xl:w-[50%] flex-row justify-center items-center rounded-xl px-12 py-10 shadow-2xl  bg-white border-gray-200 border-[1px]">

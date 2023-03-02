@@ -20,18 +20,18 @@ function App() {
             <Routes>
                 <Route path="/login" element={<LoginPage />} />
                 {/* <Route element={<RequireAuth />}> */}
-                    <Route exact path="/" element={<HomePage />} />
-                    <Route path="/profile" element={<ProfilePage />} />
+                <Route exact path="/" element={<HomePage />} />
+                <Route path="/profile" element={<ProfilePage />} />
 
-                    {/* Courses. Role: student, teacher*/}
-                    <Route path="/courses/:idCourse" element={<CoursePage />} />
-                    <Route path="/courses/:idCourse/manage" element={<ManageCourse />} />
+                {/* Courses. Role: student, teacher*/}
+                <Route path="/courses/:idCourse" element={<CoursePage />} />
+                <Route path="/courses/:idCourse/manage" element={<ManageCourse />} />
 
-                    {/* Role: admin */}
-                    <Route path="/admin/manage" element={<ManageAccount />} />
+                {/* Role: admin */}
+                <Route path="/admin/manage" element={<ManageAccount />} />
 
-                    {/* Role: ministry */}
-                    <Route path="/giaovu/ministry" element={<ManageCourses />} />
+                {/* Role: ministry */}
+                <Route path="/ministry/manage" element={<ManageCourses />} />
 
                 {/* </Route> */}
                 <Route path='*' element={<PageNotFound />} />
