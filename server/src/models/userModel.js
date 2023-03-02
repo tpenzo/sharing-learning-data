@@ -12,7 +12,7 @@ const userSchema = new Schema({
     gender: { type: String, enum: ['male', 'female','other'], default: 'male' },
     follower: [{type: Schema.Types.ObjectId, ref: 'user'}],
     following:[{type: Schema.Types.ObjectId, ref: 'user'}],
-    Role:{
+    role:{
         type: String,
         enum: ['student', 'teacher', 'ministry', 'admin'],
         default: 'student'

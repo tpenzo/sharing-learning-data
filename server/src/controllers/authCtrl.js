@@ -1,5 +1,7 @@
 import { validationResult } from 'express-validator'
 import UserModel from '../models/userModel.js';
+import StudentModel from '../models/studentModel.js'
+import TeacherModel from '../models/teacherModel.js'
 import bcrypt from 'bcryptjs'
 import { generateAccessToken, generateRefreshToken } from '../middlewares/auth.js';
 
@@ -51,12 +53,12 @@ class AuthControlller {
         }
     }
 
-    //@description     Register user
-    //@route           [POST] /api/auth/register
-    //@body            {email, password,...}
+    //@description     Register student
+    //@route           [POST] /api/auth/register/student
+    //@body            {email, password,..., studentCode}
     //@access          No
-    async register(req, res){
-        // Check input data
+    async registerStudent(req, res){
+        // Display error when input data is invalid
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             const errMessage= {}
@@ -66,8 +68,58 @@ class AuthControlller {
             return res.status(400).json(errMessage);
         }
         try {
+            // Check studentCode
+            const student = await StudentModel.findOne({studentCode:req.body.studentCode})
+            if(student){
+                return res.status(400).json({message: "Student ID already exists"}) 
+            }
+            // Check email
+            const user = await UserModel.findOne({email: req.body.email})
+            if(user){
+                return res.status(400).json({message: "The email already exists"}) 
+            }
+            // Create account
             const newUser = await UserModel.create(req.body)
-             res.send(newUser)
+            // Creat student
+            let newStudent = await StudentModel.create({account: newUser._id, ...req.body})
+            newStudent = await newStudent.populate("account", "-password")
+            return res.status(200).json({message: 'Creating successful students', data: newStudent})
+        } catch (error) {
+            return res.status(500).json({message: error.message})
+        }
+    }
+
+    //@description     Register teacher
+    //@route           [POST] /api/auth/register/teacher
+    //@body            {email, password,..., teacherCode}
+    //@access          No
+    async registerTeacher(req, res){
+        // Display error when input data is invalid
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            const errMessage= {}
+            errors.array().forEach(err => {
+                errMessage[err.param] = err.msg
+            }) 
+            return res.status(400).json(errMessage);
+        }
+        try {
+            // Check teacherCode
+            const teacher = await TeacherModel.findOne({ teacherCode:req.body.teacherCode })
+            if(teacher){
+                return res.status(400).json({message: "Teacher ID already exists"}) 
+            }
+            // Check email
+            const user = await UserModel.findOne({email: req.body.email})
+            if(user){
+                return res.status(400).json({message: "The email already exists"}) 
+            }
+            // Create account
+            const newUser = await UserModel.create({...req.body, role: 'teacher'})
+            // Creat teacher
+            let newTeacher= await TeacherModel.create({account: newUser._id, ...req.body})
+            newTeacher = await newTeacher.populate("account", "-password")
+            return res.status(200).json({message: 'Creating successful teacher', data: newTeacher})
         } catch (error) {
             return res.status(500).json({message: error.message})
         }
