@@ -27,7 +27,7 @@ function Header() {
     }
   }, [keyword]);
   return (
-    <div className="xl:max-h-full bg-light-gray flex items-center justify-between">
+    <div className="xl:max-h-full bg-white flex items-center justify-between">
       <figure className="w-32 sm:scale-50 xl:scale-100">
         <Link to={"/"}>
           <img src={headerLogo} alt="logo" />
@@ -40,7 +40,7 @@ function Header() {
         <input
           value={keyword}
           onChange={handleSearching}
-          className="w-full py-2 xl:py-3 px-10 outline-none rounded-lg bg-bold-gray focus:outline-primary-blue peer"
+          className="w-full py-2 xl:py-3 px-10 outline-none rounded-lg bg-gray-100 focus:outline-primary-blue peer"
           type="text"
           placeholder="Tìm kiếm"
         />

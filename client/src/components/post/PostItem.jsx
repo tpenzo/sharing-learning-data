@@ -4,7 +4,7 @@ function PostItem() {
   const [loved, setLoved] = useState(false);
   const [saved, setSaved] = useState(false);
   return (
-    <div className="w-[99%] bg-light-gray py-8 px-6 rounded-lg mb-5">
+    <div className="w-[99%] bg-white py-8 px-6 rounded-lg mb-5 shadow-sm">
       <h1 className="text-2xl font-bold">Lecture Rescheduling</h1>
       <div className="flex items-center gap-4 justify-between mt-5 flex-wrap-reverse">
         <div className="flex items-center gap-4">
@@ -55,8 +55,8 @@ function PostItem() {
           ></box-icon>
         </span>
         <span className="bg-gray-500/5 cursor-pointer py-1 px-1 rounded-lg flex items-center gap-2">
-          <box-icon name="comment"></box-icon>
-          <span className="text-ms leading-4">Add Respone</span>
+          <box-icon name="message-square-dots"></box-icon>
+          <span className="text-ms leading-4">Bình luận</span>
         </span>
       </div>
     </div>

@@ -35,7 +35,7 @@ function CourseList() {
         },
         {
           courseId: "CT222",
-          courseName: "Phân tích & thiết kế hệ thống thông tin",
+          courseName: "Phân tích & thiết kế hệ thống thông tin Phân tích & thiết kế hệ thống thông tinPhân tích & thiết kế hệ thống thông tin",
         },
         {
           courseId: "CT223",

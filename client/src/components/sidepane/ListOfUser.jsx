@@ -8,20 +8,27 @@ import {
   AccordionIcon,
   Box,
 } from "@chakra-ui/react";
-function ListOfPopularUser() {
+function ListOfUser() {
   return (
-    <div>
+    <div className="mt-4 h-[75%] scale-90 2xl:scale-100 w-full">
       <Accordion  defaultIndex={[0]} allowToggle>
         <AccordionItem border={0} >
           <h2>
-            <AccordionButton className="hover:bg-inherit">
+            <AccordionButton className="hover:bg-inherit rounded-lg">
               <Box className="text-primary-blue text-lg font-semibold" as="span" flex="1" textAlign="left">
                 Người dùng nổi bật
               <AccordionIcon />
               </Box>
             </AccordionButton>
           </h2>
-          <AccordionPanel className="overflow-hidden h-[180px] 2xl:h-[320px]">
+          <AccordionPanel className="overflow-y-auto h-44 2xl:h-80">
+            <PopularUserInfo />
+            <PopularUserInfo />
+            <PopularUserInfo />
+            <PopularUserInfo />
+            <PopularUserInfo />
+            <PopularUserInfo />
+            <PopularUserInfo />
             <PopularUserInfo />
             <PopularUserInfo />
             <PopularUserInfo />
@@ -34,4 +41,4 @@ function ListOfPopularUser() {
   );
 }
 
-export default ListOfPopularUser;
+export default ListOfUser;
