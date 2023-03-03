@@ -10,7 +10,6 @@ export const authSlice = createSlice({
     initialState,
     reducers: {
         authSaveData: (state, actions) => {
-            console.log('sss')
             state.user = actions.payload.user
             state.token = actions.payload.accessToken
         },

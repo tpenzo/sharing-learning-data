@@ -47,3 +47,12 @@ export const verifyRefreshToken = async (req, res, next) => {
         return res.status(500).json({message: error.message})
     }
 }
+
+export const restrictTo = (roles) => {
+    return (req, res, next) => {
+        if(!roles.includes(req.userLogin.role)){
+            return res.status(401).json({ message: "You do not have permission to perform this action" });
+        }
+        next()
+    }
+}

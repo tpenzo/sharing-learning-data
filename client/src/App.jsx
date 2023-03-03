@@ -12,10 +12,42 @@ import ManageCourse from './pages/ManageCourse';
 import ManageAccount from './pages/ManageAccount';
 import ManageCourses from './pages/ManageCourses';
 import PageNotFound from './pages/PageNotFound';
-import RequireAuth from './requireAuth';
+import RequireAuth from './requireAuth.jsx';
+import RequirePermission from './RequirePermission';
+import Unauthorized from './pages/Unauthorized';
 
 function App() {
     return (
+        // <>
+        //     <Routes>
+        //         <Route path="/login" element={<LoginPage />} />
+
+        //         <Route element={<RequireAuth />}>
+                    
+        //             <Route element={<RequirePermission roles={['teacher', 'student']} />}>
+        //                 <Route exact path="/" element={<HomePage />} />
+        //                 <Route path="/profile" element={<ProfilePage />} />
+        //                 <Route path="/courses/:idCourse" element={<CoursePage />} />
+        //             </Route>
+
+        //             <Route element={<RequirePermission roles={['teacher']} />}>
+        //                 <Route path="/courses/:idCourse/manage" element={<ManageCourse />} />
+        //             </Route>
+
+        //             <Route element={<RequirePermission roles={['admin']} />}>
+        //                 <Route path="/admin/manage" element={<ManageAccount />} />
+        //             </Route>
+
+        //             <Route element={<RequirePermission roles={['ministry']} />}>
+        //                 <Route path="/ministry/manage" element={<ManageCourses />} />
+        //             </Route>
+        //             <Route path="/unauthorized" element={<Unauthorized />} />
+
+        //         </Route>
+
+        //         <Route path='*' element={<PageNotFound />} />
+        //     </Routes>
+        // </>
         <>
             <Routes>
                 <Route path="/login" element={<LoginPage />} />

@@ -1,6 +1,6 @@
 import express from 'express';
 import authCtrl from '../controllers/authCtrl.js';
-import { verifyRefreshToken, verifyToken } from '../middlewares/auth.js';
+import { restrictTo, verifyRefreshToken, verifyToken } from '../middlewares/auth.js';
 import { 
     loginValidation, 
     registerStudentValidation, 
@@ -20,5 +20,6 @@ router.post('/register/teacher', registerTeacherValidation, authCtrl.registerTea
 
 router.get( '/refresh', verifyRefreshToken, authCtrl.requestRefreshToken)
 router.get('/logout', verifyToken, authCtrl.logout)
+
 
 export default router

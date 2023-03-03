@@ -22,7 +22,6 @@ class AuthControlller {
             }) 
             return res.status(400).json(errMessage);
         }
-        console.log(req.body)
         try {
             const user = await UserModel.findOne({email: req.body.email})
             if(!user){
@@ -32,10 +31,21 @@ class AuthControlller {
             if(!match){
                 return res.status(403).json({ message: 'Incorrect password' });
             }
-            const { password, ...others } = user._doc;
+            // Get data
+            let info = null
+            switch (user.role) {
+                case 'student':
+                    info = await StudentModel.findOne({account: user._id}).populate('account', '-password')
+                    break;
+                case 'teacher':
+                    info = await TeacherModel.findOne({account: user._id}).populate('account', '-password')
+                    break;
+                default:
+                    info = user;
+            }
             // Generate token
-            const accessToken = generateAccessToken(user._id,'10s')
-            const refreshToken = generateRefreshToken(user._id,'60s')
+            const accessToken = generateAccessToken(user._id, '500s')
+            const refreshToken = generateRefreshToken(user._id, '1000s')
             res.cookie('refreshToken', refreshToken, {
                 httpOnly: true,
                 secure: false,
@@ -44,7 +54,7 @@ class AuthControlller {
             })
             return res.status(200).json({
                   message: 'Login Success',
-                  user: { ...others },
+                  user: { ...info._doc },
                   accessToken: accessToken,
             });
 
