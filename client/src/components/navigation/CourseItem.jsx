@@ -16,11 +16,11 @@ function CourseItem(props) {
         <div className=" max-w-[75%] ml-3 ">
           <span
             title={props.courseInfo.courseName}
-            className="text-sm xl:text-base block font-semibold text-gray-700 whitespace-nowrap overflow-ellipsis overflow-hidden"
+            className="text-sm block font-semibold text-gray-700 whitespace-nowrap overflow-ellipsis overflow-hidden"
           >
             {props.courseInfo.courseName}
           </span>
-          <span className="text-xs xl:text-sm block text-gray-400">
+          <span className="text-[12px] block text-gray-400">
             {props.courseInfo.courseId}
           </span>
         </div>

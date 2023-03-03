@@ -6,14 +6,14 @@ import Header from "../components/header/Header";
 export default function HomePage() {
   return (
     <div className="container mx-auto  h-screen items-center self-center flex flex-col">
-      <header className="header sticky top-0 w-full h-[10%] max-h-full rounded-t-lg z-50">
+      <header className="header sticky top-0 w-full h-[10%] rounded-t-lg z-50">
         <Header />
       </header>
-      <div className="main-content w-full h-[89%] pt-4 flex flex-row justify-around gap-5 bg-white/60 rounded-b-lg z-0">
-        <div className="basis-1/5 max-w-[19%] max-h-full h-full self-start sticky top-28 bg-light-gray/70 rounded-lg">
+      <div className="main-content flex-initial w-full h-[89%] pt-4 flex flex-row justify-center gap-5 bg-white/60 rounded-b-lg z-0">
+        <div className="basis-1/5 w-1/5 max-h-full h-full self-start sticky top-28 bg-light-gray/70 rounded-lg">
           <SideNav />
         </div>
-        <div className="basis-3/5 px-3 2xl:px-0 overflow-y-auto">
+        <div className="basis-3/5 max-w-[56%] px-3 flex-grow-0 overflow-y-auto">
           <PostItem />
           <PostItem />
           <PostItem />
@@ -28,7 +28,7 @@ export default function HomePage() {
           <PostItem />
           <PostItem />
         </div>
-        <div className=" basis-1/5 h-full max-w-[20%] max-h-full sticky top-28 self-start bg-light-gray/70 rounded-lg z-1">
+        <div className=" basis-1/5 w-1/5 h-full max-h-full sticky top-28 bg-light-gray/70 rounded-lg z-1">
            <InfoPane />
         </div>
       </div>

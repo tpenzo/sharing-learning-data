@@ -27,8 +27,8 @@ function Header() {
     }
   }, [keyword]);
   return (
-    <div className="xl:max-h-full bg-white flex items-center justify-between">
-      <figure className="w-32 sm:scale-50 xl:scale-100">
+    <div className="h-full bg-white flex items-center justify-between">
+      <figure className="w-28 sm:scale-50 xl:scale-100">
         <Link to={"/"}>
           <img src={headerLogo} alt="logo" />
         </Link>

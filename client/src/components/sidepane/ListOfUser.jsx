@@ -15,13 +15,13 @@ function ListOfUser() {
         <AccordionItem border={0} >
           <h2>
             <AccordionButton className="hover:bg-inherit rounded-lg">
-              <Box className="text-primary-blue text-lg font-semibold" as="span" flex="1" textAlign="left">
+              <Box className="text-primary-blue text-base font-semibold" as="span" flex="1" textAlign="left">
                 Người dùng nổi bật
               <AccordionIcon />
               </Box>
             </AccordionButton>
           </h2>
-          <AccordionPanel className="overflow-y-auto h-44 2xl:h-80">
+          <AccordionPanel className="overflow-y-auto h-44 2xl:h-72">
             <PopularUserInfo />
             <PopularUserInfo />
             <PopularUserInfo />

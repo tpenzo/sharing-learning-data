@@ -20,7 +20,7 @@ module.exports = {
         md: '720px',
         lg: '960px',
         xl: '1240px',
-        '2xl': '1440px',
+        '2xl': '1340px',
       },
     },
     extend: {

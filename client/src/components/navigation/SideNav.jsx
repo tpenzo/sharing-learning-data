@@ -6,11 +6,11 @@ function SideNav() {
     <div className="flex flex-col">
       <div className="w-full h-1/5 bg-inherit scale-[85%] 2xl:scale-100">
         <Link to={"/"}>
-        <div className="flex flex-row items-center justify-center mx-auto bg-third-blue w-[90%] mt-10 2xl:mt-14 p-2 2xl:p-3 text-center text-white rounded-xl shadow-lg hover:bg-fourth-blue hover:shadow-lg cursor-pointer">
+        <div className="flex flex-row items-center justify-center mx-auto bg-third-blue w-[85%] mt-10 2xl:mt-14 p-2 2xl:p-3 text-center text-white rounded-xl shadow-lg hover:bg-fourth-blue hover:shadow-lg cursor-pointer">
           <span className="block px-1 text-lg font-semibold">
             <box-icon size="md" color="white" name="home-alt"></box-icon>
           </span>
-        <span className="block font-semibold text-xl pb-1 ml-1 mr-3">
+        <span className="block font-semibold text-base pb-1 ml-1 mr-3">
               Trang chủ
         </span>
         </div>
