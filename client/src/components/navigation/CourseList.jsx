@@ -35,7 +35,7 @@ function CourseList() {
         },
         {
           courseId: "CT222",
-          courseName: "Phân tích & thiết kế hệ thống thông tin",
+          courseName: "Phân tích & thiết kế hệ thống thông tin Phân tích & thiết kế hệ thống thông tinPhân tích & thiết kế hệ thống thông tin",
         },
         {
           courseId: "CT223",
@@ -115,7 +115,7 @@ function CourseList() {
               <h2>
                 <AccordionButton className="hover:bg-inherit rounded-lg">
                   <Box
-                    className="text-primary-blue text-lg font-semibold"
+                    className="text-primary-blue text-base font-semibold"
                     as="span"
                     flex="1"
                     textAlign="left"

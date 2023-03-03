@@ -1,27 +1,25 @@
 import express from 'express';
 import authCtrl from '../controllers/authCtrl.js';
-import { check } from 'express-validator'
-import { verifyRefreshToken, verifyToken } from '../middlewares/auth.js';
+import { restrictTo, verifyRefreshToken, verifyToken } from '../middlewares/auth.js';
+import { 
+    loginValidation, 
+    registerStudentValidation, 
+    registerTeacherValidation
+} 
+from '../validation/authValidation.js';
 
 
 const router = express.Router();
 
-router.post( '/login',
+router.post('/login', loginValidation, authCtrl.login);
 
-    check('email', 'not an email').trim().isEmail(),
-    check('password', 'password is required').trim().notEmpty(),
-    
-    authCtrl.login);
+router.post('/register/student', registerStudentValidation ,authCtrl.registerStudent);
+router.post('/register/teacher', registerTeacherValidation, authCtrl.registerTeacher)
 
-router.post( '/register',
-
-    check('email', 'not an email').trim().isEmail(),
-    check('password', 'password is required').trim().notEmpty(),
-
-    authCtrl.register);
 
 
 router.get( '/refresh', verifyRefreshToken, authCtrl.requestRefreshToken)
 router.get('/logout', verifyToken, authCtrl.logout)
+
 
 export default router

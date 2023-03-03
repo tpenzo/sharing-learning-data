@@ -16,14 +16,14 @@ export default function ProfilePage() {
     }
   };
   return (
-    <main className="container mx-auto bg-white/70">
+    <main className="container h-screen mx-auto bg-white/70">
       <div className="mx-auto md:w-[90%] xl:w-full">
         <Header />
         <div className="mt-8 flex gap-5">
-          <div className="xl:w-[25%] md:w-[25%] bg-inherit">
+          <div className="w-[20%] bg-inherit">
             <SideNav />
           </div>
-          <div className="xl:w-[75%] md:w-[75%] p-4 bg-white/90 rounded-xl">
+          <div className="w-[80%] p-4 bg-white/90 rounded-xl">
             <ProfilePane />
             <div className="w-full h-[1px] bg-gray-300 mt-6"></div>
             <div className="flex justify-between">
@@ -56,7 +56,7 @@ export default function ProfilePage() {
               <box-icon name="plus-circle" color="white"></box-icon>
               <span>Đăng bài</span>
             </div>
-            <div className="mt-6 grid grid-cols-2 gap-5 overflow-y-auto">
+            <div className="mt-6 min-h-0 grid grid-cols-2 gap-5 overflow-y-auto">
               <PostItem />
               <PostItem />
               <PostItem />
