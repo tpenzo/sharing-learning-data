@@ -8,9 +8,9 @@ function CommentList() {
         <div className="avatar w-10 h-10 mx-5 bg-gray-700 rounded-full"></div>
         <div className="input-area w-10/12">
           <form>
-            <div class="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50">
-              <div class="px-4 py-2 bg-white rounded-t-lg">
-                <label for="comment" class="sr-only"></label>
+            <div className="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50">
+              <div className="px-4 py-2 bg-white rounded-t-lg">
+                <label htmlFor="comment" className="sr-only"></label>
                 <textarea
                   id="comment"
                   rows="4"
@@ -19,10 +19,10 @@ function CommentList() {
                   required
                 ></textarea>
               </div>
-              <div class="flex items-center justify-end px-3 py-2 border-t">
+              <div className="flex items-center justify-end px-3 py-2 border-t">
                 <button
                   type="submit"
-                  class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 hover:bg-blue-800"
+                  className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 hover:bg-blue-800"
                 >
                   Thêm
                 </button>

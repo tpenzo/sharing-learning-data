@@ -1,8 +1,13 @@
 import React, { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 function PostItem() {
+  const navigate = useNavigate();
   const [loved, setLoved] = useState(false);
   const [saved, setSaved] = useState(false);
+
+  const handleNavigate = (e)=>{
+    navigate("/post/1");
+  }
   return (
     <div className="w-full bg-white py-8 px-6 rounded-lg mb-5 shadow-sm">
       <h1 className="text-xl font-bold">Lecture Rescheduling</h1>
@@ -24,7 +29,7 @@ function PostItem() {
           CT244
         </p>
       </div>
-      <p className="mt-5 text-sm">
+      <p  onClick={handleNavigate}  className="mt-5 text-sm cursor-pointer hover:font-semibold">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero voluptates
         quis illo exercitationem odio incidunt eaque commodi dolor neque, quod
         perferendis reprehenderit sint labore.

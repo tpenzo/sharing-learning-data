@@ -13,7 +13,7 @@ function ReplyComment() {
     <div className="comment mt-6 flex flex-row items-start justify-center">
       <div className="avatar w-10 h-10 mx-5 bg-gray-700 rounded-full"></div>
       <div className="content-area w-10/12">
-      <div class="w-full relative mb-4 border border-gray-200 rounded-lg bg-gray-50">
+      <div className="w-full relative mb-4 border border-gray-200 rounded-lg bg-gray-50">
           <div className="info-cmt pr-3 flex flex-row justify-start items-center self-end">
             <div className="user-name ml-2 font-semibold text-base p-2">
               Nguyễn Văn ABCDEF

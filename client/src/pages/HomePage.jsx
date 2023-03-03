@@ -10,10 +10,10 @@ export default function HomePage() {
         <Header />
       </header>
       <div className="main-content flex-initial w-full h-[89%] pt-4 flex flex-row justify-center gap-5 bg-white/60 rounded-b-lg z-0">
-        <div className="basis-1/5 w-1/5 max-h-full h-full self-start sticky top-28 bg-light-gray/70 rounded-lg">
+        <div className="basis-1/5 w-1/5 max-h-full h-full sticky top-28 bg-light-gray/70 rounded-lg">
           <SideNav />
         </div>
-        <div className="basis-3/5 max-w-[56%] px-3 flex-grow-0 overflow-y-auto">
+        <div className="basis-3/5 max-w-[56%] px-3 overflow-y-auto">
           <PostItem />
           <PostItem />
           <PostItem />

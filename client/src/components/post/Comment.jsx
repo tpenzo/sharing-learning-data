@@ -14,7 +14,7 @@ function Comment() {
     <div className="comment mt-6 flex flex-row items-start justify-center">
       <div className="avatar w-10 h-10 mx-5 bg-gray-700 rounded-full"></div>
       <div className="content-area w-10/12">
-        <div class="w-full relative mb-4 border border-gray-200 rounded-lg bg-gray-50">
+        <div className="w-full relative mb-4 border border-gray-200 rounded-lg bg-gray-50">
           <div className="info-cmt pr-3 flex flex-row justify-start items-center self-end">
             <div className="user-name ml-2 font-semibold text-base p-2">
               Nguyễn Văn ABCDEF
@@ -86,9 +86,9 @@ function Comment() {
         {isReply && (
           <div className="reply-comment mt-3 flex justify-end items-center flex-col">
             <form className="w-full">
-              <div class="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50">
-                <div class="px-4 py-2 bg-white rounded-t-lg">
-                  <label for="reply" class="sr-only"></label>
+              <div className="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50">
+                <div className="px-4 py-2 bg-white rounded-t-lg">
+                  <label htmlFor="reply" className="sr-only"></label>
                   <textarea
                     id="reply"
                     rows="2"
@@ -97,10 +97,10 @@ function Comment() {
                     required
                   ></textarea>
                 </div>
-                <div class="flex items-center justify-end px-2 py-2">
+                <div className="flex items-center justify-end px-2 py-2">
                   <button
                     type="submit"
-                    class="inline-flex items-center py-1.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 hover:bg-blue-800"
+                    className="inline-flex items-center py-1.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 hover:bg-blue-800"
                   >
                     Thêm
                   </button>
