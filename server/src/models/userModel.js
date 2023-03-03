@@ -5,7 +5,18 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
     email: { type: String, required: true, unique: true },
-    password: { type: String, require: true }
+    password: { type: String, require: true,  min: 8 },
+    fullName: {type: String, require: true},
+    urlAvatar: { type: String, default: 'https://res.cloudinary.com/devatchannel/image/upload/v1602752402/avatar/avatar_cugq40.png',},
+    phoneNumber: { type: String, default: null},
+    gender: { type: String, enum: ['male', 'female','other'], default: 'male' },
+    follower: [{type: Schema.Types.ObjectId, ref: 'user'}],
+    following:[{type: Schema.Types.ObjectId, ref: 'user'}],
+    role:{
+        type: String,
+        enum: ['student', 'teacher', 'ministry', 'admin'],
+        default: 'student'
+    }
 },{timestamps: true});
 
 // Hash password here
@@ -18,6 +29,6 @@ userSchema.pre("save", async function (next) {
     this.password = await bcrypt.hash(this.password, salt);
 });
 
-const user = mongoose.model('users', userSchema);
+const user = mongoose.model('user', userSchema);
 
 export default user

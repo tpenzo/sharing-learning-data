@@ -11,11 +11,13 @@ function LoginPage() {
   const [email, setEmail] = useState("");
   const [isShowPassWord, setIsShowPassWord] = useState(false);
 
+
   const handleLogin = async (e) => {
     e.preventDefault();
     await loginAPI(email, password, dispatch); // [POST] api/auth/login
     navigate("/");
   };
+
 
   return (
     <div className="container h-screen w-4/5 mx-auto flex flex-row justify-center items-center">
@@ -30,6 +32,7 @@ function LoginPage() {
               onSubmit={() => {
                 handleLogin();
               }}
+
             >
               <div className="input-field mt-5">
                 <label

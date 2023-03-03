@@ -7,6 +7,8 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import { store, persistor } from './redux/store.js';
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react';
+import { createStandaloneToast } from '@chakra-ui/toast'
+const { ToastContainer } = createStandaloneToast()
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -15,6 +17,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Router>
           <ChakraProvider>
             <App />
+            <ToastContainer />
           </ChakraProvider>
         </Router>
       </PersistGate>
