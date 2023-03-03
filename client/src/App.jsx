@@ -15,6 +15,7 @@ import PageNotFound from './pages/PageNotFound';
 import RequireAuth from './requireAuth.jsx';
 import RequirePermission from './RequirePermission';
 import Unauthorized from './pages/Unauthorized';
+import ChatPage from './pages/ChatPage';
 
 function App() {
     return (
@@ -54,6 +55,7 @@ function App() {
                 {/* <Route element={<RequireAuth />}> */}
                 <Route exact path="/" element={<HomePage />} />
                 <Route path="/profile" element={<ProfilePage />} />
+                <Route exact path="/chat" element={<ChatPage />} />
 
                 {/* Courses. Role: student, teacher*/}
                 <Route path="/courses/:idCourse" element={<CoursePage />} />
