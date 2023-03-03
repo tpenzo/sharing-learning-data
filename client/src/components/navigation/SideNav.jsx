@@ -4,20 +4,20 @@ import CourseList from "./courseList";
 function SideNav() {
   return (
     <div className="flex flex-col">
-      <div className="w-full h-1/5 bg-inherit scale-90 2xl:scale-100">
-        <div className="flex mx-auto bg-third-blue w-[90%] mt-10 2xl:mt-14 p-2 2xl:p-3 text-center text-white rounded-xl shadow-lg hover:bg-fourth-blue hover:shadow-lg cursor-pointer">
-          <span className="inline-block w-1/4 flex-1 px-1 mt-2 text-lg font-semibold">
+      <div className="w-full h-1/5 bg-inherit scale-[85%] 2xl:scale-100">
+        <Link to={"/"}>
+        <div className="flex flex-row items-center justify-center mx-auto bg-third-blue w-[85%] mt-10 2xl:mt-14 p-2 2xl:p-3 text-center text-white rounded-xl shadow-lg hover:bg-fourth-blue hover:shadow-lg cursor-pointer">
+          <span className="block px-1 text-lg font-semibold">
             <box-icon size="md" color="white" name="home-alt"></box-icon>
           </span>
-        <div className="w-3/4 font-semibold text-xl pt-3 2xl:-ml-20 -ml-5 mr-3">
-            <Link to={"/"}>
+        <span className="block font-semibold text-base pb-1 ml-1 mr-3">
               Trang chủ
-            </Link>
+        </span>
         </div>
-        </div>
+        </Link>
       </div>
 
-      <div className="max-h-2/3 h-2/3 mt-8 ">
+      <div className="max-h-[66%] h-2/3 mt-8 ">
         <CourseList />
       </div>
     </div>

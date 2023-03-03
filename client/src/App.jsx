@@ -11,11 +11,15 @@ import CoursePage from './pages/CoursePage';
 import ManageCourse from './pages/ManageCourse';
 import ManageAccount from './pages/ManageAccount';
 import ManageCourses from './pages/ManageCourses';
+import ViewPostPage from './pages/ViewPostPage';
 import PageNotFound from './pages/PageNotFound';
+import CreateCourse from './pages/CreateCourse';
+import RequireAuth from './requireAuth';
 import RequireAuth from './requireAuth.jsx';
 import RequirePermission from './RequirePermission';
 import Unauthorized from './pages/Unauthorized';
 import ChatPage from './pages/ChatPage';
+
 
 function App() {
     return (
@@ -57,15 +61,21 @@ function App() {
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route exact path="/chat" element={<ChatPage />} />
 
-                {/* Courses. Role: student, teacher*/}
-                <Route path="/courses/:idCourse" element={<CoursePage />} />
-                <Route path="/courses/:idCourse/manage" element={<ManageCourse />} />
+                    {/* Post. role: student, teacher */}
+                    <Route path="post/:postId" element={<ViewPostPage />}/>
+                    
+                    {/* Courses. Role: student, teacher*/}
+                    <Route path="/courses/:idCourse" element={<CoursePage />} />
+                    <Route path="/courses/:idCourse/manage" element={<ManageCourse />} />
+
 
                 {/* Role: admin */}
                 <Route path="/admin/manage" element={<ManageAccount />} />
 
-                {/* Role: ministry */}
-                <Route path="/ministry/manage" element={<ManageCourses />} />
+                    {/* Role: ministry */}
+                    <Route path="/giaovu/ministry" element={<ManageCourses />} />
+                    <Route path="/ministry/course/" element={<CreateCourse />} />
+
 
                 {/* </Route> */}
                 <Route path='*' element={<PageNotFound />} />

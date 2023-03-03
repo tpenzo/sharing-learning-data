@@ -1,11 +1,16 @@
 import React, { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 function PostItem() {
+  const navigate = useNavigate();
   const [loved, setLoved] = useState(false);
   const [saved, setSaved] = useState(false);
+
+  const handleNavigate = (e)=>{
+    navigate("/post/1");
+  }
   return (
-    <div className="w-[99%] bg-light-gray py-8 px-6 rounded-lg mb-5">
-      <h1 className="text-2xl font-bold">Lecture Rescheduling</h1>
+    <div className="w-full bg-white py-8 px-6 rounded-lg mb-5 shadow-sm">
+      <h1 className="text-xl font-bold">Lecture Rescheduling</h1>
       <div className="flex items-center gap-4 justify-between mt-5 flex-wrap-reverse">
         <div className="flex items-center gap-4">
           <figure>
@@ -17,14 +22,14 @@ function PostItem() {
           </figure>
           <div>
             <p className="font-semibold">Elisabeth May</p>
-            <span className="font-light text-gray-500 text-sm">6h Ago</span>
+            <span className="font-light text-gray-500 text-xs">6h Ago</span>
           </div>
         </div>
-        <p className="px-2 py-1 rounded-lg bg-primary-blue text-white font-medium">
+        <p className="px-2 py-1 text-sm rounded-lg bg-primary-blue text-white font-medium">
           CT244
         </p>
       </div>
-      <p className="mt-5">
+      <p  onClick={handleNavigate}  className="mt-5 text-sm cursor-pointer hover:font-semibold">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero voluptates
         quis illo exercitationem odio incidunt eaque commodi dolor neque, quod
         perferendis reprehenderit sint labore.
@@ -55,8 +60,8 @@ function PostItem() {
           ></box-icon>
         </span>
         <span className="bg-gray-500/5 cursor-pointer py-1 px-1 rounded-lg flex items-center gap-2">
-          <box-icon name="comment"></box-icon>
-          <span className="text-ms leading-4">Add Respone</span>
+          <box-icon name="message-square-dots"></box-icon>
+          <span className="text-sm leading-4">Bình luận</span>
         </span>
       </div>
     </div>

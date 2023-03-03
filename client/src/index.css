@@ -16,7 +16,7 @@
 
 /* custom scrollbar */
 :root {
-    --primary: #F9F9F9;
+    --primary: #FFFFFF;
     --secondary: #E8E8E8 ;
   }
   
@@ -45,6 +45,7 @@
     border-radius: 20px;
     border: 3px solid var(--primary);
   }
+  
 
 
 
