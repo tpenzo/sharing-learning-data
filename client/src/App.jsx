@@ -15,7 +15,6 @@ import ViewPostPage from './pages/ViewPostPage';
 import PageNotFound from './pages/PageNotFound';
 import CreateCourse from './pages/CreateCourse';
 import RequireAuth from './requireAuth';
-import RequireAuth from './requireAuth.jsx';
 import RequirePermission from './RequirePermission';
 import Unauthorized from './pages/Unauthorized';
 import ChatPage from './pages/ChatPage';
