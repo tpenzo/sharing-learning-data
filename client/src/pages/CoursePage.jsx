@@ -14,7 +14,7 @@ export default function CoursePage() {
   };
   return (
     <div className="container xl mx-auto h-screen items-center self-center flex flex-col">
-      <header className="header sticky top-0 w-full h-[12%] max-h-full rounded-t-lg z-50">
+      <header className="header sticky top-0 w-full h-[10%] rounded-t-lg z-50">
         <Header />
       </header>
       <div className="main-content w-full h-[88%] pt-4 flex flex-row justify-around gap-5 bg-white/60 rounded-b-lg z-0">
