@@ -8,18 +8,17 @@ export default function ProfilePage() {
   const handleChangeTab = (e) => {
     if (e.target.id === "post") {
       setTab(false);
-      // call api my post
     } else {
       setTab(true);
-
-      // call api saved post
     }
   };
   return (
-    <main className="container h-screen mx-auto bg-white/70">
-      <div className="mx-auto md:w-[90%] xl:w-full">
-        <Header />
-        <div className="mt-8 flex gap-5">
+    <div className="w-[90%] mx-auto h-screen ">
+      <div className="container mx-auto h-screen">
+        <header className="header sticky top-0 w-full h-[10%] rounded-t-lg z-50 ">
+          <Header />
+        </header>
+        <div className="flex gap-5 bg-white/70 h-[89%]">
           <div className="w-[20%] bg-inherit">
             <SideNav />
           </div>
@@ -56,7 +55,7 @@ export default function ProfilePage() {
               <box-icon name="plus-circle" color="white"></box-icon>
               <span>Đăng bài</span>
             </div>
-            <div className="mt-6 min-h-0 grid grid-cols-2 gap-5 overflow-y-auto">
+            <div className="mt-6 h-[44%] grid grid-cols-2 gap-5 overflow-y-auto">
               <PostItem />
               <PostItem />
               <PostItem />
@@ -67,6 +66,6 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
-    </main>
+    </div>
   );
 }
