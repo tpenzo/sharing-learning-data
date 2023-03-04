@@ -8,11 +8,8 @@ export default function CoursePage() {
   const handleChangeTab = (e) => {
     if (e.target.id === "post") {
       setTab(false);
-      // call api my post
     } else {
       setTab(true);
-
-      // call api saved post
     }
   };
   return (
