@@ -1,51 +1,52 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter&family=Raleway&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter&family=Raleway&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 #root {
-    --primary-blue: #1B2D70;
-    --second-blue: #2B3F82;
-    --third-blue: #41599D;
-    --fourth-blue: #617DBC;
-    --light-gray: #F9F9F9;
-    --bold-gray: #E8E8E8;
-    font-family: 'Inter','Raleway', sans-serif;
-    box-sizing: border-box;
+  --primary-blue: #1b2d70;
+  --second-blue: #2b3f82;
+  --third-blue: #41599d;
+  --fourth-blue: #617dbc;
+  --light-gray: #f9f9f9;
+  --bold-gray: #e8e8e8;
+  font-family: "Inter", "Raleway", sans-serif;
+  box-sizing: border-box;
 }
 
 /* custom scrollbar */
 :root {
-    --primary: #FFFFFF;
-    --secondary: #E8E8E8 ;
-  }
-  
-  /* Scrollbar styles */
-  
-  /* Firefox */
-  * {
-    scrollbar-width: thin;
-    scrollbar-color: var(--primary) var(--secondary);
-  }
-  
-  /* Chrome, Edge, and Safari */
-  *::-webkit-scrollbar {
-    width: 12px;
-  }
-  
-  *::-webkit-scrollbar-track {
-    background: var(--primary);
-    border-radius: 5px;
-    margin-top: 1px;
-    margin-bottom: 1px;
-  }
-  
-  *::-webkit-scrollbar-thumb {
-    background-color: var(--secondary);
-    border-radius: 20px;
-    border: 3px solid var(--primary);
-  }
-  
+  --primary: #ffffff;
+  --secondary: #e8e8e8;
+}
 
+/* Scrollbar styles */
 
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary) var(--secondary);
+}
 
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 12px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--primary);
+  border-radius: 5px;
+  margin-top: 1px;
+  margin-bottom: 1px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--secondary);
+  border-radius: 20px;
+  border: 3px solid var(--primary);
+}
+
+/* Editor */
+.ql-editor {
+  height: 300px;
+}
