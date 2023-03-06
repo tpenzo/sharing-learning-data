@@ -13,14 +13,14 @@ function InfoPane() {
         <div className="w-full h-1/5 bg-inherit -mt-6">
           <div
             onClick={onOpen}
-            className="flex flex-row items-center justify-center mx-auto bg-third-blue w-[80%] mt-10 2xl:mt-14 p-3 text-center text-white rounded-xl shadow-lg hover:bg-fourth-blue hover:shadow-lg cursor-pointer"
+            className="flex flex-row items-center justify-center mx-auto bg-third-blue w-[80%] mt-10 2xl:mt-14 p-2 2xl:p-3 text-center text-white rounded-xl hover:bg-fourth-blue cursor-pointer"
           >
-            <span className="block px-1 font-semibold">
-              <box-icon size="md" color="white" name="plus"></box-icon>
-            </span>
-            <span className="block font-semibold text-base pb-1 ml-1 mr-3">
+              <span className=" translate-y-1">
+              <box-icon size="sm" color="white" name="plus"></box-icon>
+              </span>
+            <span className="block font-semibold text-base pb-1 pr-2 ml-1 mt-2">
               Đăng bài
-            </span>
+        </span>
           </div>
         </div>
 
