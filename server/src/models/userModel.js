@@ -16,7 +16,16 @@ const userSchema = new Schema({
         type: String,
         enum: ['student', 'teacher', 'ministry', 'admin'],
         default: 'student'
-    }
+    },
+    // Teacher
+    teacherCode: {type: String, min: 8},
+    managedCourses: [{type: Schema.Types.ObjectId, ref: 'course'}],
+    // Student
+    studentCode: {type: String, min: 8},
+    class: {type: String},
+    major: {type: String},
+    bookmarkPost: [{type: Schema.Types.ObjectId, ref: 'post'}]
+
 },{timestamps: true});
 
 // Hash password here

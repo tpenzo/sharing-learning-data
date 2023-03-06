@@ -63,7 +63,7 @@ class ChatController {
 
     //@description     Create group chat with creator as admin 
     //@route           [POST] /api/chat/creategroup
-    //@body            {participants, name}
+    //@body            {participants, name, adminId}
     //@access          verifyToken
     async createGroupChat(req, res){
 		try {
@@ -74,22 +74,90 @@ class ChatController {
 			if(participants.length < 2){
 				return res.status(400).send({ message: "More than 2 users are required to form a group chat" });
 			}
-			participants.push(req.userLogin._id)
-			console.log(req.userLogin._id)
 			const groupChat = await ChatModel.create({
 				name: req.body.name,
-				participant: participants, // Teacher, student
+				participant: participants, 
 				isGroupChat: true,
-				admin: req.userLogin._id, // Teacher
+				admin: req.body.adminId,
 			});
 			const newGroupChat = await ChatModel.create(groupChat)
 			const fullGroupChat = await ChatModel.findOne({ _id: newGroupChat._id })
       			.populate("participant", "-password")
-      			.populate('admin')
+      			.populate('admin', "-password")
 			return res.status(200).json({message: 'successful', data: fullGroupChat})
        } catch (error) {
-        
+            return res.status(500).json({message: error.message})
        }
+    }
+
+    //@description     Add user to Group
+    //@route           [POST] /api/chat/add
+    //@body            {chatId, userId}
+    //@access          verifyToken
+    async addToGroup(req, res){
+        try {
+            if (!req.body.chatId || !req.body.userId) {
+				return res.status(400).send({ message: "Please Fill all the feilds" });
+            }
+            // find user in chat
+            const chat = await ChatModel.find({
+                $and:[
+                    {_id: req.body.chatId}, 
+                    { participant: { $elemMatch: { $eq: req.body.userId } } }
+                ]
+            })
+            if(chat){
+                return res.status(404).json({message: "This user ID has joined the chat group"})
+            }
+            const added = await ChatModel.findByIdAndUpdate(
+                req.body.chatId,
+                { $push: { participant: req.body.userId }}, { new: true}
+            )
+                .populate("participant", "-password")
+                .populate("admin", "-password");
+            if (!added) {
+                res.status(404).json({message:  "Chat Not Found"})
+            } else {
+                res.status(200).json({message: 'successful', data: added});
+            }
+        } catch (error) {
+            return res.status(500).json({message: error.message})
+        }
+    }
+
+    //@description     remove user to Group
+    //@route           [POST] /api/chat/remove
+    //@body            {chatId, userId}
+    //@access          verifyToken
+    async removeFromGroup(req, res){
+        try {
+            if (!req.body.chatId || !req.body.userId) {
+				return res.status(400).send({ message: "Please Fill all the feilds" });
+            }
+            // find user in chat
+            const chat = await ChatModel.find({
+                $and:[
+                    {_id: req.body.chatId}, 
+                    { participant: { $elemMatch: { $eq: req.body.userId } } }
+                ]
+            })
+            if(chat.length === 0){
+                return res.status(404).json({message: "This user ID has been removed or is not in the group chat"})
+            }
+            const added = await ChatModel.findByIdAndUpdate(
+                req.body.chatId,
+                { $pull: { participant: req.body.userId }}, { new: true}
+            )
+                .populate("participant", "-password")
+                .populate("admin", "-password");
+            if (!added) {
+                res.status(404).json({message:  "Chat Not Found"})
+            } else {
+                res.status(200).json({message: 'successful', data: added});
+            }
+        } catch (error) {
+            return res.status(500).json({message: error.message})
+        }
     }
 }
 
