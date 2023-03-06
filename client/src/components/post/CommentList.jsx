@@ -4,7 +4,7 @@ function CommentList() {
   return (
     <div className="px-6">
       <span className="block text-2xl mt-4 font-bold">Bình luận (1200)</span>
-      <div className="input-comment mt-4 flex flex-row items-start justify-center">
+      <div className="input-comment mt-5 flex flex-row items-start justify-center">
         <div className="avatar w-10 h-10 mx-5 bg-gray-700 rounded-full"></div>
         <div className="input-area w-10/12">
           <form>

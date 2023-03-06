@@ -18,17 +18,17 @@ function ProfilePane() {
           <span className="mr-3">0 Người đang theo dõi</span>
         </div>
         <p className="mt-3 text-gray-400 font-semibold text-sm">Captain</p>
-        <div className="mt-8 flex gap-3 font-semibold ">
-          <div className="px-3 py-2 rounded bg-bold-gray flex gap-1 items-center cursor-pointer duration-300 hover:bg-gray-300">
-            <box-icon name="pencil" type="solid"></box-icon>
+        <div className="mt-6 flex gap-3 font-semibold ">
+          <div className="px-3 py-2 rounded bg-bold-gray text-sm flex gap-1 items-center cursor-pointer duration-300 hover:bg-gray-300">
+            <box-icon name="pencil"></box-icon>
             <span>Chỉnh sửa thông tin</span>
           </div>
-          <div className="px-3 py-2 rounded text-white bg-second-blue flex gap-1 items-center cursor-pointer duration-300 hover:bg-primary-blue">
-            <box-icon name="user-plus" type="solid" color="white"></box-icon>
+          <div className="px-3 py-2 rounded text-white text-sm bg-second-blue flex gap-1 items-center cursor-pointer duration-300 hover:bg-primary-blue">
+            <box-icon name="user-plus" color="white"></box-icon>
             <span>Theo dõi</span>
           </div>
-          <div className="px-3 py-2 rounded text-white bg-second-blue flex gap-1 items-center cursor-pointer duration-300 hover:bg-primary-blue">
-            <box-icon type="solid" name="message-dots" color="white"></box-icon>
+          <div className="px-3 py-2 rounded text-white text-sm bg-second-blue flex gap-1 items-center cursor-pointer duration-300 hover:bg-primary-blue">
+          <box-icon color="white" name='message-square-dots'></box-icon>
             <span>Nhắn tin</span>
           </div>
         </div>

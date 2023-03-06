@@ -107,7 +107,7 @@ function CourseList() {
     },
   ];
   return (
-    <div className="mt-4 h-[75%] scale-90 2xl:scale-100 w-full">
+    <div className="mt-4 h-[75%] w-full">
       <Accordion allowToggle defaultIndex={[0]}>
         {courseList.map((semesterInfo, index) => {
           return (
