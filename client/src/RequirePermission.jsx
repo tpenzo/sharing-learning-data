@@ -6,7 +6,7 @@ export default function RequirePermission({ roles }) {
     const auth = useSelector(state => state.auth)
     const location = useLocation()
     return (
-        auth.token && roles?.includes(auth.user?.account?.role)
+        auth.token && roles?.includes(auth.user?.role)
             ? <Outlet />
             : <Navigate to="/unauthorized" state={{ from: location }} replace />
     )

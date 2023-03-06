@@ -34,8 +34,8 @@ function LoginPage() {
   const handleLogin = async (e) => {
     e.preventDefault();
     formik.handleSubmit();
-    //await loginAPI(formik.values.email, formik.values.password, dispatch); // [POST] api/auth/login
-    //navigate("/");
+    await loginAPI(formik.values.email, formik.values.password, dispatch); // [POST] api/auth/login
+    navigate("/");
   };
 
   return (
