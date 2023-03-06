@@ -25,7 +25,7 @@ function InfoPane() {
           </div>
         </div>
 
-        <div className="mt-6">
+        <div className="mt-6 -ml-4">
           <ListOfUser />
         </div>
         <div className="mt-5 mb-1 mr-3">
