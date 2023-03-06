@@ -35,10 +35,12 @@ class AuthControlller {
             let info = null
             switch (user.role) {
                 case 'student':
-                    info = await StudentModel.findOne({account: user._id}).populate('account', '-password')
+                    info = await StudentModel.findOne({account: user._id})
+                        .populate('account', '-password')
                     break;
                 case 'teacher':
-                    info = await TeacherModel.findOne({account: user._id}).populate('account', '-password')
+                    info = await TeacherModel.findOne({account: user._id})
+                        .populate('account', '-password')
                     break;
                 default:
                     info = user;
@@ -52,6 +54,7 @@ class AuthControlller {
                 path: "/",
                 sameSite: "strict",
             })
+            // Return
             return res.status(200).json({
                   message: 'Login Success',
                   user: { ...info._doc },
