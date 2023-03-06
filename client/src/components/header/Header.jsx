@@ -29,9 +29,11 @@ function Header() {
   return (
     <div className="h-full bg-white flex items-center justify-between">
       <div className="h-full bg-white flex items-center justify-start">
-          <figure className="w-24 2xl:w-32 sm:scale-50 xl:scale-100">
+          <Link to="/">
+          <figure className="w-24 sm:scale-50 xl:scale-100">
             <img src={headerLogo} alt="logo" />
           </figure>
+          </Link>
           <div className="flex flex-col justify-center">
             <span className="text-yellow-500 text-sm font-semibold">
               CTU SHARE
@@ -91,22 +93,23 @@ function Header() {
           </p>
         </figure>
         {dropdown && (
-          <ul className="absolute z-[9999] bg-light-gray w-full top-12 left-0 rounded shadow-xl overflow-hidden">
+          <ul className="absolute z-[9999] bg-light-gray w-full top-14 left-0 rounded-xl shadow-xl overflow-hidden">
             <Link to={"/profile"}>
-              <li className="p-2 font-semibold hover:bg-bold-gray flex items-center justify-between cursor-pointer">
-                <span>Trang cá nhân</span>
-                <box-icon name="cog"></box-icon>
+              <li className="p-2 font-semibold hover:bg-bold-gray flex items-center justify-start cursor-pointer">
+                <box-icon name="user"></box-icon>
+                <span className="ml-2">Trang cá nhân</span>
               </li>
             </Link>
             <Link>
-              <li className="p-2 font-semibold hover:bg-bold-gray flex items-center justify-between cursor-pointer">
-                <span>Nhắn tin</span>
+              <li className="p-2 font-semibold hover:bg-bold-gray flex items-center justify-start cursor-pointer">
+                <box-icon name='message-square-dots'></box-icon>
+                <span className="ml-2">Nhắn tin</span>
               </li>
             </Link>
             <Link>
-              <li className="p-2 font-semibold hover:bg-bold-gray flex items-center justify-between cursor-pointer">
-                <span>Đăng xuất</span>
+              <li className="p-2 font-semibold hover:bg-bold-gray flex items-center justify-start cursor-pointer">
                 <box-icon name="log-out"></box-icon>
+                <span className="ml-2">Đăng xuất</span>
               </li>
             </Link>
           </ul>

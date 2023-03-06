@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 function ListOfUser() {
   return (
-    <div className="mt-4 h-[75%] scale-90 2xl:scale-100 w-full">
+    <div className="mt-4 h-[75%] w-full">
       <Accordion  defaultIndex={[0]} allowToggle>
         <AccordionItem border={0} >
           <h2>

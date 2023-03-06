@@ -18,12 +18,19 @@ export default function ProfilePage() {
         <header className="header sticky top-0 w-full h-[10%] rounded-t-lg z-50 ">
           <Header />
         </header>
-        <div className="flex gap-5 bg-white/70 h-[89%]">
-          <div className="w-[20%] bg-inherit">
+        <div className="flex gap-5 bg-white/70 h-[89%] pt-4">
+          <div className="w-[20%] bg-white rounded-lg">
             <SideNav />
           </div>
           <div className="w-[80%] p-4 bg-white/90 rounded-xl">
+            <div className="flex items-start">
+
             <ProfilePane />
+            <div className="mt-6 mr-3 ml-auto w-[20%] px-3 py-2 rounded text-white bg-second-blue flex gap-1 justify-center items-center cursor-pointer duration-300 hover:bg-primary-blue">
+              <box-icon name="plus-circle" color="white"></box-icon>
+              <span>Đăng bài</span>
+            </div>
+            </div>
             <div className="w-full h-[1px] bg-gray-300 mt-6"></div>
             <div className="flex justify-between">
               <span
@@ -51,11 +58,8 @@ export default function ProfilePage() {
                 Đã Lưu
               </span>
             </div>
-            <div className="mt-6 ml-auto w-[20%] px-3 py-2 rounded text-white bg-second-blue flex gap-1 justify-center items-center cursor-pointer duration-300 hover:bg-primary-blue">
-              <box-icon name="plus-circle" color="white"></box-icon>
-              <span>Đăng bài</span>
-            </div>
-            <div className="mt-6 h-[44%] grid grid-cols-2 gap-5 overflow-y-auto">
+            
+            <div className="mt-6 h-[52%] bg-gray-200/70 grid grid-cols-2 gap-2 overflow-y-auto">
               <PostItem />
               <PostItem />
               <PostItem />

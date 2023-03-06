@@ -9,8 +9,7 @@ function PostItem() {
     navigate("/post/1");
   }
   return (
-    <div className="w-full bg-white py-8 px-6 rounded-lg mb-5 shadow-sm">
-      <h1 className="text-xl font-bold">Lecture Rescheduling</h1>
+    <div className="w-full bg-white pb-4 pt-1 px-6 rounded-lg mb-5 shadow-sm">
       <div className="flex items-center gap-4 justify-between mt-5 flex-wrap-reverse">
         <div className="flex items-center gap-4">
           <figure>
@@ -31,8 +30,7 @@ function PostItem() {
       </div>
       <p  onClick={handleNavigate}  className="mt-5 text-sm cursor-pointer hover:font-semibold">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero voluptates
-        quis illo exercitationem odio incidunt eaque commodi dolor neque, quod
-        perferendis reprehenderit sint labore.
+        quis illo exercitati
       </p>
       <div className="mt-5 flex gap-5 md:gap-3">
         <span
