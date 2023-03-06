@@ -1,7 +1,5 @@
 import { validationResult } from 'express-validator'
 import UserModel from '../models/userModel.js';
-import StudentModel from '../models/studentModel.js'
-import TeacherModel from '../models/teacherModel.js'
 import bcrypt from 'bcryptjs'
 import { generateAccessToken, generateRefreshToken } from '../middlewares/auth.js';
 
@@ -31,20 +29,6 @@ class AuthControlller {
             if(!match){
                 return res.status(403).json({ message: 'Incorrect password' });
             }
-            // Get data
-            let info = null
-            switch (user.role) {
-                case 'student':
-                    info = await StudentModel.findOne({account: user._id})
-                        .populate('account', '-password')
-                    break;
-                case 'teacher':
-                    info = await TeacherModel.findOne({account: user._id})
-                        .populate('account', '-password')
-                    break;
-                default:
-                    info = user;
-            }
             // Generate token
             const accessToken = generateAccessToken(user._id, '500s')
             const refreshToken = generateRefreshToken(user._id, '1000s')
@@ -55,9 +39,10 @@ class AuthControlller {
                 sameSite: "strict",
             })
             // Return
+            const { password, ...others } = user._doc;
             return res.status(200).json({
                   message: 'Login Success',
-                  user: { ...info._doc },
+                  user: { ...others },
                   accessToken: accessToken,
             });
 
@@ -82,20 +67,13 @@ class AuthControlller {
         }
         try {
             // Check studentCode
-            const student = await StudentModel.findOne({studentCode:req.body.studentCode})
+            // studentCode:req.body.studentCode
+            const student = await UserModel.findOne({$or: [{studentCode:req.body.studentCode},{email: req.body.email}]})
             if(student){
-                return res.status(400).json({message: "Student ID already exists"}) 
+                return res.status(400).json({message: "studentCode or email already exists"}) 
             }
-            // Check email
-            const user = await UserModel.findOne({email: req.body.email})
-            if(user){
-                return res.status(400).json({message: "The email already exists"}) 
-            }
-            // Create account
-            const newUser = await UserModel.create(req.body)
-            // Creat student
-            let newStudent = await StudentModel.create({account: newUser._id, ...req.body})
-            newStudent = await newStudent.populate("account", "-password")
+            // Create user with role student
+            const newStudent = await UserModel.create(req.body)
             return res.status(200).json({message: 'Creating successful students', data: newStudent})
         } catch (error) {
             return res.status(500).json({message: error.message})
@@ -117,21 +95,13 @@ class AuthControlller {
             return res.status(400).json(errMessage);
         }
         try {
-            // Check teacherCode
-            const teacher = await TeacherModel.findOne({ teacherCode:req.body.teacherCode })
+            // Check teacherCode and email
+            const teacher = await UserModel.findOne({$or: [{ teacherCode: req.body.teacherCode }, {email: req.body.email}]})
             if(teacher){
-                return res.status(400).json({message: "Teacher ID already exists"}) 
+                return res.status(400).json({message: "Teacher ID or email already exists"}) 
             }
-            // Check email
-            const user = await UserModel.findOne({email: req.body.email})
-            if(user){
-                return res.status(400).json({message: "The email already exists"}) 
-            }
-            // Create account
-            const newUser = await UserModel.create({...req.body, role: 'teacher'})
-            // Creat teacher
-            let newTeacher= await TeacherModel.create({account: newUser._id, ...req.body})
-            newTeacher = await newTeacher.populate("account", "-password")
+            // Create teacher
+            const newTeacher = await UserModel.create({...req.body, role: 'teacher'})
             return res.status(200).json({message: 'Creating successful teacher', data: newTeacher})
         } catch (error) {
             return res.status(500).json({message: error.message})
