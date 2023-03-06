@@ -9,7 +9,7 @@ function PopularUserInfo() {
   return (
     <li
     title={userName}
-    className="user-info flex flex-row justify-start items-center w-full py-2 px-3 list-none bg-inherit hover:bg-white hover:shadow-sm rounded-xl mt-1 mx-auto cursor-pointer whitespace-nowrap overflow-ellipsis overflow-hidden">
+    className="user-info flex flex-row justify-start items-center w-full py-2 px-3 list-none bg-inherit hover:bg-white hover:shadow-hover-button rounded-xl mt-1 mx-auto cursor-pointer whitespace-nowrap overflow-ellipsis overflow-hidden">
       <div className="max-w-[20%] w-8 h-8 inline-block border-[1px] border-gray-300 bg-gray-200 rounded-[100%] mt-1 text-center ">
         {/* {img ? img :<box-icon name='user' ></box-icon>} */}
       </div>

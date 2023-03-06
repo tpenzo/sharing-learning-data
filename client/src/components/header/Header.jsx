@@ -74,8 +74,8 @@ function Header() {
       </div>
       <div className="flex items-center gap-2 relative pr-5">
         <div className="text-right">
-          <p className="font-semibold">Duong Anh Thuong</p>
-          <span className="text-sm text-gray-400">Captain</span>
+          <p className="font-semibold text-sm">Duong Anh Thuong</p>
+          <span className="text-xs text-gray-400">Captain</span>
         </div>
         <figure className="relative">
           <img
@@ -84,7 +84,7 @@ function Header() {
             alt=""
           />
           <p
-            className="absolute top-5 -right-2 h-6 rounded-full bg-white scale-75 cursor-pointer"
+            className="absolute top-6 -right-2 h-6 rounded-full bg-white scale-[70%] cursor-pointer"
             onClick={() => {
               setDropdown(!dropdown);
             }}
@@ -93,7 +93,7 @@ function Header() {
           </p>
         </figure>
         {dropdown && (
-          <ul className="absolute z-[9999] bg-light-gray w-full top-14 left-0 rounded-xl shadow-xl overflow-hidden">
+          <ul className="absolute z-[9999] bg-white w-full top-14 left-0 rounded-xl shadow-xl border overflow-hidden">
             <Link to={"/profile"}>
               <li className="p-2 font-semibold hover:bg-bold-gray flex items-center justify-start cursor-pointer">
                 <box-icon name="user"></box-icon>

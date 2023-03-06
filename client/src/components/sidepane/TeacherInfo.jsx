@@ -11,7 +11,7 @@ function TeacherInfo() {
           Nguyễn Văn Giảng Viên
         </span>
       </div>
-      <div className="info-description relative w-4/5 max-w-full text-center bg-white/90 rounded-xl px-4 py-2">
+      <div className="info-description relative w-4/5 max-w-full text-center bg-white/80 rounded-xl shadow-md px-4 py-2">
         <span className="text-xs font-medium flex items-center text-gray-700 mt-2 whitespace-nowrap overflow-ellipsis overflow-hidden">
         <box-icon color="#4b5563" name='envelope'></box-icon> 
           : Example@ctu.edu.vn

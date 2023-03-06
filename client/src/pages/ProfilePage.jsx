@@ -22,9 +22,8 @@ export default function ProfilePage() {
           <div className="w-[20%] bg-white rounded-lg">
             <SideNav />
           </div>
-          <div className="w-[80%] p-4 bg-white/90 rounded-xl">
+          <div className="w-[80%] p-4 bg-white rounded-xl">
             <div className="flex items-start">
-
             <ProfilePane />
             <div className="mt-6 mr-3 ml-auto w-[20%] px-3 py-2 rounded text-white bg-second-blue flex gap-1 justify-center items-center cursor-pointer duration-300 hover:bg-primary-blue">
               <box-icon name="plus-circle" color="white"></box-icon>
@@ -59,7 +58,7 @@ export default function ProfilePage() {
               </span>
             </div>
             
-            <div className="mt-6 h-[52%] bg-gray-200/70 grid grid-cols-2 gap-2 overflow-y-auto">
+            <div className="mt-6 h-[56%] bg-gray-200/20 pr-1 grid grid-cols-2 gap-2 overflow-y-auto">
               <PostItem />
               <PostItem />
               <PostItem />
