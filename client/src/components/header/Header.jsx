@@ -28,11 +28,18 @@ function Header() {
   }, [keyword]);
   return (
     <div className="h-full bg-white flex items-center justify-between">
-      <figure className="w-28 sm:scale-50 xl:scale-100">
-        <Link to={"/"}>
-          <img src={headerLogo} alt="logo" />
-        </Link>
-      </figure>
+      <div className="h-full bg-white flex items-center justify-start">
+          <figure className="w-24 2xl:w-32 sm:scale-50 xl:scale-100">
+            <img src={headerLogo} alt="logo" />
+          </figure>
+          <div className="flex flex-col justify-center">
+            <span className="text-yellow-500 text-sm font-semibold">
+              CTU SHARE
+              <br />
+            </span>
+            <span className="text-primary-blue text-xs font-semibold">Chia sẻ dữ liệu học tập</span>
+          </div>
+        </div>
       <div className="xl:w-[50%] flex relative">
         <span className="cursor-pointer pl-1 absolute top-2 xl:top-3 left-2">
           <box-icon name="search-alt-2" color="gray"></box-icon>

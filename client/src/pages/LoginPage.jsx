@@ -54,7 +54,7 @@ function LoginPage() {
           </div>
         </div>
       </header>
-      <div className="h-4/5 xl:h-3/5 w-3/5 xl:w-[90%] flex flex-row justify-center items-center bg-white rounded-xl px-8 py-10 shadow-2xl border-gray-200 border-[1px]">
+      <div className="h-4/5 xl:h-3/5 w-3/5 xl:w-[80%] flex flex-row justify-center items-center bg-white rounded-xl px-8 py-10 shadow-2xl border-gray-200 border-[1px]">
         <div className="login-form flex flex-col w-full xl:w-[50%] bg-white rounded-xl">
           <div className="text-center text-2xl md:text-3xl pt-4 2xl:pt-0">
             Đăng nhập
