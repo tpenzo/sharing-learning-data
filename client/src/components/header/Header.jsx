@@ -100,7 +100,7 @@ function Header() {
                 <span className="ml-2">Trang cá nhân</span>
               </li>
             </Link>
-            <Link>
+            <Link to={"/chat"}>
               <li className="p-2 font-semibold hover:bg-bold-gray flex items-center justify-start cursor-pointer">
                 <box-icon name='message-square-dots'></box-icon>
                 <span className="ml-2">Nhắn tin</span>
