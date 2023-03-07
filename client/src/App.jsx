@@ -50,6 +50,7 @@ function App() {
                 </Route>
 
                 <Route path='*' element={<PageNotFound />} />
+                <Route path='unauthorized' element={<Unauthorized />} />
             </Routes>
         </>
         // <>
