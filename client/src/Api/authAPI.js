@@ -1,22 +1,29 @@
 import axiosClient from "./axiosClient.js";
-import { authSaveData } from "../redux/AuthSlice.js";
-import { createStandaloneToast } from '@chakra-ui/toast'
-
-const { toast } = createStandaloneToast()
+import { authSaveData, resetAuthSlice } from "../redux/AuthSlice.js";
+import showToast from "./showToast.js";
 
 export const loginAPI = async (email, password, dispatch) => {
     try {
         // Call API
-        const data = await axiosClient.post('api/auth/login',{email, password})
+        const res = await axiosClient.post('/api/auth/login',{email, password})
         // Update user, token in authSlice
-        dispatch(authSaveData(data))
+        dispatch(authSaveData(res))
+        // show
+        showToast(res.message, 'success')
     } catch (error) {
-        toast({
-            description: error.data.message,
-            status: 'error',
-            duration: 9000,
-            position: 'top-right',
-            isClosable: true,
-        })
+        showToast(error.data.message, 'error')
+    }
+}
+
+export const logoutAPI = async (dispatch) => {
+    try {
+        // Call API
+        const res = await axiosClient.get('/api/auth/logout')
+        // Resert user, token in authSlice
+        dispatch(resetAuthSlice())
+        // show
+        showToast(res.message, 'success')
+    } catch (error) {
+        showToast(error.data.message, 'error')
     }
 }

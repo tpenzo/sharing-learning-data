@@ -1,6 +1,6 @@
 import express from 'express'
 import messageCtrl from '../controllers/messageCtrl.js'
-import { verifyToken } from '../middlewares/auth'
+import { verifyToken } from '../middlewares/auth.js'
 
 const router = express.Router()
 

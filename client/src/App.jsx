@@ -27,10 +27,9 @@ function App() {
                 <Route path="/login" element={<LoginPage />} />
 
                 <Route element={<RequireAuth />}>
-                    
                     <Route element={<RequirePermission roles={['teacher', 'student']} />}>
                         <Route exact path="/" element={<HomePage />} />
-                        <Route path="/profile" element={<ProfilePage />} />
+                        <Route path="/profile/:userId" element={<ProfilePage />} />
                         <Route path="/courses/:idCourse" element={<CoursePage />} />
                     </Route>
 
