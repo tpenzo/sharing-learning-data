@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import Header from "../components/header/Header";
 import StudentList from "../components/ministry/StudentList";
-import readXlsxFile from 'read-excel-file'
+import readXlsxFile from 'read-excel-file';
+import { createStandaloneToast } from '@chakra-ui/toast'
+
+const { toast } = createStandaloneToast()
 
 export default function CreateCourse() {
   const [fileName, setFileName] = useState("");
@@ -25,7 +28,17 @@ export default function CreateCourse() {
       setFileName(e.target.files[0].name);
 
       readXlsxFile(e.target.files[0], {map}).then(({rows, errors})=>{
-        setStudentList(...studentList, rows);
+        if(errors.length===0){
+          setStudentList(rows);
+        } else {
+          toast({
+            description: "Vui lòng chọn lại tập tin để nhập",
+            status: 'warning',
+            duration: 7000,
+            position: 'top-right',
+            isClosable: true,
+        })
+        }
       });
     }
   };
