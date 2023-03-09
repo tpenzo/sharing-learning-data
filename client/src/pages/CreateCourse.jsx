@@ -17,22 +17,32 @@ export default function CreateCourse() {
   const [courseNote, setCourseNote] = useState("");
 
   //mapping format for excel file
-  const map = {
-    'STT':'stt',
-    'HO VA TEN': 'fullName',
-    'MSSV': 'studentCode'
+  const schema = {
+    'STT':{
+      prop: 'stt',
+      type: String
+    },
+    'HO VA TEN': {
+      prop: 'fullName',
+      type: String,
+      required: true
+    },
+    'MSSV': {
+      prop: 'studentCode',
+      type: String,
+      required: true
+    }
   }
 
   const handleSubmitFile = (e) => {
     if(e.target.files){
-      setFileName(e.target.files[0].name);
-
-      readXlsxFile(e.target.files[0], {map}).then(({rows, errors})=>{
+      readXlsxFile(e.target.files[0], {schema}).then(({rows, errors})=>{
         if(errors.length===0){
+          setFileName(e.target.files[0].name);
           setStudentList(rows);
         } else {
           toast({
-            description: "Vui lòng chọn lại tập tin để nhập",
+            description: "Vui lòng chọn lại tập tin đúng định dạng để nhập",
             status: 'warning',
             duration: 7000,
             position: 'top-right',
