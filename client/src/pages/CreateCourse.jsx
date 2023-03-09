@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Header from "../components/header/Header";
 import StudentList from "../components/ministry/StudentList";
+import readXlsxFile from 'read-excel-file'
 
 export default function CreateCourse() {
   const [fileName, setFileName] = useState("");
@@ -9,16 +10,24 @@ export default function CreateCourse() {
   const [teacherName, setTeachername] = useState("");
   const [semester, setSemester] = useState("");
   const [schoolYear, setSchoolYear] = useState("");
-  const [fileStudentList, setFileStudentList] = useState([]);
+  const [studentList, setStudentList] = useState([]);
   const [courseNote, setCourseNote] = useState("");
 
+  //mapping format for excel file
+  const map = {
+    'STT':'stt',
+    'HO VA TEN': 'fullName',
+    'MSSV': 'studentCode'
+  }
+
   const handleSubmitFile = (e) => {
-    setFileName(e.target.files[0].name);
     if(e.target.files){
-      setFileStudentList([...fileStudentList, e.target.files[0]]);
-    console.log(e.target.files[0]);
+      setFileName(e.target.files[0].name);
+
+      readXlsxFile(e.target.files[0], {map}).then(({rows, errors})=>{
+        setStudentList(...studentList, rows);
+      });
     }
-    //handle display in studentlist
   };
 
   const handleSubmitForm = () => {
@@ -152,6 +161,7 @@ export default function CreateCourse() {
                 id="studentList"
                 name="studentList"
                 type="file"
+                accept=".xlsx, .xls"
               />
             </div>
 
@@ -189,7 +199,7 @@ export default function CreateCourse() {
           </form>
         </div>
         <div className="basis-3/5 bg-white shadow mr-4 mb-1 rounded-lg">
-          <StudentList />
+          <StudentList studentList={studentList} />
         </div>
       </div>
     </div>
