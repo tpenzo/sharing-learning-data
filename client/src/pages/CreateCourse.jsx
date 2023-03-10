@@ -55,7 +55,7 @@ export default function CreateCourse() {
 
   const handleSubmitForm = () => {
     //submit api
-    console.log(courseId, courseName, courseNote, teacherName, fileStudentList, semester, schoolYear);
+    console.log(courseId, courseName, courseNote, teacherName, studentList, semester, schoolYear);
   };
 
   return (
