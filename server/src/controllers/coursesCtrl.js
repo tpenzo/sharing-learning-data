@@ -15,7 +15,25 @@ class coursesController {
                 .skip(perPage * page - perPage)
                 .limit(perPage);
 
-            res.status(200).json({ message: "successful", data: coursesList });
+            return res.status(200).json({ message: "successful", data: coursesList });
+        } catch (error) {
+            return res.status(500).json({ message: error.message });
+        }
+    }
+
+    //@description     get a Course Info by _id
+    //@route           [GET] /api/courses/:_courseId
+    //@body            {}
+    //@access          verifyToken
+    async getCourse(req, res) {
+        try {
+            let courseID = req.params._courseId;
+            const course = await courseModel.findOne({_id: courseID})
+            if(course){
+               return res.status(200).json({ message: "successful", data: course });
+            } else {
+                return res.status(404).json({ message: "Can't find course" });
+            }
         } catch (error) {
             return res.status(500).json({ message: error.message });
         }
@@ -46,6 +64,45 @@ class coursesController {
                 return res
                     .status(200)
                     .json({ message: "Course created successfully", data: newCourse });
+            }
+            // }
+        } catch (error) {
+            return res.status(500).json({ message: error.message });
+        }
+    }
+
+    //@description     update all info of a course
+    //@route           [POST] /api/courses/update
+    //@body            {courseId, description, teacher, chatGroup, studentList,...}
+    //@access          verifyToken, role: Ministry
+    async updateCourse(req, res) {
+        try {
+            const { role } = req.body.userLogin;
+            const { courseID, semester, schoolYear } = req.body;
+            // if(role !== "ministry"){
+            //     return res.status(401).json({message: "Don't have permission to access"})
+            // }else{
+            const course = await courseModel.findOne({
+                $and: [
+                    { courseID: courseID },
+                    { semester: semester },
+                    { schoolYear: schoolYear },
+                ],
+            });
+            if (course) {
+                const updatedCourse = await courseModel.findOneAndUpdate(
+                    {
+                        $and: [
+                            { courseID: courseID },
+                            { semester: semester },
+                            { schoolYear: schoolYear },
+                        ],
+                    },
+                    { $set: req.body } //overide all data
+                );
+                return res.status(200).json({message: 'update course success', data: updatedCourse})
+            } else {
+                return res.status(404).json({ message: "Can't find specific course to update" });
             }
             // }
         } catch (error) {
