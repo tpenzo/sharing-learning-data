@@ -11,7 +11,7 @@ import { createStandaloneToast } from '@chakra-ui/toast'
 const { ToastContainer } = createStandaloneToast()
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <Router>
@@ -21,6 +21,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           </ChakraProvider>
         </Router>
       </PersistGate>
-    </Provider>
-  </React.StrictMode>,
+    </Provider>,
+  // </React.StrictMode>,
 )

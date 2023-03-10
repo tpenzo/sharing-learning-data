@@ -25,7 +25,7 @@ const userSchema = new Schema({
     class: {type: String},
     major: {type: String},
     bookmarkPost: [{type: Schema.Types.ObjectId, ref: 'post'}]
-
+    
 },{timestamps: true});
 
 // Hash password here

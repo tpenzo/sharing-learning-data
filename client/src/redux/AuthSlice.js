@@ -15,10 +15,24 @@ export const authSlice = createSlice({
         },
         updateNewToken: (state, actions) => {
             state.token= actions.payload
-        }
+        },
+        followUser(state, action){
+            state.user = {
+                ...state.user, 
+                following: [...state.user.following, action.payload]
+            }
+        },
+        unfollowUser(state, action){
+            state.user = {
+                ...state.user, 
+                following: state.user.following.filter(item => item !== action.payload)
+            }
+        },
+
+        resetAuthSlice: () => initialState
     }
 })
 
-export const { authSaveData, updateNewToken } = authSlice.actions
+export const { authSaveData, updateNewToken, resetAuthSlice, followUser, unfollowUser } = authSlice.actions
 
 export default authSlice.reducer;

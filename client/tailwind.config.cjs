@@ -26,6 +26,7 @@ module.exports = {
     extend: {
       colors: {
         "primary-blue":"var(--primary-blue)",
+        "primary-red": "var(--primary-red)",
         "second-blue":"var(--second-blue)",
         "third-blue":"var(--third-blue)",
         "fourth-blue":"var(--fourth-blue)",
