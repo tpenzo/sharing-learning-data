@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
     Routes,
     Route,
@@ -18,9 +18,20 @@ import RequireAuth from './requireAuth';
 import RequirePermission from './RequirePermission';
 import Unauthorized from './pages/Unauthorized';
 import ChatPage from './pages/ChatPage';
+import io from 'socket.io-client'
+import { setSocket } from './redux/SocketSlice.js';
+import { useDispatch } from 'react-redux'
 
 
 function App() {
+
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        let socket = io('http://localhost:4000')
+        dispatch(setSocket(socket))
+    }, [])
+
     return (
         <>
             <Routes>
@@ -62,7 +73,7 @@ function App() {
 
         //             {/* Post. role: student, teacher */}
         //             <Route path="post/:postId" element={<ViewPostPage />}/>
-                    
+
         //             {/* Courses. Role: student, teacher*/}
         //             <Route path="/courses/:idCourse" element={<CoursePage />} />
         //             <Route path="/courses/:idCourse/manage" element={<ManageCourse />} />

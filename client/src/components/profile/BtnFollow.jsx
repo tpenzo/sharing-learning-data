@@ -5,7 +5,8 @@ import { followUserAPI, unFollowUserAPI } from '../../Api/userAPI'
 export default function BtnFollow() {
 
     const dispatch = useDispatch()
-    const { auth, profile } = useSelector(state => state)
+    const { auth, profile, socketInstance } = useSelector(state => state)
+    const { socket } = socketInstance
 
     const [followed, setFollowed] = useState(false)
 
@@ -16,12 +17,12 @@ export default function BtnFollow() {
     }, [auth.user.following, profile.user?._id])
 
     const handleFollow = () => {
-        followUserAPI(profile.user._id, dispatch)
+        followUserAPI(profile.user._id, dispatch, socket)
         setFollowed(true); // UnFollow
     };
 
     const handleUnFollow = () => {
-        unFollowUserAPI(profile.user._id, dispatch)
+        unFollowUserAPI(profile.user._id, dispatch, socket)
         setFollowed(false); //  Follow
     };
 

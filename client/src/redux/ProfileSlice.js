@@ -25,10 +25,16 @@ export const profileSlice = createSlice({
                 follower: state.user.follower.filter((item) => item !== action.payload),
             };
       },
+      resetProfileSlice: () => initialState
     }
 })
 
-export const { profileGetUser, profileUpdateFollower, profileUpdateUnFollower } = profileSlice.actions
+export const { 
+    profileGetUser, 
+    profileUpdateFollower, 
+    profileUpdateUnFollower,
+    resetProfileSlice
+} = profileSlice.actions
 
 
 export default profileSlice.reducer

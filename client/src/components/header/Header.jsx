@@ -90,7 +90,7 @@ function Header() {
             <figure className="relative">
                <img
                   className="w-10 rounded-full"
-                  src="https://lh3.googleusercontent.com/ogw/AAEL6sgatvoo8KDucDZZEhU56G4QKQOmBemOC_4F7ayyag=s32-c-mo"
+                  src="https://res.cloudinary.com/devatchannel/image/upload/v1602752402/avatar/avatar_cugq40.png"
                   alt=""
                />
                <p

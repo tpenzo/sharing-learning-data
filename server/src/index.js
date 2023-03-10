@@ -1,10 +1,13 @@
 import express from 'express';
+import { createServer } from 'http'
 import cors from 'cors';
+import { Server } from 'socket.io'
 import cookieParser from 'cookie-parser';
 import * as dotenv from 'dotenv';
 import connectDB from './config/connectDB.js';
 import morgan from 'morgan'
 import route from './route/index.js';
+import socketServer from './socketServer.js';
 
 // Create instance
 const app = express();
@@ -20,7 +23,20 @@ app.use(cookieParser());
 connectDB()
 app.use('/api', route);
 
+// Socket
+const http = createServer(app)
+const io = new Server(http, {
+   cors: {
+      origin: '*',   
+      methods: ['GET', 'POST']
+  }
+})
+
+io.on("connection", (socket) => {
+   socketServer(socket)
+});
+
 // Running
-app.listen(port, () => {
+http.listen(port, () => {
    console.log(`Server is running on http://localhost:${port}`);
 });

@@ -1,13 +1,14 @@
 import axiosClient from "./axiosClient.js";
 import { authSaveData, resetAuthSlice } from "../redux/AuthSlice.js";
 import showToast from "./showToast.js";
+import { resetProfileSlice } from "../redux/ProfileSlice.js";
 
 export const loginAPI = async (email, password, dispatch) => {
     try {
         // Call API
         const res = await axiosClient.post('/api/auth/login',{email, password})
         // Update user, token in authSlice
-        dispatch(authSaveData(res))
+        await dispatch(authSaveData(res))
         // show
         showToast(res.message, 'success')
     } catch (error) {
@@ -20,7 +21,8 @@ export const logoutAPI = async (dispatch) => {
         // Call API
         const res = await axiosClient.get('/api/auth/logout')
         // Resert user, token in authSlice
-        dispatch(resetAuthSlice())
+        await dispatch(resetAuthSlice())
+        await dispatch(resetProfileSlice())
         // show
         showToast(res.message, 'success')
     } catch (error) {

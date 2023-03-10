@@ -8,12 +8,13 @@ export const profileGetUserAPI = async (userId, dispatch) => {
         // Call API
         const res = await axiosClient.get(`/api/user/${userId}`)
         await dispatch(profileGetUser(res.data))
+
     } catch (error) {
        showToast(error.data.message, 'error')
     }
 }
 
-export const followUserAPI = async(userId, dispatch) => {
+export const followUserAPI = async(userId, dispatch, socket) => {
     try {
         // Call API
         const res = await axiosClient.post("/api/user/follow", {userId})
@@ -21,19 +22,23 @@ export const followUserAPI = async(userId, dispatch) => {
         await dispatch(followUser(userId))
         // Update follower of user profile
         await dispatch(profileUpdateFollower(userId))
+        // socket [follow]
+        socket.emit('follow', userId)
     } catch (error) {
         showToast(error.data.message, 'error')
     }
 }
 
-export const unFollowUserAPI = async(userId, dispatch) => {
+export const unFollowUserAPI = async(userId, dispatch, socket) => {
     try {
         // Call API
         const res = await axiosClient.post("/api/user/unfollow", {userId})
         // Update following of user
-        dispatch((unfollowUser(userId)))
+        await dispatch((unfollowUser(userId)))
         // Update follower of user profile
-        dispatch(profileUpdateUnFollower(userId))
+        await dispatch(profileUpdateUnFollower(userId))
+        // socket [unfollow]
+        socket.emit('unFollow', userId)
     } catch (error) {
         showToast(error.data.message, 'error')
     }
