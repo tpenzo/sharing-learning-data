@@ -1,13 +1,7 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Pic401 from "/assets/401-error.png";
 export default function Unauthorized() {
-  const navigate = useNavigate();
-  const navigateHomePage = (e) => {
-    e.preventDefault();
-    navigate("/");
-  };
-
   return (
     <div className="container h-screen bg-inherit">
       <div className="flex flex-row justify-center items-center">
@@ -19,14 +13,14 @@ export default function Unauthorized() {
             Oops! Bạn không có đủ quyền để truy cập vào địa chỉ này.
             <br /> Trở về trang chủ bằng cách chọn vào nút bên dưới.
           </p>
-
-          <button
-            onClick={navigateHomePage}
-            type="button"
-            class="text-white font-semibold text-lg mt-7 bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 rounded-lg px-10 py-2.5 text-center mr-2 mb-2"
-          >
-            Trang chủ
-          </button>
+          <Link to="/">
+            <button
+              type="button"
+              class="text-white font-semibold text-lg mt-7 bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 rounded-lg px-10 py-2.5 text-center mr-2 mb-2"
+            >
+              Trang chủ
+            </button>
+          </Link>
         </div>
         <div className="w-3/5 h-auto">
           <img src={Pic401} alt="err-pic" />

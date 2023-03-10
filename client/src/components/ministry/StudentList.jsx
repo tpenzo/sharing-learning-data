@@ -53,6 +53,7 @@ function StudentList(props) {
             </thead>
             <tbody className="">
             {
+              props.studentList &&
               props.studentList.map((student, index)=>{
                 return (
                   <tr key={index + 1} className="bg-white border-b hover:bg-gray-50">

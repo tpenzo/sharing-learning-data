@@ -44,7 +44,7 @@ function App() {
                         <Route path="/profile/:userId" element={<ProfilePage />} />
                         <Route path="/courses/:idCourse" element={<CoursePage />} />
                         <Route exact path="/chat" element={<ChatPage />} />
-        //             <Route path="post/:postId" element={<ViewPostPage />}/>
+                        <Route path="post/:postId" element={<ViewPostPage />}/>
                     </Route>
 
                     <Route element={<RequirePermission roles={['teacher']} />}>
