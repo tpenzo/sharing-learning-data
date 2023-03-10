@@ -27,22 +27,30 @@ function Header() {
     }
   }, [keyword]);
   return (
-    <div className="h-full bg-white flex items-center justify-between">
+    <div className="h-full bg-white flex items-center justify-between gap-10">
       <div className="h-full bg-white flex items-center justify-start">
-          <Link to="/">
+        <Link to="/">
           <figure className="w-24 sm:scale-50 xl:scale-100">
             <img src={headerLogo} alt="logo" />
           </figure>
-          </Link>
-          <div className="flex flex-col justify-center">
-            <span className="text-yellow-500 text-sm font-semibold">
-              CTU SHARE
-              <br />
-            </span>
-            <span className="text-primary-blue text-xs font-semibold">Chia sẻ dữ liệu học tập</span>
-          </div>
+        </Link>
+        <div className="flex flex-col justify-center">
+          <span className="text-yellow-500 text-sm font-semibold">
+            CTU SHARE
+            <br />
+          </span>
+          <span className="text-primary-blue text-xs font-semibold">
+            Chia sẻ dữ liệu học tập
+          </span>
         </div>
-      <div className="xl:w-[50%] flex relative">
+      </div>
+      <Link to={"/admin/manage"}>
+        <span>Quản lý Tài khoản</span>
+      </Link>
+      <Link to={"/giaovu/ministry"}>
+        <span>Quản lý Nhóm học</span>
+      </Link>
+      <div className="flex-1 flex relative">
         <span className="cursor-pointer pl-1 absolute top-2 xl:top-3 left-2">
           <box-icon name="search-alt-2" color="gray"></box-icon>
         </span>
@@ -102,7 +110,7 @@ function Header() {
             </Link>
             <Link>
               <li className="p-2 font-semibold hover:bg-bold-gray flex items-center justify-start cursor-pointer">
-                <box-icon name='message-square-dots'></box-icon>
+                <box-icon name="message-square-dots"></box-icon>
                 <span className="ml-2">Nhắn tin</span>
               </li>
             </Link>
