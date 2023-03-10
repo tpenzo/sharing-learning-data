@@ -1,10 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../components/header/Header";
 import StudentList from "../components/ministry/StudentList";
 import readXlsxFile from 'read-excel-file';
-import { createStandaloneToast } from '@chakra-ui/toast'
-
-const { toast } = createStandaloneToast()
+import showToast from "../Api/showToast";
 
 export default function CreateCourse() {
   const [fileName, setFileName] = useState("");
@@ -41,13 +39,7 @@ export default function CreateCourse() {
           setFileName(e.target.files[0].name);
           setStudentList(rows);
         } else {
-          toast({
-            description: "Vui lòng chọn lại tập tin đúng định dạng để nhập",
-            status: 'warning',
-            duration: 7000,
-            position: 'top-right',
-            isClosable: true,
-        })
+          showToast('Vui lòng chọn lại tập tin đúng định dạng để nhập', 'warning');
         }
       });
     }
@@ -57,6 +49,10 @@ export default function CreateCourse() {
     //submit api
     console.log(courseId, courseName, courseNote, teacherName, studentList, semester, schoolYear);
   };
+
+  useEffect(()=>{
+
+  }, [])
 
   return (
     <div className="container xl mx-auto h-screen items-center self-center flex flex-col overflow-hidden">

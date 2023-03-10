@@ -4,6 +4,7 @@ import ProfileSlice from './ProfileSlice.js';
 import storage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore } from 'redux-persist';
 import thunk from 'redux-thunk';
+import AllCoursesSlice from './AllCoursesSlice.js';
 
 const persistConfig = {
   key: 'root',
@@ -13,7 +14,8 @@ const persistConfig = {
 // import ...Slice here
 const reducer = combineReducers({
   auth: AuthSlice,
-  profile: ProfileSlice
+  profile: ProfileSlice,
+  allCoursesList: AllCoursesSlice
 })
 
 const persistedReducer = persistReducer(persistConfig, reducer)
