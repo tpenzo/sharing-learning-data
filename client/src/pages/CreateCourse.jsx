@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import Header from "../components/header/Header";
 import StudentList from "../components/ministry/StudentList";
+import readXlsxFile from 'read-excel-file';
+import { createStandaloneToast } from '@chakra-ui/toast'
+
+const { toast } = createStandaloneToast()
 
 export default function CreateCourse() {
   const [fileName, setFileName] = useState("");
@@ -9,21 +13,49 @@ export default function CreateCourse() {
   const [teacherName, setTeachername] = useState("");
   const [semester, setSemester] = useState("");
   const [schoolYear, setSchoolYear] = useState("");
-  const [fileStudentList, setFileStudentList] = useState([]);
+  const [studentList, setStudentList] = useState([]);
   const [courseNote, setCourseNote] = useState("");
 
-  const handleSubmitFile = (e) => {
-    setFileName(e.target.files[0].name);
-    if(e.target.files){
-      setFileStudentList([...fileStudentList, e.target.files[0]]);
-    console.log(e.target.files[0]);
+  //mapping format for excel file
+  const schema = {
+    'STT':{
+      prop: 'stt',
+      type: String
+    },
+    'HO VA TEN': {
+      prop: 'fullName',
+      type: String,
+      required: true
+    },
+    'MSSV': {
+      prop: 'studentCode',
+      type: String,
+      required: true
     }
-    //handle display in studentlist
+  }
+
+  const handleSubmitFile = (e) => {
+    if(e.target.files){
+      readXlsxFile(e.target.files[0], {schema}).then(({rows, errors})=>{
+        if(errors.length===0){
+          setFileName(e.target.files[0].name);
+          setStudentList(rows);
+        } else {
+          toast({
+            description: "Vui lòng chọn lại tập tin đúng định dạng để nhập",
+            status: 'warning',
+            duration: 7000,
+            position: 'top-right',
+            isClosable: true,
+        })
+        }
+      });
+    }
   };
 
   const handleSubmitForm = () => {
     //submit api
-    console.log(courseId, courseName, courseNote, teacherName, fileStudentList, semester, schoolYear);
+    console.log(courseId, courseName, courseNote, teacherName, studentList, semester, schoolYear);
   };
 
   return (
@@ -152,6 +184,7 @@ export default function CreateCourse() {
                 id="studentList"
                 name="studentList"
                 type="file"
+                accept=".xlsx, .xls"
               />
             </div>
 
@@ -189,7 +222,7 @@ export default function CreateCourse() {
           </form>
         </div>
         <div className="basis-3/5 bg-white shadow mr-4 mb-1 rounded-lg">
-          <StudentList />
+          <StudentList studentList={studentList} />
         </div>
       </div>
     </div>
