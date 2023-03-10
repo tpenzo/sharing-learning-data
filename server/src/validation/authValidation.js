@@ -1,12 +1,12 @@
 import { check } from 'express-validator'
 
 export const loginValidation = [
-    check('email', 'bot an email').trim().isEmail(),
+    check('email', 'not an email').trim().isEmail(),
     check('password', 'password is required').trim().notEmpty(),
 ];
 
 export const registerStudentValidation = [
-    check('email', 'bot an email')
+    check('email', 'not an email')
         .trim().isEmail(),
     check('password', 'the required password is at least 8 characters long')
         .trim().isLength({min: 8}).notEmpty(),

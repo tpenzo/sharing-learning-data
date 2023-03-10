@@ -6,7 +6,7 @@ export default function showToast(message, status){
     toast({
         description: message,
         status: status,
-        duration: 1000,
+        duration: 3000,
         position: 'top-right',
         isClosable: true,
     })

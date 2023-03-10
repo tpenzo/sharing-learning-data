@@ -35,7 +35,7 @@ export default function BtnFollow() {
                         onClick={handleUnFollow}
                     >
                         <box-icon type='solid' name='user-x'></box-icon>
-                        <span>Hũy theo dõi</span>
+                        <span>Hủy theo dõi</span>
                     </div>
                 ) : (
                     <div

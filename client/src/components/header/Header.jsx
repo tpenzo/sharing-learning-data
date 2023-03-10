@@ -103,7 +103,7 @@ function Header() {
                </p>
             </figure>
             {dropdown && (
-               <ul className="absolute z-[9999] bg-white w-full top-14 left-0 rounded-xl shadow-xl border overflow-hidden">
+               <ul className="absolute z-[9999] bg-white w-44 top-14 left-0 rounded-xl shadow-xl border overflow-hidden">
                   <Link to={`/profile/${auth.user._id}`}>
                      <li className="p-2 font-semibold hover:bg-bold-gray flex items-center justify-start cursor-pointer">
                         <box-icon name="user"></box-icon>

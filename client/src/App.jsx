@@ -38,10 +38,13 @@ function App() {
                 <Route path="/login" element={<LoginPage />} />
 
                 <Route element={<RequireAuth />}>
+                    
                     <Route element={<RequirePermission roles={['teacher', 'student']} />}>
                         <Route exact path="/" element={<HomePage />} />
                         <Route path="/profile/:userId" element={<ProfilePage />} />
                         <Route path="/courses/:idCourse" element={<CoursePage />} />
+                        <Route exact path="/chat" element={<ChatPage />} />
+        //             <Route path="post/:postId" element={<ViewPostPage />}/>
                     </Route>
 
                     <Route element={<RequirePermission roles={['teacher']} />}>
@@ -54,6 +57,7 @@ function App() {
 
                     <Route element={<RequirePermission roles={['ministry']} />}>
                         <Route path="/ministry/manage" element={<ManageCourses />} />
+                        <Route path="/ministry/course/" element={<CreateCourse />} />
                     </Route>
                     <Route path="/unauthorized" element={<Unauthorized />} />
 
@@ -68,7 +72,7 @@ function App() {
         //         <Route path="/login" element={<LoginPage />} />
         //         {/* <Route element={<RequireAuth />}> */}
         //         <Route exact path="/" element={<HomePage />} />
-        //         <Route path="/profile" element={<ProfilePage />} />
+        //         <Route path="/profile/:id" element={<ProfilePage />} />
         //         <Route exact path="/chat" element={<ChatPage />} />
 
         //             {/* Post. role: student, teacher */}
@@ -83,7 +87,7 @@ function App() {
         //         <Route path="/admin/manage" element={<ManageAccount />} />
 
         //             {/* Role: ministry */}
-        //             <Route path="/giaovu/ministry" element={<ManageCourses />} />
+        //             <Route path="/ministry/manage" element={<ManageCourses />} />
         //             <Route path="/ministry/course/" element={<CreateCourse />} />
 
 

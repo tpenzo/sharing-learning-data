@@ -5,6 +5,7 @@ import SocketSlice from './SocketSlice.js';
 import storage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore } from 'redux-persist';
 import thunk from 'redux-thunk';
+import AllCoursesSlice from './AllCoursesSlice.js';
 
 const persistConfig = {
   key: 'root',
@@ -15,7 +16,11 @@ const persistConfig = {
 const reducer = combineReducers({
   auth: AuthSlice,
   profile: ProfileSlice,
+<<<<<<< HEAD
   socketInstance: SocketSlice
+=======
+  allCoursesList: AllCoursesSlice
+>>>>>>> 4ae66b155630ed5a9af448d768179515d2b5966b
 })
 
 const persistedReducer = persistReducer(persistConfig, reducer)

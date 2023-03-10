@@ -10,7 +10,7 @@ export const loginAPI = async (email, password, dispatch) => {
         // Update user, token in authSlice
         await dispatch(authSaveData(res))
         // show
-        showToast(res.message, 'success')
+        showToast('Đăng nhập thành công', 'success')
     } catch (error) {
         showToast(error.data.message, 'error')
     }
@@ -24,7 +24,7 @@ export const logoutAPI = async (dispatch) => {
         await dispatch(resetAuthSlice())
         await dispatch(resetProfileSlice())
         // show
-        showToast(res.message, 'success')
+        showToast('Đăng xuất thành công', 'success')
     } catch (error) {
         showToast(error.data.message, 'error')
     }
