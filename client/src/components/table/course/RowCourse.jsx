@@ -8,7 +8,6 @@ function RowCourse(props) {
 
   const getTeacherName = async (teacherId)=>{
     const teacherData = await getTeacherInfoAPI(teacherId)
-    console.log(teacherData.fullName);
     setTeacherName(teacherData.fullName);
   }
 

@@ -30,8 +30,7 @@ function ManageCourses() {
   //get all course from redux
   useEffect(()=> {
     getCoursesList(dispatch)
-      setCourses(coursesData.courseList)
-      console.log(coursesData.courseList);
+    setCourses(coursesData.courseList)
   }, [])
 
   useEffect(() => {
