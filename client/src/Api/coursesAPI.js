@@ -1,4 +1,4 @@
-import { setAllCoursesData } from "../redux/AllCoursesSlice";
+import { setAllCoursesData, updateTeacherForCourse } from "../redux/AllCoursesSlice";
 import axiosClient from "./axiosClient.js";
 import showToast from "./showToast";
 
@@ -25,5 +25,16 @@ export const updateCourse = async (course) => {
         const response = await axiosClient.post('/api/courses/update', {course})
     } catch (error) {
         showToast(error.data.message, 'error')
+    }
+    
+}
+
+export const getTeacherInfoAPI = async (teacherId) => {
+    try {
+        // Call API
+       const response = await axiosClient.get(`/api/user/${teacherId}`);
+       return response.data
+    } catch (error) {
+       showToast(error.data.message, 'error')
     }
 }

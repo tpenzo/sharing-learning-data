@@ -16,11 +16,8 @@ const persistConfig = {
 const reducer = combineReducers({
   auth: AuthSlice,
   profile: ProfileSlice,
-<<<<<<< HEAD
-  socketInstance: SocketSlice
-=======
-  allCoursesList: AllCoursesSlice
->>>>>>> 4ae66b155630ed5a9af448d768179515d2b5966b
+  allCoursesList: AllCoursesSlice,
+  socketInstance: SocketSlice,
 })
 
 const persistedReducer = persistReducer(persistConfig, reducer)

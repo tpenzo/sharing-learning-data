@@ -31,10 +31,10 @@ export default function BtnFollow() {
             {
                 followed ? (
                     <div
-                        className="px-3 py-2 rounded text-white text-sm bg-red-600 flex gap-1 items-center cursor-pointer duration-300 hover:bg-primary-red"
+                        className="px-3 py-2 rounded text-white text-sm bg-gray-400 hover:bg-gray-500 flex gap-1 items-center cursor-pointer duration-300"
                         onClick={handleUnFollow}
                     >
-                        <box-icon type='solid' name='user-x'></box-icon>
+                        <box-icon color="white" name='user-x'></box-icon>
                         <span>Hủy theo dõi</span>
                     </div>
                 ) : (
