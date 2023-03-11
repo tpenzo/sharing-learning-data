@@ -1,5 +1,7 @@
 import React from "react";
 import { Table, Thead, Tbody, Tr, Th, TableContainer } from "@chakra-ui/react";
+
+
 import RowCourse from "./RowCourse";
 function TableCourse(props) {
   const { courses } = props;
@@ -18,9 +20,9 @@ function TableCourse(props) {
           </Tr>
         </Thead>
         <Tbody>
-          {courses &&
+          {courses && courses.length!==0 &&
             courses.map((course, index) => {
-              return <RowCourse key={course.id} course={course} stt={index} />;
+              return (<RowCourse key={index} course={course} stt={index} />)
             })}
         </Tbody>
       </Table>
