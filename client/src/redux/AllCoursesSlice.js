@@ -1,7 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    courseList: []
+    courseList: [],
+    teacherList: [],
+    currentCourse: {}
 };
 
 export const allCoursesSlice = createSlice({
@@ -11,16 +13,19 @@ export const allCoursesSlice = createSlice({
         setAllCoursesData: (state, action) => {
             state.courseList = action.payload;
         },
+        setTeacherList: (state, action) => {
+            state.teacherList = action.payload
+        },
         addStudentIntoCourse: (state, action) =>{
-            state.courseList = {
-                ...state.courseList,
+            state.currentCourse = {
+                ...state.currentCourse,
                 studentList: [...studentList, action.payload]
             }
         },
         removeStudentFromCourse: (state, action) => {
-            state.courseList = {
-                ...state.courseList,
-                studentList: state.courseList.studentList.filter((student) => student !== action.payload )
+            state.currentCourse = {
+                ...state.currentCourse,
+                studentList: state.currentCourse.studentList.filter((student) => student !== action.payload )
             }
         },
         
@@ -28,6 +33,6 @@ export const allCoursesSlice = createSlice({
 });
 
 
-export const {setAllCoursesData, addStudentIntoCourse, removeStudentFromCourse, updateTeacherForCourse} = allCoursesSlice.actions
+export const {setAllCoursesData, addStudentIntoCourse, removeStudentFromCourse, setTeacherList} = allCoursesSlice.actions
 
 export default allCoursesSlice.reducer

@@ -1,4 +1,4 @@
-import { setAllCoursesData, updateTeacherForCourse } from "../redux/AllCoursesSlice";
+import { setAllCoursesData, setTeacherList } from "../redux/AllCoursesSlice";
 import axiosClient from "./axiosClient.js";
 import showToast from "./showToast";
 
@@ -11,22 +11,33 @@ export const getCoursesList = async (dispatch) => {
     }
 }
 
-export const createCourse = async (course) => {
+export const createCourseAPI = async (course) => {
     try {
         const response = await axiosClient.post('/api/courses/create', {course});
+        showToast("Thêm nhóm học phần thành công", "success")
     } catch (error) {
         showToast(error.data.message, 'error')
     }
 
 }
 
-export const updateCourse = async (course) => {
+export const updateCourseAPI = async (course) => {
     try {
         const response = await axiosClient.post('/api/courses/update', {course})
     } catch (error) {
         showToast(error.data.message, 'error')
     }
     
+}
+
+export const getTeacherListAPI = async (dispatch) => {
+    try {
+        // Call API
+       const response = await axiosClient.get(`/api/user/teacher/all`);
+       dispatch(setTeacherList(response.data))
+    } catch (error) {
+       showToast(error.data.message, 'error')
+    }
 }
 
 export const getTeacherInfoAPI = async (teacherId) => {

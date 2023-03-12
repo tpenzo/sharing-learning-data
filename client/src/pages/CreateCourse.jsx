@@ -1,61 +1,92 @@
 import React, { useEffect, useState } from "react";
+import { getTeacherListAPI, createCourseAPI } from "../Api/coursesAPI";
+import { useDispatch, useSelector } from "react-redux";
 import Header from "../components/header/Header";
 import StudentList from "../components/ministry/StudentList";
-import readXlsxFile from 'read-excel-file';
+import readXlsxFile from "read-excel-file";
 import showToast from "../Api/showToast";
+import courses from "../data/CoursesData";
 
 export default function CreateCourse() {
   const [fileName, setFileName] = useState("");
-  const [courseId, setCourseId] = useState("");
+  const [courseID, setcourseID] = useState("");
   const [courseName, setCourseName] = useState("");
   const [teacherName, setTeachername] = useState("");
-  const [semester, setSemester] = useState("");
-  const [schoolYear, setSchoolYear] = useState("");
+  const [semester, setSemester] = useState("1");
+  const [schoolYear, setSchoolYear] = useState("2022-2023");
   const [studentList, setStudentList] = useState([]);
-  const [courseNote, setCourseNote] = useState("");
+  const [description, setdescription] = useState("");
+  const [teacherList, setTeacherList] = useState([]);
+
+  const dispatch = useDispatch();
+  const teacherListData = useSelector(
+    (state) => state.allCoursesList.teacherList
+  );
+  const auth = useSelector(state => state.auth)
 
   //mapping format for excel file
   const schema = {
-    'STT':{
-      prop: 'stt',
-      type: String
-    },
-    'HO VA TEN': {
-      prop: 'fullName',
+    STT: {
+      prop: "stt",
       type: String,
-      required: true
     },
-    'MSSV': {
-      prop: 'studentCode',
+    "HO VA TEN": {
+      prop: "fullName",
       type: String,
-      required: true
-    }
-  }
+      required: true,
+    },
+    MSSV: {
+      prop: "studentCode",
+      type: String,
+      required: true,
+    },
+  };
 
   const handleSubmitFile = (e) => {
-    if(e.target.files){
-      readXlsxFile(e.target.files[0], {schema}).then(({rows, errors})=>{
-        if(errors.length===0){
+    if (e.target.files) {
+      readXlsxFile(e.target.files[0], { schema }).then(({ rows, errors }) => {
+        if (errors.length === 0) {
           setFileName(e.target.files[0].name);
           setStudentList(rows);
         } else {
-          showToast('Vui lòng chọn lại tập tin đúng định dạng để nhập', 'warning');
+          showToast(
+            "Vui lòng chọn lại tập tin đúng định dạng để nhập",
+            "warning"
+          );
         }
       });
     }
   };
 
-  const handleSubmitForm = () => {
+  const handleSubmitForm = (e) => {
+    e.preventDefault()
+    const teacherCode = teacherName.split("-")[0]
+    const teacher = teacherList.find((teacher)=>{return teacher.teacherCode === teacherCode})?._id
+
+    //package data
+    const courseDataSubmit = {
+      courseID: courseID,
+      name: courseName,
+      teacher: teacher,
+      description: description,
+      studentList: studentList,
+      semester: semester,
+      schoolyear: schoolYear,
+      chatGroup: null
+    }
     //submit api
-    console.log(courseId, courseName, courseNote, teacherName, studentList, semester, schoolYear);
+    console.log(JSON.stringify(courseDataSubmit));
+    createCourseAPI(courseDataSubmit)
   };
 
-  useEffect(()=>{
-
-  }, [])
+  //get teacher data to display suggestion
+  useEffect(() => {
+    getTeacherListAPI(dispatch);
+    setTeacherList(teacherListData);
+  }, []);
 
   return (
-    <div className="container xl mx-auto h-screen items-center self-center flex flex-col overflow-hidden">
+    <div className="container mx-auto h-screen items-center self-center flex flex-col overflow-hidden">
       <header className="header sticky top-0 w-full h-[12%] max-h-full rounded-t-lg z-50">
         <Header />
       </header>
@@ -65,22 +96,36 @@ export default function CreateCourse() {
             QUẢN LÝ NHÓM HỌC PHẦN
           </div>
           <form className="ml-6">
-            {/* courseId, coursename */}
+            {/* courseID, coursename */}
             <div className="flex flex-row justify-start items-center flex-auto">
               <div className="mt-4 w-1/4">
-                <label className="text-sm font-medium" htmlFor="courseId">
+                <label className="text-sm font-medium" htmlFor="courseID">
                   Mã Học Phần
                 </label>
                 <input
-                  value={courseId}
-                  onChange={(e) => setCourseId(e.target.value)}
+                  value={courseID}
+                  onChange={(e) => {setcourseID(e.target.value)}}
                   autoComplete="off"
                   className="bg-gray-50 block w-full mt-1 border outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
-                  id="courseId"
-                  name="courseId"
+                  id="courseID"
+                  name="courseID"
                   type="text"
+                  list="courseIDList"
                   required
                 />
+                <datalist id="courseIDList">
+                  {courseID.length > 2 &&
+                    courses.map((course) => {
+                      return (
+                        <option
+                          key={course.courseId}
+                          value={course.courseId}
+                        >
+                          {course.courseId + " - " + course.courseName}
+                        </option>
+                      );
+                    })}
+                </datalist>
               </div>
               <div className="mt-4 ml-2">
                 <label className="text-sm font-medium" htmlFor="courseName">
@@ -107,7 +152,7 @@ export default function CreateCourse() {
               <input
                 value={teacherName}
                 onChange={(e) => setTeachername(e.target.value)}
-                className="bg-gray-50 block mt-1 border outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                className="bg-gray-50 w-[71%] block mt-1 border outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
                 id="teacherName"
                 name="teacherName"
                 type="text"
@@ -116,16 +161,21 @@ export default function CreateCourse() {
               />
 
               {/* suggestion for teachername */}
-              <datalist id="teacherList">
-                <option value="Nguyễn văn giảng viên"></option>
-                <option value="Nguyễn văn giảng viên c"></option>
-                <option value="Nguyễn văn giảng viên"></option>
-                <option value="Nguyễn văn giảng viên c"></option>
-                <option value="Nguyễn văn giảng viên"></option>
-                <option value="Nguyễn văn giảng viên c"></option>
-                <option value="Nguyễn văn giảng viên"></option>
-                <option value="Nguyễn văn giảng viên c"></option>
-              </datalist>
+              {teacherName && (
+                <datalist id="teacherList">
+                  {teacherList &&
+                    teacherList.map((teacher) => {
+                      return (
+                        <option
+                          key={teacher._id}
+                          value={teacher.teacherCode + "-" + teacher.fullName}
+                        >
+                          {/* {teacher.teacherCode + " - " + teacher.fullName} */}
+                        </option>
+                      );
+                    })}
+                </datalist>
+              )}
             </div>
 
             {/* semester-schoolYear */}
@@ -154,9 +204,10 @@ export default function CreateCourse() {
                   placeholder="Niên khoá"
                   className="bg-gray-50 border outline-none ml-1 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
                 >
-                  <option>2022-2023</option>
-                  <option>2021-2022</option>
-                  <option>2020-2021</option>
+                  <option value="2022-2023">2022-2023</option>
+                  <option value="2021-2022">2021-2022</option>
+                  <option value="2020-2021">2020-2021</option>
+                  <option value="2019-2020">2019-2020</option>
                 </select>
               </div>
             </div>
@@ -186,16 +237,16 @@ export default function CreateCourse() {
 
             {/* note */}
             <div className="mt-4">
-              <label className="text-sm font-medium" htmlFor="courseNote">
+              <label className="text-sm font-medium" htmlFor="description">
                 Ghi chú
               </label>
               <textarea
-                value={courseNote}
-                onChange={(e) => setCourseNote(e.target.value)}
+                value={description}
+                onChange={(e) => setdescription(e.target.value)}
                 rows="5"
                 className="bg-gray-50 block w-[90%] mt-1 border outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
-                name="courseNote"
-                id="courseNote"
+                name="description"
+                id="description"
               ></textarea>
             </div>
 
