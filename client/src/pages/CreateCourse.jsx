@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Header from "../components/header/Header";
 import StudentList from "../components/ministry/StudentList";
 import readXlsxFile from "read-excel-file";
+import { inputStudentSchema } from "../utils/schemaExcel";
 import showToast from "../Api/showToast";
 import courses from "../data/CoursesData";
 
@@ -16,33 +17,17 @@ export default function CreateCourse() {
   const [schoolYear, setSchoolYear] = useState("2022-2023");
   const [studentList, setStudentList] = useState([]);
   const [description, setdescription] = useState("");
+  const [groupNumber, setGroupNumber] = useState("");
+  
   const [teacherList, setTeacherList] = useState([]);
 
   const dispatch = useDispatch();
   const teacherListData = useSelector(
     (state) => state.allCoursesList.teacherList
   );
-  const auth = useSelector(state => state.auth)
-
-  //mapping format for excel file
-  const schema = {
-    STT: {
-      prop: "stt",
-      type: String,
-    },
-    "HO VA TEN": {
-      prop: "fullName",
-      type: String,
-      required: true,
-    },
-    MSSV: {
-      prop: "studentCode",
-      type: String,
-      required: true,
-    },
-  };
 
   const handleSubmitFile = (e) => {
+  const schema = inputStudentSchema;
     if (e.target.files) {
       readXlsxFile(e.target.files[0], { schema }).then(({ rows, errors }) => {
         if (errors.length === 0) {
@@ -58,24 +43,24 @@ export default function CreateCourse() {
     }
   };
 
+  //submit course handle
   const handleSubmitForm = (e) => {
     e.preventDefault()
     const teacherCode = teacherName.split("-")[0]
     const teacher = teacherList.find((teacher)=>{return teacher.teacherCode === teacherCode})?._id
-
     //package data
     const courseDataSubmit = {
       courseID: courseID,
       name: courseName,
       teacher: teacher,
       description: description,
+      groupNumber: groupNumber,
       studentList: studentList,
       semester: semester,
       schoolyear: schoolYear,
       chatGroup: null
     }
     //submit api
-    console.log(JSON.stringify(courseDataSubmit));
     createCourseAPI(courseDataSubmit)
   };
 
@@ -84,6 +69,16 @@ export default function CreateCourse() {
     getTeacherListAPI(dispatch);
     setTeacherList(teacherListData);
   }, []);
+
+   //watch courseID to auto fill courseName
+   useEffect(() => {
+    if(courseID.length > 4){
+      const selectedCourse = courses.find((course)=>{
+        return course.courseId === courseID
+      })
+      setCourseName(selectedCourse.courseName);
+    }
+  }, [courseID]);
 
   return (
     <div className="container mx-auto h-screen items-center self-center flex flex-col overflow-hidden">
@@ -97,14 +92,14 @@ export default function CreateCourse() {
           </div>
           <form className="ml-6">
             {/* courseID, coursename */}
-            <div className="flex flex-row justify-start items-center flex-auto">
+            <div className="flex justify-start items-center w-full">
               <div className="mt-4 w-1/4">
                 <label className="text-sm font-medium" htmlFor="courseID">
                   Mã Học Phần
                 </label>
                 <input
                   value={courseID}
-                  onChange={(e) => {setcourseID(e.target.value)}}
+                  onChange={(e) => {setcourseID(e.target.value);}}
                   autoComplete="off"
                   className="bg-gray-50 block w-full mt-1 border outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
                   id="courseID"
@@ -113,8 +108,10 @@ export default function CreateCourse() {
                   list="courseIDList"
                   required
                 />
+
+                {/* suggestion for courseID */}
                 <datalist id="courseIDList">
-                  {courseID.length > 2 &&
+                  {courseID.length > 1 &&
                     courses.map((course) => {
                       return (
                         <option
@@ -127,7 +124,25 @@ export default function CreateCourse() {
                     })}
                 </datalist>
               </div>
-              <div className="mt-4 ml-2">
+              <div className="mt-4 ml-2 w-1/4">
+                <label className="text-sm font-medium" htmlFor="groupNumber">
+                  Nhóm
+                </label>
+                <input
+                  value={groupNumber}
+                  onChange={(e) => setGroupNumber(e.target.value)}
+                  autoComplete="off"
+                  className="bg-gray-50 block mt-1 w-full border outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                  id="groupNumber"
+                  name="groupNumber"
+                  type="text"
+                  required
+                />
+              </div>
+            </div>
+
+             {/* coursename */}
+              <div className="mt-4">
                 <label className="text-sm font-medium" htmlFor="courseName">
                   Tên nhóm
                 </label>
@@ -135,15 +150,13 @@ export default function CreateCourse() {
                   value={courseName}
                   onChange={(e) => setCourseName(e.target.value)}
                   autoComplete="off"
-                  className="bg-gray-50 block mt-1 border outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                  className="bg-gray-50 block mt-1 w-[71%] border outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
                   id="courseName"
                   name="courseName"
                   type="text"
                   required
                 />
               </div>
-            </div>
-
             {/* teacherName */}
             <div className="mt-4">
               <label className="text-sm font-medium" htmlFor="teacherName">
@@ -170,7 +183,6 @@ export default function CreateCourse() {
                           key={teacher._id}
                           value={teacher.teacherCode + "-" + teacher.fullName}
                         >
-                          {/* {teacher.teacherCode + " - " + teacher.fullName} */}
                         </option>
                       );
                     })}
@@ -236,14 +248,14 @@ export default function CreateCourse() {
             </div>
 
             {/* note */}
-            <div className="mt-4">
+            <div className="mt-3">
               <label className="text-sm font-medium" htmlFor="description">
                 Ghi chú
               </label>
               <textarea
                 value={description}
                 onChange={(e) => setdescription(e.target.value)}
-                rows="5"
+                rows="2"
                 className="bg-gray-50 block w-[90%] mt-1 border outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
                 name="description"
                 id="description"

@@ -19,6 +19,7 @@ function RowCourse(props) {
     <Tr>
       <Td>{stt + 1}</Td>
       <Td>{course.courseID}</Td>
+      <Td>{course.groupNumber}</Td>
       <Td>{course.name}</Td>
       <Td>{teacherName}</Td>
       <Td>{course.studentList.length}</Td>
