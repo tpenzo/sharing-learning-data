@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Header from "../components/header/Header";
+import { Link } from "react-router-dom";
 import TableCourse from "../components/table/course/TableCourse";
 import { useSelector, useDispatch } from "react-redux";
 import { getCoursesList } from "../Api/coursesAPI";
@@ -79,9 +80,11 @@ function ManageCourses() {
                 </span>
               )}
             </div>
+            <Link to={"/ministry/create"}>
             <span className="px-3 py-2 font-bold bg-gray-300 cursor-pointer rounded hover:bg-gray-400/60">
               Tạo nhóm học
             </span>
+            </Link>
           </div>
           <div className="mt-4 h-5/6 overflow-y-auto">
             {

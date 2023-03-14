@@ -10,8 +10,7 @@ import logo from "/assets/header-logo.png";
 function LoginPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const [password, setPassword] = useState("");
-  // const [email, setEmail] = useState("");
+  
   const [isShowPassWord, setIsShowPassWord] = useState(false);
 
   //email = formik.values.email

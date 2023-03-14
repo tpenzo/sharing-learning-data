@@ -7,6 +7,7 @@ import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
 import thunk from "redux-thunk";
 import AllCoursesSlice from "./AllCoursesSlice.js";
+import ManageSlice from './ManageSlice.js';
 import { parse, stringify } from "flatted";
 import createTransform from "redux-persist/es/createTransform";
 
@@ -14,6 +15,7 @@ const transformCircular = createTransform(
   (inboundState, key) => stringify(inboundState),
   (outboundState, key) => parse(outboundState)
 );
+
 
 const persistConfig = {
   key: "root",
@@ -25,6 +27,8 @@ const persistConfig = {
 const reducer = combineReducers({
   auth: AuthSlice,
   profile: ProfileSlice,
+  manage: ManageSlice,
+  allCoursesList: AllCoursesSlice,
   post: PostSlice,
   socketInstance: SocketSlice,
   allCoursesList: AllCoursesSlice,

@@ -1,12 +1,22 @@
 import React, { useEffect, useRef, useState } from "react";
 import Header from "../components/header/Header";
 import TableAccount from "../components/table/account/TableAccount";
+import { useSelector, useDispatch } from "react-redux";
+import { getTeacherListAccountAPI, getStudentListAccountAPI, getMinistryListAccountAPI } from "../Api/manageAPI";
 
 function ManageAccount() {
   const [tab, setTab] = useState("student");
   const [keyword, setKeyword] = useState("");
   const [closeX, setCloseX] = useState(false);
   const typingTimeoutRef = useRef(null);
+  const dispatch = useDispatch();
+
+  const [accounts, setAccounts] = useState([]);
+  const studentAccounts = useSelector(state => state.manage.studentList)
+  const teacherAccounts = useSelector(state => state.manage.teacherList)
+  const ministryAccounts = useSelector(state => state.manage.ministryList)
+
+
   const handleSearching = (e) => {
     const value = e.target.value;
     setKeyword(value);
@@ -19,6 +29,11 @@ function ManageAccount() {
       // callApi
     }, 500);
   };
+
+  const handleChangeTab = (e) => {
+    setTab(e.target.id);
+  };
+
   useEffect(() => {
     if (keyword.length) {
       setCloseX(true);
@@ -26,60 +41,32 @@ function ManageAccount() {
       setCloseX(false);
     }
   }, [keyword]);
-  const handleChangeTab = (e) => {
-    setTab(e.target.id);
-  };
+  
 
-  const [accounts, setAccounts] = useState([
-    {
-      id: 1,
-      code: "B1906585",
-      fullName: "Dương Anh Thương",
-      typeAccount: "student",
-    },
-    {
-      id: 2,
-      code: "B1906475",
-      fullName: "Đặng Hồ Trường Phúc",
-      typeAccount: "student",
-    },
-    {
-      id: 3,
-      code: "B1906476",
-      fullName: "Hồ Anh Vinh",
-      typeAccount: "student",
-    },
-    {
-      id: 4,
-      code: "12843423",
-      fullName: "Nguyễn Anh Thầy",
-      typeAccount: "teacher",
-    },
-    {
-      id: 5,
-      code: "42343244",
-      fullName: "Trần Văn Giáo Vụ",
-      typeAccount: "ministry",
-    },
-    {
-      id: 6,
-      code: "B1906111",
-      fullName: "Dương Em Thương",
-      typeAccount: "student",
-    },
-    {
-      id: 8,
-      code: "12731233",
-      fullName: "Thầy Giáo 2",
-      typeAccount: "teacher",
-    },
-    {
-      id: 12,
-      code: "23123123",
-      fullName: "Trần Trần Giảng Viên",
-      typeAccount: "teacher",
-    },
-  ]);
+  //fetch data when change tab
+  useEffect(() => {
+    switch (tab) {
+      case "student":
+        getStudentListAccountAPI(dispatch);
+        setAccounts(studentAccounts);
+        console.log(accounts);
+        break;
+
+      case "teacher":
+        getTeacherListAccountAPI(dispatch);
+        setAccounts(teacherAccounts);
+        console.log(accounts);
+        break;
+
+      case "ministry":
+        getMinistryListAccountAPI(dispatch);
+        setAccounts(ministryAccounts);
+        console.log(accounts);
+        break;
+    }
+  }, [tab]);
+
+
   return (
     <div className="container mx-auto h-screen items-center self-center flex flex-col">
       <header className="header sticky top-0 w-full h-[10%] rounded-t-lg z-50">
@@ -155,7 +142,7 @@ function ManageAccount() {
             </span>
           </div>
           <div className="mt-4 h-3/4 overflow-y-auto">
-            <TableAccount accounts={accounts} />
+            <TableAccount accounts={accounts} roles={tab} />
           </div>
         </div>
       </div>

@@ -11,7 +11,7 @@ const courses = [
 		courseId: 'AQ218',
 		weight: 3,
 	},
-	{ coursecourseName: 'Quản lý trại giống cá', courseId: 'AQ222', weight: 3 },
+	{ courseName: 'Quản lý trại giống cá', courseId: 'AQ222', weight: 3 },
 	{
 		courseName: 'Quản lý trại giống giáp xác và nhuyễn thể',
 		courseId: 'AQ223',
