@@ -23,12 +23,6 @@ export const allCoursesSlice = createSlice({
                 studentList: state.courseList.studentList.filter((student) => student !== action.payload )
             }
         },
-        updateTeacherForCourse: (state, action) => {
-            state.courseList = {
-                ...state.courseList,
-                teacher: action.payload
-            }
-        }
         
     }
 });

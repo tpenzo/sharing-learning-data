@@ -43,3 +43,12 @@ export const unFollowUserAPI = async(userId, dispatch, socket) => {
         showToast(error.data.message, 'error')
     }
 }
+
+export const searchAPI = async(value) => {
+    try {
+        const res = await axiosClient.get(`/api/user/search?info=${value}`)
+        return res.data
+    } catch (error) {
+        return []
+    }
+}

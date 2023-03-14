@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux'
 import headerLogo from "/assets/header-logo.png";
 import { logoutAPI } from "../../Api/authAPI.js";
+import { searchAPI } from "../../Api/userAPI.js";
+import SearchResult from "./SearchResult.jsx";
+import { useDetectClickOutside } from 'react-detect-click-outside';
 
 function Header() {
 
@@ -13,18 +16,28 @@ function Header() {
    const [closeX, setCloseX] = useState(false);
    const [dropdown, setDropdown] = useState(false);
    const typingTimeoutRef = useRef(null);
+
+   const [searchResult, setSearchResult] = useState([])
+
    const handleSearching = (e) => {
       const value = e.target.value;
       setKeyword(value);
-
       if (typingTimeoutRef.current) {
          clearTimeout(typingTimeoutRef.current);
       }
-      typingTimeoutRef.current = setTimeout(() => {
-         console.log(value);
-         // callApi
+      typingTimeoutRef.current = setTimeout(async () => {
+         if (value) {
+            // Call API
+            setSearchResult(await searchAPI(value))
+         } else {
+            setSearchResult([])
+         }
       }, 500);
    };
+
+   // Click outside input search and search result
+   const ref = useDetectClickOutside({ onTriggered: () => setKeyword('') });
+
    useEffect(() => {
       if (keyword.length) {
          setCloseX(true);
@@ -61,27 +74,24 @@ function Header() {
                onChange={handleSearching}
                className="w-full py-2 xl:py-3 px-10 outline-none rounded-lg bg-gray-100 focus:outline-primary-blue peer"
                type="text"
-               placeholder="Tìm kiếm"
+               placeholder="Tìm kiếm..."
             />
             {closeX && (
                <span
                   className="cursor-pointer absolute top-2 xl:top-3 right-2"
                   onClick={() => {
                      setKeyword("");
+                     setSearchResult([])
                   }}
                >
                   <box-icon name="x" color="gray"></box-icon>
                </span>
             )}
-            <div className="absolute z-10 p-1 w-full top-14 left-0 bg-light-gray rounded-lg shadow-xl overflow-hidden invisible peer-focus:visible">
-               <h4 className="mt-3 ml-3 font-bold">Tìm kiếm gần đây</h4>
-               <ul className="mt-2">
-                  <li className="p-3 font-semibold rounded-lg hover:bg-bold-gray flex items-center justify-between cursor-pointer">
-                     <span>Profile</span>
-                  </li>
-               </ul>
+            <div ref={ref} className="absolute z-10 p-1 w-full top-14 left-0 bg-light-gray rounded-lg shadow-xl overflow-hidden peer-focus:visible">
+               {keyword && <SearchResult searchResult={searchResult} />}
             </div>
          </div>
+         {/* user */}
          <div className="flex items-center gap-2 relative pr-5">
             <div className="text-right">
                <p className="font-semibold text-sm">{auth.user.fullName}</p>
