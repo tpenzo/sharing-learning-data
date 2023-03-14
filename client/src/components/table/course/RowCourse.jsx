@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Tr, Td, Select, Button } from "@chakra-ui/react";
 import { getTeacherInfoAPI } from "../../../Api/coursesAPI";
+import { Link } from "react-router-dom";
 
 function RowCourse(props) {
   const { course, stt } = props;
@@ -27,13 +28,15 @@ function RowCourse(props) {
         <ul className="flex items-center gap-2">
           <li className="cursor-pointer">
             <span>
-              <box-icon color="gray" name="trash"></box-icon>
+              <box-icon title="Xoá" color="gray" name="trash"></box-icon>
             </span>
           </li>
           <li className="cursor-pointer">
+            <Link reloadDocument to={`/ministry/manage/${course._id}`}>
             <span>
-              <box-icon color="gray" name="pencil"></box-icon>
+              <box-icon title="Chỉnh sửa" color="gray" name="pencil"></box-icon>
             </span>
+            </Link>
           </li>
         </ul>
       </Td>

@@ -32,7 +32,7 @@ function ManageCourses() {
   useEffect(()=> {
     getCoursesList(dispatch)
     setCourses(coursesData.courseList)
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (keyword.length) {

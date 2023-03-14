@@ -57,6 +57,7 @@ function App() {
 
                     <Route element={<RequirePermission roles={['ministry']} />}>
                         <Route path="/ministry/manage" element={<ManageCourses />} />
+                        <Route path="/ministry/manage/:courseId"  element={<CreateCourse />} />
                         <Route path="/ministry/create/" element={<CreateCourse />} />
                     </Route>
                     <Route path="/unauthorized" element={<Unauthorized />} />

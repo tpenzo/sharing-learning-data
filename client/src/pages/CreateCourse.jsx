@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getTeacherListAPI, createCourseAPI } from "../Api/coursesAPI";
+import { getTeacherListAPI, createCourseAPI, getCourseAPI } from "../Api/coursesAPI";
 import { useDispatch, useSelector } from "react-redux";
 import Header from "../components/header/Header";
 import StudentList from "../components/ministry/StudentList";
@@ -7,9 +7,11 @@ import readXlsxFile from "read-excel-file";
 import { inputStudentSchema } from "../utils/schemaExcel";
 import showToast from "../Api/showToast";
 import courses from "../data/CoursesData";
+import { useParams } from "react-router-dom";
 
 export default function CreateCourse() {
   const [fileName, setFileName] = useState("");
+
   const [courseID, setcourseID] = useState("");
   const [courseName, setCourseName] = useState("");
   const [teacherName, setTeachername] = useState("");
@@ -20,11 +22,21 @@ export default function CreateCourse() {
   const [groupNumber, setGroupNumber] = useState("");
   
   const [teacherList, setTeacherList] = useState([]);
+  const {courseId} = useParams();
 
   const dispatch = useDispatch();
   const teacherListData = useSelector(
     (state) => state.allCoursesList.teacherList
   );
+
+  //fetch data for manage
+  useEffect(()=>{
+    if(courseId){
+        getCourseAPI(courseId).then((course)=>{
+          setCourseInfo(course)
+        })
+    }
+  }, []);
 
   const handleSubmitFile = (e) => {
     //schema for input excel file
@@ -42,6 +54,24 @@ export default function CreateCourse() {
         }
       });
     }
+  };
+
+  //set course info for manage func
+  const setCourseInfo = (course) => {
+    const teacherInfo = teacherListData.find((teacher)=>{
+      return teacher._id == course.teacher
+    });
+    setcourseID(course.courseID);
+    setCourseName(course.name);
+    setTeachername(`${teacherInfo.teacherCode}-${teacherInfo.fullName}`);
+    setdescription(course.description);
+    setGroupNumber(course.groupNumber);
+    setSemester(course.semester);
+    setSchoolYear(course.schoolyear);
+    setGroupNumber(course.groupNumber);
+
+    //setStudentList(course.studentList);
+
   };
 
   //submit course handle
@@ -71,13 +101,15 @@ export default function CreateCourse() {
     setTeacherList(teacherListData);
   }, []);
 
-   //watch courseID to auto fill courseName
+   //watch courseID to auto fill courseName when in create func
    useEffect(() => {
-    if(courseID.length > 4){
-      const selectedCourse = courses.find((course)=>{
-        return course.courseId === courseID
-      })
-      setCourseName(selectedCourse.courseName);
+    if(!courseId){
+      if(courseID.length > 4){
+        const selectedCourse = courses.find((course)=>{
+          return course.courseId === courseID
+        })
+        setCourseName(selectedCourse.courseName);
+      }
     }
   }, [courseID]);
 
