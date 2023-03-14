@@ -10,7 +10,7 @@
   --fourth-blue: #617dbc;
   --light-gray: #f9f9f9;
   --bold-gray: #e8e8e8;
-  --primary-red: #FF0000;
+  --primary-red: #ff0000;
   font-family: "Inter", "Raleway", sans-serif;
   box-sizing: border-box;
 }
@@ -48,6 +48,15 @@
 }
 
 /* Editor */
+.readonly .ql-editor {
+  height: 100%;
+}
 .ql-editor {
   height: 300px;
+}
+.readonly > .ql-toolbar.ql-snow {
+  display: none;
+}
+.readonly > .ql-container.ql-snow.ql-disabled {
+  border: none;
 }
