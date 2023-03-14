@@ -4,9 +4,11 @@ function RowAccount(props) {
   const { account, stt } = props;
   const [isOption, setIsOption] = useState(true);
   const [types, setTypes] = useState(["student", "ministry", "teacher"]);
+
   const renderTypeAcc = (currentAcc) => {
     return types.filter((type) => type !== currentAcc);
   };
+
   const handleChange = (e) => {
     if (e.target.value) {
       setIsOption(false);
@@ -18,15 +20,15 @@ function RowAccount(props) {
   return (
     <Tr>
       <Td>{stt + 1}</Td>
-      <Td>{account.code}</Td>
+      {account.role ==="student" ? <Td>{account?.studentCode}</Td> : <Td>{account?.teacherCode}</Td>}
       <Td>{account.fullName}</Td>
       <Td>
         <Select
-          placeholder={account.typeAccount}
-          defaultValue={account.typeAccount}
+          placeholder={account.role}
+          defaultValue={account.role}
           onChange={handleChange}
         >
-          {renderTypeAcc(account.typeAccount).map((type) => {
+          {renderTypeAcc(account.role).map((type) => {
             return (
               <option key={type} value={type}>
                 {type}

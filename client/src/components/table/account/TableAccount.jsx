@@ -2,7 +2,7 @@ import React from "react";
 import { Table, Thead, Tbody, Tr, Th, TableContainer } from "@chakra-ui/react";
 import RowAccount from "./RowAccount";
 function TableAccount(props) {
-  const { accounts } = props;
+  const { accounts, roles } = props;
 
   return (
     <TableContainer overflowX="unset" overflowY="unset">
@@ -10,7 +10,7 @@ function TableAccount(props) {
         <Thead position={"sticky"} top={0} zIndex="docked" bg={"gray.300"}>
           <Tr>
             <Th>STT</Th>
-            <Th>MSSV</Th>
+            {roles === "student" ? <Th>MSSV</Th> : <Th>MSCB</Th>}
             <Th>Họ và tên</Th>
             <Th>Loại tài khoản</Th>
             <Th>Tùy chọn</Th>
@@ -19,7 +19,7 @@ function TableAccount(props) {
         <Tbody>
           {accounts &&
             accounts.map((account, index) => {
-              return <RowAccount key={account} account={account} stt={index} />;
+              return <RowAccount key={account._id} account={account} stt={index} />;
             })}
         </Tbody>
       </Table>

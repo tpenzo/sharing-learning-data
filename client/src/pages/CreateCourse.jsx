@@ -27,6 +27,7 @@ export default function CreateCourse() {
   );
 
   const handleSubmitFile = (e) => {
+    //schema for input excel file
   const schema = inputStudentSchema;
     if (e.target.files) {
       readXlsxFile(e.target.files[0], { schema }).then(({ rows, errors }) => {
