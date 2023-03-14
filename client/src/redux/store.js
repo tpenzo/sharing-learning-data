@@ -18,7 +18,7 @@ const transformCircular = createTransform(
 const persistConfig = {
   key: "root",
   storage,
-  transforms: [transformCircular],
+  // transforms: [transformCircular],
 };
 
 // import ...Slice here

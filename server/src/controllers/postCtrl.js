@@ -8,9 +8,7 @@ class postController {
   // files {type ,name , title, desc, url}
   async createPost(req, res) {
     const { title, content, description, courseId, docs } = req.body;
-    // const { _id, role } = req.userLogin;
-    const _id = "6405990317505142f32abf3c"; //fake
-    const role = "student"; //fake
+    const { _id, role } = req.userLogin;
     try {
       const newPost = new postModel({
         author: _id,
@@ -92,10 +90,9 @@ class postController {
   //@params          postId
   //@access          verifyToken
   async likePost(req, res) {
-    console.log(123);
     const postId = req.params.postId;
-    // const { _id } = req.userLogin ;
-    const _id = "6405990317505142f32abf3c";
+    const { _id } = req.userLogin;
+
     try {
       const post = await postModel.findOneAndUpdate(
         { _id: postId },
@@ -116,8 +113,7 @@ class postController {
   //@access          verifyToken
   async unLikePost(req, res) {
     const postId = req.params.postId;
-    // const { _id } = req.userLogin;
-    const _id = "6405990317505142f32abf3c";
+    const { _id } = req.userLogin;
 
     try {
       const post = await postModel.findOneAndUpdate(

@@ -1,15 +1,26 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 function PostItem(props) {
-  const { dataItem } = props;
-
-  const navigate = useNavigate();
-  const [loved, setLoved] = useState(false);
+  const { dataItem, handleLovedPost } = props;
+  const user = useSelector((state) => state.auth.user);
+  const [loved, setLoved] = useState(() => {
+    if (dataItem) {
+      return [...dataItem.likes].some((id) => id === user._id);
+    }
+  });
   const [saved, setSaved] = useState(false);
 
-  const handleNavigate = (e) => {
-    navigate(`/post/${dataItem._id}`);
+  const handleToggle = () => {
+    setLoved(!loved);
+    //api
+    if (!loved) {
+      handleLovedPost(dataItem._id, loved, user._id);
+    } else {
+      handleLovedPost(dataItem._id, loved, user._id);
+    }
   };
+
   return (
     <div className="w-full bg-white pb-4 pt-1 px-6 rounded-lg mb-5 shadow-sm">
       <div className="flex items-center gap-4 justify-between mt-5 flex-wrap-reverse">
@@ -34,28 +45,27 @@ function PostItem(props) {
           CT244
         </p>
       </div>
-      <p
-        onClick={handleNavigate}
-        className="mt-5 text-sm cursor-pointer hover:font-semibold"
-      >
-        {dataItem.title}
-      </p>
-      <div className="mt-5 flex gap-5 md:gap-3">
-        <span
-          className="bg-gray-500/5 cursor-pointer pt-1 px-1 rounded-lg "
-          onClick={() => {
-            setLoved(!loved);
-          }}
+      <Link to={`/post/${dataItem._id}`}>
+        <p className="mt-5 text-sm cursor-pointer hover:font-semibold">
+          {dataItem.title}
+        </p>
+      </Link>
+      <div className="mt-5 flex items-center gap-5 md:gap-2">
+        <p
+          className="bg-gray-500/5 cursor-pointer pt-1 px-1 rounded-lg flex items-center"
+          onClick={handleToggle}
         >
-          {dataItem.likes.length > 0 ? dataItem.likes.length : null}
+          <span className="text-sm leading-4">
+            {dataItem.likes.length > 0 ? dataItem.likes.length : null}
+          </span>
           <box-icon
             name="heart"
             type={loved ? "solid" : "regular"}
             color={loved ? "red" : "black"}
           ></box-icon>
-        </span>
+        </p>
         <span
-          className="bg-gray-500/5 cursor-pointer pt-1 px-1 rounded-lg"
+          className="bg-gray-500/5 cursor-pointer pt-1 px-1 rounded-lg flex items-center"
           onClick={() => {
             setSaved(!saved);
           }}

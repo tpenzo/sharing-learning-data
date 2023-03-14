@@ -13,10 +13,11 @@ export default function ViewPostPage() {
   const { postId } = useParams();
   const dispatch = useDispatch();
   const post = useSelector((state) => state.post.postItem);
+  const user = useSelector((state) => state.auth.user);
   const [lovedPost, setLovedPost] = useState(() => {
-    return post?.likes.filter((like) => like === "6405990317505142f32abf3c")
-      ? true
-      : false;
+    if (post) {
+      return [...post.likes].some((id) => id === user._id);
+    }
   });
   // const [readOnly, setReadOnly] = useState(true);
   const [bookmarked, setBookmarked] = useState(false);
@@ -26,9 +27,9 @@ export default function ViewPostPage() {
     setLovedPost(!lovedPost);
     //api
     if (!lovedPost) {
-      await likePost(postId, "6405990317505142f32abf3c", dispatch);
+      await likePost(postId, user._id, dispatch);
     } else {
-      await unLikePost(postId, "6405990317505142f32abf3c", dispatch);
+      await unLikePost(postId, user._id, dispatch);
     }
   };
 
@@ -75,7 +76,9 @@ export default function ViewPostPage() {
                   name="heart"
                 ></box-icon>
               </span>
-              <span>{post.likes.length}</span>
+              <span className="text-black">
+                {post?.likes.length > 0 ? post?.likes.length : null}
+              </span>
             </div>
             <div
               onClick={handleScrollComment}
@@ -109,9 +112,9 @@ export default function ViewPostPage() {
           <div className="h-full scroll-smooth">
             <div id="post" className="post-content h-screen">
               <h1 className="text-center font-bold text-2xl my-4">
-                {post.title}
+                {post?.title}
               </h1>
-              {parse(post.content)}
+              {parse(post ? String(post?.content) : " ")}
               {/* <QuillEditor
                 readOnly={readOnly}
                 isEdit={true}
