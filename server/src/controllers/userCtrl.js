@@ -2,6 +2,11 @@ import UserModel from "../models/userModel.js"
 
 
 class UserController {
+
+    //@description     Get user
+    //@route           [GET] /user/:userId
+    //@body            No
+    //@access          verifyToken
     async getUser(req, res){
         try {
             const { userId } = req.params
@@ -17,6 +22,38 @@ class UserController {
     }
 
 
+    //@description     Search user
+    //@route           [GET] /user/search?info=''
+    //@body            No
+    //@access          verifyToken
+    async search(req, res){
+        try {
+            const { info } = req.query
+            
+            // Search user
+            const userList = await UserModel.find({
+                $or: [
+                    { email: { $regex: info } },
+                    { fullName : { $regex: info  } },
+                    { teacherCode : { $regex: info  } },
+                    { studentCode: { $regex: info } },
+                ],
+            }).select('fullName urlAvatar email role teacherCode studentCode')
+            // Search course here
+
+            if(userList.length === 0) {
+                return res.status(400).json({message: "Data does not match"}) 
+            }
+            return res.status(200).json({ message: 'successful', data: userList });
+        } catch (error) {
+            return res.status(500).json({message: error.message})
+        }
+    }
+
+    //@description     follow user
+    //@route           [POST] /user/follow
+    //@body            { userId }
+    //@access          verifyToken
     async followUser(req, res){
         try {
             const { userId } = req.body
@@ -43,6 +80,10 @@ class UserController {
         }
     }
 
+    //@description     unfollow user
+    //@route           [POST] /user/unfollow
+    //@body            { userId }
+    //@access          verifyToken
     async UnFollowUser(req, res){
         try {
             const { userId } = req.body
@@ -94,7 +135,6 @@ class UserController {
     //@access          verifyToken
     async getAllMinistry(req, res) {
         try {
-
             const ministryList = await UserModel.find({role: "ministry"})
             return res.status(200).json({ message: "successful", data: ministryList });
         } catch (error) {
