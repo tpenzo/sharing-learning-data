@@ -16,6 +16,7 @@ class UserController {
         }
     }
 
+
     async followUser(req, res){
         try {
             const { userId } = req.body
@@ -59,6 +60,48 @@ class UserController {
             return res.status(500).json({message: error.message})
         }
     }
+
+    //@description     get All teacher Info
+    //@route           [GET] /api/teacher/all
+    //@body            {}
+    //@access          verifyToken
+    async getAllTeacher(req, res) {
+        try {
+
+            const teacherList = await UserModel.find({role: "teacher"})
+            return res.status(200).json({ message: "successful", data: teacherList });
+        } catch (error) {
+            return res.status(500).json({ message: error.message });
+        }
+    }
+
+    //@description     get All student Info
+    //@route           [GET] /api/student/all
+    //@body            {}
+    //@access          verifyToken
+    async getAllStudent(req, res) {
+        try {
+            const studentList = await UserModel.find({role: "student"})
+            return res.status(200).json({ message: "successful", data: studentList });
+        } catch (error) {
+            return res.status(500).json({ message: error.message });
+        }
+    }
+
+    //@description     getAll ministry Info
+    //@route           [GET] /api/ministry/all
+    //@body            {}
+    //@access          verifyToken
+    async getAllMinistry(req, res) {
+        try {
+
+            const ministryList = await UserModel.find({role: "ministry"})
+            return res.status(200).json({ message: "successful", data: ministryList });
+        } catch (error) {
+            return res.status(500).json({ message: error.message });
+        }
+    }
+
 }
 
 

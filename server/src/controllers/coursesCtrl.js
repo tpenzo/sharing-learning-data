@@ -45,27 +45,24 @@ class coursesController {
     //@access          verifyToken, role: Ministry
     async createCourse(req, res) {
         try {
-            const { role } = req.body.userLogin;
-            const { courseID, semester, schoolYear } = req.body;
-            // if(role !== "ministry"){
-            //     return res.status(401).json({message: "Don't have permission to access"})
-            // }else{
+            const { courseID, semester, schoolYear, groupNumber } = req.body.course;
             const course = await courseModel.findOne({
                 $and: [
                     { courseID: courseID },
                     { semester: semester },
                     { schoolYear: schoolYear },
+                    { groupNumber: groupNumber},
                 ],
             });
             if (course) {
                 res.status(404).json({ message: "This course already created" });
             } else {
-                const newCourse = await courseModel.create(req.body);
+                console.log(req.body);
+                const newCourse = await courseModel.create(req.body.course);
                 return res
                     .status(200)
                     .json({ message: "Course created successfully", data: newCourse });
             }
-            // }
         } catch (error) {
             return res.status(500).json({ message: error.message });
         }
@@ -77,16 +74,13 @@ class coursesController {
     //@access          verifyToken, role: Ministry
     async updateCourse(req, res) {
         try {
-            const { role } = req.body.userLogin;
-            const { courseID, semester, schoolYear } = req.body;
-            // if(role !== "ministry"){
-            //     return res.status(401).json({message: "Don't have permission to access"})
-            // }else{
+            const { courseID, semester, schoolYear, groupNumber } = req.body.course;
             const course = await courseModel.findOne({
                 $and: [
                     { courseID: courseID },
                     { semester: semester },
                     { schoolYear: schoolYear },
+                    { groupNumber: groupNumber},
                 ],
             });
             if (course) {
@@ -98,13 +92,13 @@ class coursesController {
                             { schoolYear: schoolYear },
                         ],
                     },
-                    { $set: req.body } //overide all data
+                    { $set: req.body.course } //overide all data
                 );
                 return res.status(200).json({message: 'update course success', data: updatedCourse})
             } else {
                 return res.status(404).json({ message: "Can't find specific course to update" });
             }
-            // }
+
         } catch (error) {
             return res.status(500).json({ message: error.message });
         }
@@ -116,16 +110,13 @@ class coursesController {
     //@access          verifyToken, role: Ministry
     async removeCourse(req, res) {
         try {
-            const { role } = req.body.userLogin;
-            const { courseID, semester, schoolYear } = req.body;
-            // if(role !== "ministry"){
-            //     return res.status(401).json({message: "Don't have permission to access"})
-            // }else{
+            const { courseID, semester, schoolYear, groupNumber } = req.body.course;
             const course = await courseModel.findOne({
                 $and: [
                     { courseID: courseID },
                     { semester: semester },
                     { schoolYear: schoolYear },
+                    { groupNumber: groupNumber},
                 ],
             });
             if (course) {
@@ -159,13 +150,14 @@ class coursesController {
     //@access          verifyToken, role: ministry, teacher
     async addStudentIntoCourse(req, res) {
         try {
-            const { userLogin, courseID, schoolYear, semester } = req.body;
+            const { userLogin, courseID, schoolYear, semester, groupNumber } = req.body.course;
             //check available course
             const course = await courseModel.findOne({
                 $and: [
                     { courseID: courseID },
                     { semester: semester },
                     { schoolYear: schoolYear },
+                    { groupNumber: groupNumber},
                 ],
             });
 
@@ -219,13 +211,14 @@ class coursesController {
     //@access          verifyToken, role: ministry, teacher
     async removeStudentFromCourse(req, res) {
         try {
-            const { userLogin, courseID, schoolYear, semester } = req.body;
+            const { userLogin, courseID, schoolYear, semester, groupNumber } = req.body.course;
             //check available course
             const course = await courseModel.findOne({
                 $and: [
                     { courseID: courseID },
                     { semester: semester },
                     { schoolYear: schoolYear },
+                    { groupNumber: groupNumber},
                 ],
             });
 
@@ -280,13 +273,14 @@ class coursesController {
     //@access          verifyToken, role: ministry
     async updateTeacherCourse(req, res){
         try {
-            const { teacherID, courseID, schoolYear, semester } = req.body;
+            const { teacherID, courseID, schoolYear, semester } = req.body.course;
             //check available course
             const course = await courseModel.findOne({
                 $and: [
                     { courseID: courseID },
                     { semester: semester },
                     { schoolYear: schoolYear },
+                    { groupNumber: groupNumber},
                 ],
             });
 
