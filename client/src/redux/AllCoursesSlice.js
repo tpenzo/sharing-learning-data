@@ -3,7 +3,6 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     courseList: [],
     teacherList: [],
-    currentCourse: {}
 };
 
 export const allCoursesSlice = createSlice({
@@ -17,9 +16,9 @@ export const allCoursesSlice = createSlice({
             state.teacherList = action.payload
         },
         addStudentIntoCourse: (state, action) =>{
-            state.currentCourse = {
-                ...state.currentCourse,
-                studentList: [...studentList, action.payload]
+            state.courseList={
+                ...state.courseList,
+                
             }
         },
         removeStudentFromCourse: (state, action) => {

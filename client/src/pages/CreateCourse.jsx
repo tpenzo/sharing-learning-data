@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   getTeacherListAPI,
   createCourseAPI,
@@ -6,6 +6,7 @@ import {
   getUserInfoAPI,
   getInfoByStudentCodeAPI,
 } from "../Api/coursesAPI";
+import { useDisclosure } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Header from "../components/header/Header";
@@ -28,7 +29,9 @@ export default function CreateCourse() {
   const [description, setdescription] = useState("");
   const [groupNumber, setGroupNumber] = useState("");
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [teacherList, setTeacherList] = useState([]);
+  let studentInfoList = useRef([]);
   const { courseId } = useParams();
   const dispatch = useDispatch();
   const teacherListData = useSelector(
@@ -37,18 +40,20 @@ export default function CreateCourse() {
 
   //fetch data for manage func
   useEffect(() => {
+    let filteredArr = [];
     if (courseId) {
       getCourseAPI(courseId).then((course) => {
         setCourseInfo(course),
+        setStudentList([]),
           //after set data for course, fetch data for student list from _id stored in course
           course.studentList.forEach((student) => {
             getUserInfoAPI(student).then((studentInfo) => {
               setStudentList((studentList) => [...studentList, studentInfo]);
             });
-          });
+          });  
       });
     }
-  }, []);
+  }, [isOpen]);
 
   const handleSubmitFile = (e) => {
     //schema for input excel file
@@ -155,8 +160,8 @@ export default function CreateCourse() {
                     setcourseID(e.target.value);
                   }}
                   autoComplete="off"
-                  className={`bg-gray-50 block w-full mt-1 border outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 
-                            ${courseId ? "cursor-not-allowed text-gray-300 font-thin": "" }`}
+                  className={`bg-gray-50 block w-full mt-1 border outline-none border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 
+                            ${courseId ? "cursor-not-allowed text-gray-400 font-thin": "text-gray-900" }`}
                   id="courseID"
                   name="courseID"
                   type="text"
@@ -185,8 +190,8 @@ export default function CreateCourse() {
                   value={groupNumber}
                   onChange={(e) => setGroupNumber(e.target.value)}
                   autoComplete="off"
-                  className={`bg-gray-50 block mt-1 w-full border outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5
-                             ${courseId ? "cursor-not-allowed text-gray-300 font-thin": "" }`}
+                  className={`bg-gray-50 block mt-1 w-full border outline-none border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5
+                             ${courseId ? "cursor-not-allowed text-gray-400 font-thin": "text-gray-900" }`}
                   id="groupNumber"
                   name="groupNumber"
                   type="text"
@@ -205,8 +210,8 @@ export default function CreateCourse() {
                 value={courseName}
                 onChange={(e) => setCourseName(e.target.value)}
                 autoComplete="off"
-                className={`bg-gray-50 block mt-1 w-[71%] border outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5
-                          ${courseId ? "cursor-not-allowed text-gray-300 font-thin": "" }`}
+                className={`bg-gray-50 block mt-1 w-[71%] border outline-none border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5
+                          ${courseId ? "cursor-not-allowed text-gray-400 font-thin": "text-gray-900" }`}
                 id="courseName"
                 name="courseName"
                 type="text"
@@ -260,8 +265,8 @@ export default function CreateCourse() {
                   onChange={(e) => setSemester(e.target.value)}
                   id="semester"
                   disabled={courseId ? true : false}
-                  className={`bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5
-                            ${courseId ? "cursor-not-allowed text-gray-300 font-thin": "" }`}
+                  className={`bg-gray-50 border outline-none border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5
+                            ${courseId ? "cursor-not-allowed text-gray-400 font-thin": "text-gray-900" }`}
                 >
                   <option value="1">1</option>
                   <option value="2">2</option>
@@ -273,8 +278,8 @@ export default function CreateCourse() {
                   id="schoolYear"
                   placeholder="Niên khoá"
                   disabled={courseId ? true : false}
-                  className={`bg-gray-50 border outline-none ml-1 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5
-                            ${courseId ? "cursor-not-allowed text-gray-300 font-thin": "" }`}
+                  className={`bg-gray-50 border outline-none ml-1 border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5
+                            ${courseId ? "cursor-not-allowed text-gray-400 font-thin": "text-gray-900" }`}
                 >
                   <option value="2022-2023">2022-2023</option>
                   <option value="2021-2022">2021-2022</option>
@@ -291,8 +296,8 @@ export default function CreateCourse() {
               </div>
               <label className="text-lg font-medium mr-5" htmlFor="studentList">
                 <div
-                 className={`px-2.5 py-2 flex justify-center items-center bg-gray-100 w-full ml-2 rounded-lg  cursor-pointer
-                 ${courseId ? "cursor-not-allowed text-gray-300 font-thin hover:bg-gray-100": "hover:bg-gray-300" }`}>
+                 className={`px-2.5 py-2 flex justify-center items-center bg-gray-100 w-full ml-2 rounded-lg  
+                 ${courseId ? "cursor-not-allowed text-gray-300 font-thin hover:bg-gray-100": "hover:bg-gray-300 cursor-pointer" }`}>
                   <span className="text-xs">
                     {fileName === "" ? "Chọn tập tin" : fileName}
                   </span>
@@ -327,7 +332,7 @@ export default function CreateCourse() {
 
             {/* button field */}
             <div className=" flex justify-end items-center mr-12 mt-6">
-              <Link to={"/ministry/manage"}>
+              <Link reloadDocument to={"/ministry/manage"}>
               <button
                 type="button"
                 className="text-white bg-gray-400 hover:bg-gray-500 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 outline-none "
@@ -346,7 +351,7 @@ export default function CreateCourse() {
           </form>
         </div>
         <div className="basis-3/5 bg-white shadow mr-4 mb-1 rounded-lg">
-          <StudentList studentList={studentList} />
+          <StudentList isOpen={isOpen} onOpen={onOpen} onClose={onClose} studentList={studentList} />
         </div>
       </div>
     </div>

@@ -39,6 +39,15 @@ export const updateCourseAPI = async (course) => {
     
 }
 
+export const addStudentIntoCourseAPI = async (course) =>{
+    try {
+        const response = await axiosClient.post('/api/courses/addStudent', {course})
+        showToast("Thêm sinh viên thành công", 'success')
+    } catch (error) {
+        showToast(error.data, 'error')
+    }
+}
+
 export const getTeacherListAPI = async (dispatch) => {
     try {
         // Call API
@@ -62,7 +71,6 @@ export const getUserInfoAPI = async (userId) => {
 export const getInfoByStudentCodeAPI = async (studentCode) => {
     try {
         // Call API
-        console.log(studentCode);
        const response = await axiosClient.get(`/api/user/student/${studentCode}`);
        return response.data
     } catch (error) {

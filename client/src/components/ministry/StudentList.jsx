@@ -1,4 +1,5 @@
 import React from "react";
+import ModalAddStudent from "../modal/ModalAddStudent";
 function StudentList(props) {
 
   return (
@@ -25,7 +26,7 @@ function StudentList(props) {
             />
           </div>
           <div className="pr-3 ">
-            <button className="flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg py-1 px-2 mr-2 outline-none ">
+            <button onClick={props.onOpen} className="flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg py-1 px-2 mr-2 outline-none ">
               <span className="translate-y-1">
                 <box-icon name="plus-circle" color="white"></box-icon>
               </span>
@@ -65,9 +66,9 @@ function StudentList(props) {
                 <td className="px-3 py-4">
                   <a
                     href="#"
-                    className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                    className="font-medium text-red-600 dark:text-red-500 hover:underline"
                   >
-                    Sửa
+                    Xoá
                   </a>
                 </td>
               </tr>
@@ -78,6 +79,10 @@ function StudentList(props) {
           </table>
         </div>
       </div>
+      <ModalAddStudent
+      isOpen={props.isOpen}
+      onClose={props.onClose}
+      />
     </div>
   );
 }

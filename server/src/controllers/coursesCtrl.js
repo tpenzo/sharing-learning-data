@@ -150,25 +150,18 @@ class coursesController {
     //@access          verifyToken, role: ministry, teacher
     async addStudentIntoCourse(req, res) {
         try {
-            const { userLogin, courseID, schoolYear, semester, groupNumber } = req.body.course;
-            //check available course
-            const course = await courseModel.findOne({
-                $and: [
-                    { courseID: courseID },
-                    { semester: semester },
-                    { schoolYear: schoolYear },
-                    { groupNumber: groupNumber},
-                ],
-            });
 
+            const { courseId, student_id } = req.body.course;
+            //check available course
+            const course = await courseModel.findOne(
+                {_id: courseId}
+            );
             //check if student already in course
             const existedStudent = await courseModel.findOne(
                 {
                     $and: [
-                        { courseID: courseID },
-                        { semester: semester },
-                        { schoolYear: schoolYear },
-                        { studentList: { $elemMatch: { $eq: userLogin._id } } },
+                        {_id: courseId},
+                        { studentList: { $elemMatch: { $eq: student_id } } },
                     ],
                 },
             );
@@ -176,29 +169,23 @@ class coursesController {
             //if course available and student not in course
             if (course) {
                 if (existedStudent) {
-                    return res.status(404).json("Student already in course");
+                    return res.status(400).json("Student already in course");
                 } else {
                     const updatedCourse = await courseModel.findOneAndUpdate(
-                        {
-                            $and: [
-                                { courseID: courseID },
-                                { semester: semester },
-                                { schoolYear: schoolYear },
-                            ],
-                        },
-                        { $push: { studentList: userLogin._id } }
+                        {_id:courseId},
+                        { $push: { studentList: student_id } }
                     );
                     return res
                         .status(200)
                         .json({
-                            message: `add student into course with id: ${courseID} successfully`,
+                            message: `add student into course successfully`,
                             data: updatedCourse,
                         });
                 }
             } else {
                 return res
                     .status(404)
-                    .json({ message: "Can't find specific course to add" });
+                    .json({ message: "Can't find specific course to add student" });
             }
         } catch (error) {
             return res.status(500).json({ message: error.message });
@@ -211,25 +198,16 @@ class coursesController {
     //@access          verifyToken, role: ministry, teacher
     async removeStudentFromCourse(req, res) {
         try {
-            const { userLogin, courseID, schoolYear, semester, groupNumber } = req.body.course;
+            const { courseId, student_id } = req.body.course;
             //check available course
-            const course = await courseModel.findOne({
-                $and: [
-                    { courseID: courseID },
-                    { semester: semester },
-                    { schoolYear: schoolYear },
-                    { groupNumber: groupNumber},
-                ],
-            });
+            const course = await courseModel.findOne({_id: courseId});
 
             //check if student already in course
             const existedStudent = await courseModel.findOne(
                 {
                     $and: [
-                        { courseID: courseID },
-                        { semester: semester },
-                        { schoolYear: schoolYear },
-                        { studentList: { $elemMatch: { $eq: userLogin._id } } },
+                        {_id: courseId},
+                        { studentList: { $elemMatch: { $eq: student_id } } },
                     ],
                 },
             );
@@ -240,23 +218,16 @@ class coursesController {
                     return res.status(404).json({message: "Can't find student to remove"})
                 } else {
                     const updatedCourse = await courseModel.findOneAndUpdate(
-                        {
-                            $and: [
-                                { courseID: courseID },
-                                { semester: semester },
-                                { schoolYear: schoolYear },
-                            ],
-                        },
-                        { $pull: { studentList: userLogin._id } }
+                        {_id: courseId},
+                        { $pull: { studentList: student_id } }
                     );
                     return res
                         .status(200)
                         .json({
-                            message: `remove student from course with id: ${courseID} successfully`,
+                            message: `remove student from course successfully`,
                             data: updatedCourse,
                         });
                 }
-               
             } else {
                 return res
                     .status(404)

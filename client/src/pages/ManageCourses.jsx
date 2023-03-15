@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import TableCourse from "../components/table/course/TableCourse";
 import { useSelector, useDispatch } from "react-redux";
 import { getCoursesList } from "../Api/coursesAPI";
+import { useLocation } from "react-router-dom";
 
 function ManageCourses() {
   const [tab, setTab] = useState("student");
@@ -13,6 +14,7 @@ function ManageCourses() {
   // const [courses, setCourses] = useState([]);
 
   const dispatch = useDispatch();
+  const location = useLocation();
   const coursesData = useSelector(state => state.allCoursesList)
 
   const handleSearching = (e) => {
@@ -30,9 +32,13 @@ function ManageCourses() {
 
   //get all course from redux
   useEffect(()=> {
-    getCoursesList(dispatch)
+    setCourses("")
+    const fetchData = async ()=>{
+     await getCoursesList(dispatch)
+    }
+    fetchData()
     setCourses(coursesData.courseList)
-  }, []);
+  }, [location]);
 
   useEffect(() => {
     if (keyword.length) {

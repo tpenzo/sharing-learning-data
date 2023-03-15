@@ -32,7 +32,7 @@ function RowCourse(props) {
             </span>
           </li>
           <li className="cursor-pointer">
-            <Link reloadDocument to={`/ministry/manage/${course._id}`}>
+            <Link to={`/ministry/manage/${course._id}`}>
             <span>
               <box-icon title="Chỉnh sửa" color="gray" name="pencil"></box-icon>
             </span>
