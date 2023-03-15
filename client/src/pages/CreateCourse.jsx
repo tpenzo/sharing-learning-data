@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { getTeacherListAPI, createCourseAPI, getCourseAPI } from "../Api/coursesAPI";
+import {
+  getTeacherListAPI,
+  createCourseAPI,
+  getCourseAPI,
+  getUserInfoAPI,
+  getInfoByStudentCodeAPI,
+} from "../Api/coursesAPI";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import Header from "../components/header/Header";
 import StudentList from "../components/ministry/StudentList";
 import readXlsxFile from "read-excel-file";
@@ -20,32 +27,44 @@ export default function CreateCourse() {
   const [studentList, setStudentList] = useState([]);
   const [description, setdescription] = useState("");
   const [groupNumber, setGroupNumber] = useState("");
-  
-  const [teacherList, setTeacherList] = useState([]);
-  const {courseId} = useParams();
 
+  const [teacherList, setTeacherList] = useState([]);
+  const { courseId } = useParams();
   const dispatch = useDispatch();
   const teacherListData = useSelector(
     (state) => state.allCoursesList.teacherList
   );
 
-  //fetch data for manage
-  useEffect(()=>{
-    if(courseId){
-        getCourseAPI(courseId).then((course)=>{
-          setCourseInfo(course)
-        })
+  //fetch data for manage func
+  useEffect(() => {
+    if (courseId) {
+      getCourseAPI(courseId).then((course) => {
+        setCourseInfo(course),
+          //after set data for course, fetch data for student list from _id stored in course
+          course.studentList.forEach((student) => {
+            getUserInfoAPI(student).then((studentInfo) => {
+              setStudentList((studentList) => [...studentList, studentInfo]);
+            });
+          });
+      });
     }
   }, []);
 
   const handleSubmitFile = (e) => {
     //schema for input excel file
-  const schema = inputStudentSchema;
+    const schema = inputStudentSchema;
+
     if (e.target.files) {
       readXlsxFile(e.target.files[0], { schema }).then(({ rows, errors }) => {
         if (errors.length === 0) {
           setFileName(e.target.files[0].name);
-          setStudentList(rows);
+          rows.forEach((student) => {
+            getInfoByStudentCodeAPI(student.studentCode).then((studentInfo) => {
+              setStudentList((studentList) => [...studentList, studentInfo]);
+            });
+          });
+          // setStudentList(rows);
+          console.log(rows);
         } else {
           showToast(
             "Vui lòng chọn lại tập tin đúng định dạng để nhập",
@@ -57,9 +76,9 @@ export default function CreateCourse() {
   };
 
   //set course info for manage func
-  const setCourseInfo = (course) => {
-    const teacherInfo = teacherListData.find((teacher)=>{
-      return teacher._id == course.teacher
+  const setCourseInfo = async (course) => {
+    const teacherInfo = teacherListData.find((teacher) => {
+      return teacher._id == course.teacher;
     });
     setcourseID(course.courseID);
     setCourseName(course.name);
@@ -69,16 +88,16 @@ export default function CreateCourse() {
     setSemester(course.semester);
     setSchoolYear(course.schoolyear);
     setGroupNumber(course.groupNumber);
-
-    //setStudentList(course.studentList);
-
   };
 
   //submit course handle
   const handleSubmitForm = (e) => {
-    e.preventDefault()
-    const teacherCode = teacherName.split("-")[0]
-    const teacher = teacherList.find((teacher)=>{return teacher.teacherCode === teacherCode})?._id
+    e.preventDefault();
+    const teacherCode = teacherName.split("-")[0];
+    const teacher = teacherList.find((teacher) => {
+      return teacher.teacherCode === teacherCode;
+    })?._id;
+    const students_id = studentList.map((student) => student._id);
     //package data
     const courseDataSubmit = {
       courseID: courseID,
@@ -86,13 +105,13 @@ export default function CreateCourse() {
       teacher: teacher,
       description: description,
       groupNumber: groupNumber,
-      studentList: studentList,
+      studentList: students_id,
       semester: semester,
       schoolyear: schoolYear,
-      chatGroup: null
-    }
+      chatGroup: null,
+    };
     //submit api
-    createCourseAPI(courseDataSubmit)
+    createCourseAPI(courseDataSubmit);
   };
 
   //get teacher data to display suggestion
@@ -101,13 +120,13 @@ export default function CreateCourse() {
     setTeacherList(teacherListData);
   }, []);
 
-   //watch courseID to auto fill courseName when in create func
-   useEffect(() => {
-    if(!courseId){
-      if(courseID.length > 4){
-        const selectedCourse = courses.find((course)=>{
-          return course.courseId === courseID
-        })
+  //watch courseID to auto fill courseName when in create func
+  useEffect(() => {
+    if (!courseId) {
+      if (courseID.length > 4) {
+        const selectedCourse = courses.find((course) => {
+          return course.courseId === courseID;
+        });
         setCourseName(selectedCourse.courseName);
       }
     }
@@ -132,14 +151,18 @@ export default function CreateCourse() {
                 </label>
                 <input
                   value={courseID}
-                  onChange={(e) => {setcourseID(e.target.value);}}
+                  onChange={(e) => {
+                    setcourseID(e.target.value);
+                  }}
                   autoComplete="off"
-                  className="bg-gray-50 block w-full mt-1 border outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                  className={`bg-gray-50 block w-full mt-1 border outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 
+                            ${courseId ? "cursor-not-allowed text-gray-300 font-thin": "" }`}
                   id="courseID"
                   name="courseID"
                   type="text"
                   list="courseIDList"
                   required
+                  disabled={courseId ? true : false}
                 />
 
                 {/* suggestion for courseID */}
@@ -147,10 +170,7 @@ export default function CreateCourse() {
                   {courseID.length > 1 &&
                     courses.map((course) => {
                       return (
-                        <option
-                          key={course.courseId}
-                          value={course.courseId}
-                        >
+                        <option key={course.courseId} value={course.courseId}>
                           {course.courseId + " - " + course.courseName}
                         </option>
                       );
@@ -165,31 +185,35 @@ export default function CreateCourse() {
                   value={groupNumber}
                   onChange={(e) => setGroupNumber(e.target.value)}
                   autoComplete="off"
-                  className="bg-gray-50 block mt-1 w-full border outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                  className={`bg-gray-50 block mt-1 w-full border outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5
+                             ${courseId ? "cursor-not-allowed text-gray-300 font-thin": "" }`}
                   id="groupNumber"
                   name="groupNumber"
                   type="text"
                   required
+                  disabled={courseId ? true : false}
                 />
               </div>
             </div>
 
-             {/* coursename */}
-              <div className="mt-4">
-                <label className="text-sm font-medium" htmlFor="courseName">
-                  Tên nhóm
-                </label>
-                <input
-                  value={courseName}
-                  onChange={(e) => setCourseName(e.target.value)}
-                  autoComplete="off"
-                  className="bg-gray-50 block mt-1 w-[71%] border outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
-                  id="courseName"
-                  name="courseName"
-                  type="text"
-                  required
-                />
-              </div>
+            {/* coursename */}
+            <div className="mt-4">
+              <label className="text-sm font-medium" htmlFor="courseName">
+                Tên nhóm
+              </label>
+              <input
+                value={courseName}
+                onChange={(e) => setCourseName(e.target.value)}
+                autoComplete="off"
+                className={`bg-gray-50 block mt-1 w-[71%] border outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5
+                          ${courseId ? "cursor-not-allowed text-gray-300 font-thin": "" }`}
+                id="courseName"
+                name="courseName"
+                type="text"
+                required
+                disabled={courseId ? true : false}
+              />
+            </div>
             {/* teacherName */}
             <div className="mt-4">
               <label className="text-sm font-medium" htmlFor="teacherName">
@@ -215,8 +239,7 @@ export default function CreateCourse() {
                         <option
                           key={teacher._id}
                           value={teacher.teacherCode + "-" + teacher.fullName}
-                        >
-                        </option>
+                        ></option>
                       );
                     })}
                 </datalist>
@@ -236,7 +259,9 @@ export default function CreateCourse() {
                   value={semester}
                   onChange={(e) => setSemester(e.target.value)}
                   id="semester"
-                  className="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                  disabled={courseId ? true : false}
+                  className={`bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5
+                            ${courseId ? "cursor-not-allowed text-gray-300 font-thin": "" }`}
                 >
                   <option value="1">1</option>
                   <option value="2">2</option>
@@ -247,7 +272,9 @@ export default function CreateCourse() {
                   onChange={(e) => setSchoolYear(e.target.value)}
                   id="schoolYear"
                   placeholder="Niên khoá"
-                  className="bg-gray-50 border outline-none ml-1 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                  disabled={courseId ? true : false}
+                  className={`bg-gray-50 border outline-none ml-1 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5
+                            ${courseId ? "cursor-not-allowed text-gray-300 font-thin": "" }`}
                 >
                   <option value="2022-2023">2022-2023</option>
                   <option value="2021-2022">2021-2022</option>
@@ -263,11 +290,13 @@ export default function CreateCourse() {
                 Danh sách sinh viên
               </div>
               <label className="text-lg font-medium mr-5" htmlFor="studentList">
-                <div className="px-2.5 py-2 flex justify-center items-center bg-gray-100 w-full ml-2 rounded-lg hover:bg-gray-300 cursor-pointer">
+                <div
+                 className={`px-2.5 py-2 flex justify-center items-center bg-gray-100 w-full ml-2 rounded-lg  cursor-pointer
+                 ${courseId ? "cursor-not-allowed text-gray-300 font-thin hover:bg-gray-100": "hover:bg-gray-300" }`}>
                   <span className="text-xs">
                     {fileName === "" ? "Chọn tập tin" : fileName}
                   </span>
-                  <box-icon name="file-blank"></box-icon>
+                  <box-icon name="file-blank" color={courseId ? "gray" : "black"}></box-icon>
                 </div>
               </label>
               <input
@@ -277,6 +306,7 @@ export default function CreateCourse() {
                 name="studentList"
                 type="file"
                 accept=".xlsx, .xls"
+                disabled={courseId ? true : false}
               />
             </div>
 
@@ -297,18 +327,20 @@ export default function CreateCourse() {
 
             {/* button field */}
             <div className=" flex justify-end items-center mr-12 mt-6">
+              <Link to={"/ministry/manage"}>
               <button
                 type="button"
                 className="text-white bg-gray-400 hover:bg-gray-500 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 outline-none "
               >
                 Huỷ
               </button>
+              </Link>
               <button
                 onClick={handleSubmitForm}
                 type="button"
                 className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 outline-none "
               >
-                Lưu
+                {courseId ? "Cập nhật" : "Lưu"}
               </button>
             </div>
           </form>

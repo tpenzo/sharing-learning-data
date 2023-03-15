@@ -142,6 +142,25 @@ class UserController {
         }
     }
 
+    //@description     Get student by studentCode
+    //@route           [GET] /user/student/:userId
+    //@body            No
+    //@access          verifyToken
+    async getStudentByCode(req, res){
+        try {
+            const { studentCode } = req.params
+            console.log(studentCode);
+            const student = await UserModel.findOne({studentCode: studentCode})
+            if(!student){
+                return res.status(400).json({message: "This student info does not exist"}) 
+            }
+            const { password, ...others } = student._doc;
+            return res.status(200).json({ message: 'successful', data: others });
+        } catch (error) {
+            return res.status(500).json({message: error.message})
+        }
+    }
+
 }
 
 

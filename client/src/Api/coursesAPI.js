@@ -49,10 +49,21 @@ export const getTeacherListAPI = async (dispatch) => {
     }
 }
 
-export const getTeacherInfoAPI = async (teacherId) => {
+export const getUserInfoAPI = async (userId) => {
     try {
         // Call API
-       const response = await axiosClient.get(`/api/user/${teacherId}`);
+       const response = await axiosClient.get(`/api/user/${userId}`);
+       return response.data
+    } catch (error) {
+       showToast(error.data.message, 'error')
+    }
+}
+
+export const getInfoByStudentCodeAPI = async (studentCode) => {
+    try {
+        // Call API
+        console.log(studentCode);
+       const response = await axiosClient.get(`/api/user/student/${studentCode}`);
        return response.data
     } catch (error) {
        showToast(error.data.message, 'error')

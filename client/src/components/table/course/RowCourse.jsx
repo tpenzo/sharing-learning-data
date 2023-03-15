@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Tr, Td, Select, Button } from "@chakra-ui/react";
-import { getTeacherInfoAPI } from "../../../Api/coursesAPI";
+import { getUserInfoAPI } from "../../../Api/coursesAPI";
 import { Link } from "react-router-dom";
 
 function RowCourse(props) {
@@ -8,7 +8,7 @@ function RowCourse(props) {
   const [teacherName, setTeacherName] = useState("")
 
   const getTeacherName = async (teacherId)=>{
-    const teacherData = await getTeacherInfoAPI(teacherId)
+    const teacherData = await getUserInfoAPI(teacherId)
     setTeacherName(teacherData.fullName);
   }
 
