@@ -15,8 +15,8 @@ export default function ViewPostPage() {
   const post = useSelector((state) => state.post.postItem);
   const user = useSelector((state) => state.auth.user);
   const [lovedPost, setLovedPost] = useState(() => {
-    if (post) {
-      return [...post.likes].some((id) => id === user._id);
+    if (post?.likes) {
+      return [...post?.likes].some((id) => id === user._id);
     }
   });
   // const [readOnly, setReadOnly] = useState(true);
@@ -77,7 +77,7 @@ export default function ViewPostPage() {
                 ></box-icon>
               </span>
               <span className="text-black">
-                {post?.likes.length > 0 ? post?.likes.length : null}
+                {post?.likes?.length > 0 ? post?.likes?.length : null}
               </span>
             </div>
             <div

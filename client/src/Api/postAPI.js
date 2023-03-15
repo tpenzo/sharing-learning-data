@@ -61,9 +61,7 @@ export const likePost = async (postId, userId, dispatch) => {
   try {
     const res = await axiosClient.post(`/api/post/${postId}/like`);
 
-    console.log(res.data);
-
-    dispatch(addFavoriteList(res));
+    dispatch(addFavoriteList({ postId, userId, res }));
   } catch (error) {
     console.log(error);
 
@@ -74,9 +72,7 @@ export const unLikePost = async (postId, userId, dispatch) => {
   try {
     const res = await axiosClient.post(`/api/post/${postId}/unlike`);
 
-    console.log(res.data);
-
-    dispatch(removeFavoriteList(res));
+    dispatch(removeFavoriteList({ postId, userId, res }));
   } catch (error) {
     console.log(error);
 

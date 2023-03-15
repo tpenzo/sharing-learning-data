@@ -17,10 +17,25 @@ const PostSlice = createSlice({
       state.postItem = actions.payload.data;
     },
     addFavoriteList: (state, actions) => {
-      state.postItem = actions.payload.data;
+      const { postId, userId, res } = actions.payload;
+      state.postList = state.postList.map((post) => {
+        if (post._id === postId) {
+          post?.likes.push(userId);
+        }
+        return post;
+      });
+      state.postItem = res.data;
     },
     removeFavoriteList: (state, actions) => {
-      state.postItem = actions.payload.data;
+      const { postId, userId, res } = actions.payload;
+      state.postList = state.postList.map((post) => {
+        if (post._id === postId) {
+          post?.likes.pop(userId);
+        }
+        return post;
+      });
+      console.log(actions.payload);
+      state.postItem = res.data;
     },
   },
 });
