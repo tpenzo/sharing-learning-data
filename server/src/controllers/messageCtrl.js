@@ -13,7 +13,9 @@ class MessageCtroller {
             if(!sender || !content || !chatId){
                 return res.status(400).json({message: "Please fill out the fields"})
             }
-            const newMessage  = await MessageModel.create({sender, content, chatId})
+            const msg  = await MessageModel.create({sender, content, chatId})
+            const newMessage = await MessageModel.findById({_id: msg._id})
+                    .populate('sender', 'fullName urlAvatar teacherCode studentCode')
             return res.status(200).json({message: "successful", data: newMessage})
         } catch (error) {
             return res.status(500).json({message: error.message})
@@ -32,6 +34,7 @@ class MessageCtroller {
                 return res.status(403).json({message: 'The chat does not exist'})
             }
             const messages = await MessageModel.find({chatId: chatId})
+                .populate('sender', 'fullName urlAvatar teacherCode studentCode')
             return res.status(200).json({messages: "successful", data: messages})
         } catch (error) {
             return res.status(500).json({message: error.message})

@@ -21,7 +21,9 @@ class ChatController {
                     { participant: { $elemMatch: { $eq: req.userLogin._id } } },
                     { participant: { $elemMatch: { $eq: userId } } }
                 ]
-            }).populate('participant', '-password').populate("lastestMessage")
+            })
+                .populate('participant', 'fullName urlAvatar teacherCode studentCode')
+                .populate("lastestMessage")
             if (isChat.length > 0) {
                 return res.status(200).json({message: 'successful', data: isChat[0]});
             }
@@ -34,7 +36,7 @@ class ChatController {
             const newChat = await ChatModel.create(chatData)
             const fullChat = await ChatModel
                 .findOne({ _id: newChat._id })
-                .populate('participant', '-password');
+                .populate('participant', 'fullName urlAvatar teacherCode studentCode')
             return res.status(200).json({message: 'successful', data: fullChat});
         } catch (error) {
             return res.status(500).json({message: error.message})
@@ -48,8 +50,7 @@ class ChatController {
     async fetchChats(req, res){
         try {
             const chats = await ChatModel.find({participant: { $elemMatch: { $eq:req.userLogin._id } }})
-                .populate('participant', '-password')
-                .populate("admin", "-password")
+                .populate('participant admin', 'fullName urlAvatar teacherCode studentCode')
                 .populate({path: 'lastestMessage', populate: {
                     path: "sender",
                     select: "email fullName urlAvatar",
@@ -82,8 +83,7 @@ class ChatController {
 			});
 			const newGroupChat = await ChatModel.create(groupChat)
 			const fullGroupChat = await ChatModel.findOne({ _id: newGroupChat._id })
-      			.populate("participant", "-password")
-      			.populate('admin', "-password")
+      			.populate('participant admin', 'fullName urlAvatar teacherCode studentCode')
 			return res.status(200).json({message: 'successful', data: fullGroupChat})
        } catch (error) {
             return res.status(500).json({message: error.message})
@@ -113,8 +113,7 @@ class ChatController {
                 req.body.chatId,
                 { $push: { participant: req.body.userId }}, { new: true}
             )
-                .populate("participant", "-password")
-                .populate("admin", "-password");
+                .populate('participant admin', 'fullName urlAvatar teacherCode studentCode')
             if (!added) {
                 res.status(404).json({message:  "Chat Not Found"})
             } else {
@@ -148,8 +147,7 @@ class ChatController {
                 req.body.chatId,
                 { $pull: { participant: req.body.userId }}, { new: true}
             )
-                .populate("participant", "-password")
-                .populate("admin", "-password");
+               .populate('participant admin', 'fullName urlAvatar teacherCode studentCode')
             if (!added) {
                 res.status(404).json({message:  "Chat Not Found"})
             } else {
