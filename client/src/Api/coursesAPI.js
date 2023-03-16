@@ -39,10 +39,11 @@ export const updateCourseAPI = async (course) => {
     
 }
 
-export const addStudentIntoCourseAPI = async (course) =>{
+export const removeCourseAPI = async(course) => {
     try {
-        const response = await axiosClient.post('/api/courses/addStudent', {course})
-        showToast("Thêm sinh viên thành công", 'success')
+        console.log(course);
+        const response = await axiosClient.post('/api/courses/delete', {course})
+        showToast("Xoá nhóm học phần thành công", "success")
     } catch (error) {
         showToast(error.data, 'error')
     }

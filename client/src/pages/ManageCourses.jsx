@@ -11,10 +11,9 @@ function ManageCourses() {
   const [keyword, setKeyword] = useState("");
   const [closeX, setCloseX] = useState(false);
   const typingTimeoutRef = useRef(null);
-  // const [courses, setCourses] = useState([]);
+  const [courses, setCourses] = useState([])
 
   const dispatch = useDispatch();
-  const location = useLocation();
   const coursesData = useSelector(state => state.allCoursesList)
 
   const handleSearching = (e) => {
@@ -32,13 +31,12 @@ function ManageCourses() {
 
   //get all course from redux
   useEffect(()=> {
-    setCourses("")
     const fetchData = async ()=>{
      await getCoursesList(dispatch)
     }
     fetchData()
     setCourses(coursesData.courseList)
-  }, [location]);
+  }, [dispatch]);
 
   useEffect(() => {
     if (keyword.length) {
@@ -51,7 +49,7 @@ function ManageCourses() {
     setTab(e.target.id);
   };
 
-  const [courses, setCourses] = useState(null)
+ 
 
   
   return (

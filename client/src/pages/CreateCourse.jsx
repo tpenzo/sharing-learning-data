@@ -5,19 +5,21 @@ import {
   getCourseAPI,
   getUserInfoAPI,
   getInfoByStudentCodeAPI,
+  updateCourseAPI,
 } from "../Api/coursesAPI";
 import { useDisclosure } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import Header from "../components/header/Header";
-import StudentList from "../components/ministry/StudentList";
+import { useParams } from "react-router-dom";
 import readXlsxFile from "read-excel-file";
 import { inputStudentSchema } from "../utils/schemaExcel";
+import { getCoursesList } from "../Api/coursesAPI";
 import showToast from "../Api/showToast";
 import courses from "../data/CoursesData";
-import { useParams } from "react-router-dom";
+import Header from "../components/header/Header";
+import StudentList from "../components/ministry/StudentList";
 
-export default function CreateCourse() {
+export default function CreateCourse(props) {
   const [fileName, setFileName] = useState("");
 
   const [courseID, setcourseID] = useState("");
@@ -29,9 +31,7 @@ export default function CreateCourse() {
   const [description, setdescription] = useState("");
   const [groupNumber, setGroupNumber] = useState("");
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [teacherList, setTeacherList] = useState([]);
-  let studentInfoList = useRef([]);
   const { courseId } = useParams();
   const dispatch = useDispatch();
   const teacherListData = useSelector(
@@ -40,29 +40,28 @@ export default function CreateCourse() {
 
   //fetch data for manage func
   useEffect(() => {
-    let filteredArr = [];
     if (courseId) {
       getCourseAPI(courseId).then((course) => {
         setCourseInfo(course),
-        setStudentList([]),
+          setStudentList([]),
           //after set data for course, fetch data for student list from _id stored in course
           course.studentList.forEach((student) => {
             getUserInfoAPI(student).then((studentInfo) => {
               setStudentList((studentList) => [...studentList, studentInfo]);
             });
-          });  
+          });
       });
     }
-  }, [isOpen]);
+  }, []);
 
   const handleSubmitFile = (e) => {
     //schema for input excel file
     const schema = inputStudentSchema;
-
     if (e.target.files) {
       readXlsxFile(e.target.files[0], { schema }).then(({ rows, errors }) => {
         if (errors.length === 0) {
           setFileName(e.target.files[0].name);
+          setStudentList([])
           rows.forEach((student) => {
             getInfoByStudentCodeAPI(student.studentCode).then((studentInfo) => {
               setStudentList((studentList) => [...studentList, studentInfo]);
@@ -96,7 +95,7 @@ export default function CreateCourse() {
   };
 
   //submit course handle
-  const handleSubmitForm = (e) => {
+  const handleSubmitForm = async (e) => {
     e.preventDefault();
     const teacherCode = teacherName.split("-")[0];
     const teacher = teacherList.find((teacher) => {
@@ -116,7 +115,20 @@ export default function CreateCourse() {
       chatGroup: null,
     };
     //submit api
-    createCourseAPI(courseDataSubmit);
+    //if in manage func
+    if (courseId) {
+      await updateCourseAPI(courseDataSubmit);
+      showToast("Cập nhật thông tin thành công", "success");
+    } else {
+      //if in create func
+      await createCourseAPI(courseDataSubmit);
+    }
+
+    //update courses data
+    const fetchData = async ()=>{
+      await getCoursesList(dispatch)
+     }
+     fetchData()
   };
 
   //get teacher data to display suggestion
@@ -161,7 +173,11 @@ export default function CreateCourse() {
                   }}
                   autoComplete="off"
                   className={`bg-gray-50 block w-full mt-1 border outline-none border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 
-                            ${courseId ? "cursor-not-allowed text-gray-400 font-thin": "text-gray-900" }`}
+                            ${
+                              courseId
+                                ? "cursor-not-allowed text-gray-400 font-thin"
+                                : "text-gray-900"
+                            }`}
                   id="courseID"
                   name="courseID"
                   type="text"
@@ -191,7 +207,11 @@ export default function CreateCourse() {
                   onChange={(e) => setGroupNumber(e.target.value)}
                   autoComplete="off"
                   className={`bg-gray-50 block mt-1 w-full border outline-none border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5
-                             ${courseId ? "cursor-not-allowed text-gray-400 font-thin": "text-gray-900" }`}
+                             ${
+                               courseId
+                                 ? "cursor-not-allowed text-gray-400 font-thin"
+                                 : "text-gray-900"
+                             }`}
                   id="groupNumber"
                   name="groupNumber"
                   type="text"
@@ -211,7 +231,11 @@ export default function CreateCourse() {
                 onChange={(e) => setCourseName(e.target.value)}
                 autoComplete="off"
                 className={`bg-gray-50 block mt-1 w-[71%] border outline-none border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5
-                          ${courseId ? "cursor-not-allowed text-gray-400 font-thin": "text-gray-900" }`}
+                          ${
+                            courseId
+                              ? "cursor-not-allowed text-gray-400 font-thin"
+                              : "text-gray-900"
+                          }`}
                 id="courseName"
                 name="courseName"
                 type="text"
@@ -266,7 +290,11 @@ export default function CreateCourse() {
                   id="semester"
                   disabled={courseId ? true : false}
                   className={`bg-gray-50 border outline-none border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5
-                            ${courseId ? "cursor-not-allowed text-gray-400 font-thin": "text-gray-900" }`}
+                            ${
+                              courseId
+                                ? "cursor-not-allowed text-gray-400 font-thin"
+                                : "text-gray-900"
+                            }`}
                 >
                   <option value="1">1</option>
                   <option value="2">2</option>
@@ -279,7 +307,11 @@ export default function CreateCourse() {
                   placeholder="Niên khoá"
                   disabled={courseId ? true : false}
                   className={`bg-gray-50 border outline-none ml-1 border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5
-                            ${courseId ? "cursor-not-allowed text-gray-400 font-thin": "text-gray-900" }`}
+                            ${
+                              courseId
+                                ? "cursor-not-allowed text-gray-400 font-thin"
+                                : "text-gray-900"
+                            }`}
                 >
                   <option value="2022-2023">2022-2023</option>
                   <option value="2021-2022">2021-2022</option>
@@ -296,12 +328,20 @@ export default function CreateCourse() {
               </div>
               <label className="text-lg font-medium mr-5" htmlFor="studentList">
                 <div
-                 className={`px-2.5 py-2 flex justify-center items-center bg-gray-100 w-full ml-2 rounded-lg  
-                 ${courseId ? "cursor-not-allowed text-gray-300 font-thin hover:bg-gray-100": "hover:bg-gray-300 cursor-pointer" }`}>
+                  className={`px-2.5 py-2 flex justify-center items-center bg-gray-100 w-full ml-2 rounded-lg  
+                 ${
+                   courseId
+                     ? "cursor-not-allowed text-gray-300 font-thin hover:bg-gray-100"
+                     : "hover:bg-gray-300 cursor-pointer"
+                 }`}
+                >
                   <span className="text-xs">
                     {fileName === "" ? "Chọn tập tin" : fileName}
                   </span>
-                  <box-icon name="file-blank" color={courseId ? "gray" : "black"}></box-icon>
+                  <box-icon
+                    name="file-blank"
+                    color={courseId ? "gray" : "black"}
+                  ></box-icon>
                 </div>
               </label>
               <input
@@ -332,13 +372,13 @@ export default function CreateCourse() {
 
             {/* button field */}
             <div className=" flex justify-end items-center mr-12 mt-6">
-              <Link reloadDocument to={"/ministry/manage"}>
-              <button
-                type="button"
-                className="text-white bg-gray-400 hover:bg-gray-500 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 outline-none "
-              >
-                Huỷ
-              </button>
+              <Link to={"/ministry/manage"}>
+                <button
+                  type="button"
+                  className="text-white bg-gray-400 hover:bg-gray-500 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 outline-none "
+                >
+                  Huỷ
+                </button>
               </Link>
               <button
                 onClick={handleSubmitForm}
@@ -351,7 +391,10 @@ export default function CreateCourse() {
           </form>
         </div>
         <div className="basis-3/5 bg-white shadow mr-4 mb-1 rounded-lg">
-          <StudentList isOpen={isOpen} onOpen={onOpen} onClose={onClose} studentList={studentList} />
+          <StudentList
+            setStudentList={setStudentList}
+            studentList={studentList}
+          />
         </div>
       </div>
     </div>

@@ -105,11 +105,12 @@ class coursesController {
     }
 
     //@description     remove a course
-    //@route           [DELETE] /api/courses/delete
+    //@route           [post] /api/courses/delete
     //@body            {courseId, semester, schoolYear}
     //@access          verifyToken, role: Ministry
     async removeCourse(req, res) {
         try {
+            console.log(req.body.course);
             const { courseID, semester, schoolYear, groupNumber } = req.body.course;
             const course = await courseModel.findOne({
                 $and: [
@@ -125,6 +126,7 @@ class coursesController {
                         { courseID: courseID },
                         { semester: semester },
                         { schoolYear: schoolYear },
+                        { groupNumber: groupNumber},
                     ],
                 });
                 return res

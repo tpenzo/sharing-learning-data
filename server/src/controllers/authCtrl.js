@@ -144,7 +144,7 @@ class AuthControlller {
         try {
             // Generate token
             const newAccessToken = generateAccessToken(req.userLogin._id,'120s')
-            const newRefreshToken = generateRefreshToken(req.userLogin._id,'420s')
+            const newRefreshToken = generateRefreshToken(req.userLogin._id,'42000s')
             res.cookie('refreshToken', newRefreshToken, {
                 httpOnly: true,
                 secure: false,
