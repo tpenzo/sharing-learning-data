@@ -3,10 +3,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { profileGetUserAPI } from "../../Api/userAPI.js";
 import BtnFollow from "./BtnFollow.jsx";
+import axiosClient from "../../Api/axiosClient.js";
+import { setSelectedChat } from "../../redux/ChatSlice.js";
+import { useNavigate } from 'react-router-dom'
 
 function ProfilePane() {
 
     const dispatch = useDispatch()
+    const navigate = useNavigate()
+
     const { auth, profile } = useSelector(state => state)
     const { userId } = useParams()
 
@@ -26,6 +31,16 @@ function ProfilePane() {
             // if user does not exist [NO PROCESS]
         }
     }, [auth.user, profile.user, userId, dispatch])
+
+    /* When the user clicks on the message on the profile, 
+        if the chat already exists it will go to the chat page 
+        if the conversation does not exist then create a new one and go to the chat page.
+    */
+    const goToChat = async () => {
+        const res = await axiosClient.post('/api/chat/access', { userId: profile.user._id })
+        await dispatch(setSelectedChat(res.data))
+        navigate('/chat')
+    }
 
     return (
         <div className="flex gap-5">
@@ -56,7 +71,9 @@ function ProfilePane() {
                         ) : (
                             <>
                                 <BtnFollow />
-                                <div className="px-3 py-2 rounded text-white text-sm bg-second-blue flex gap-1 items-center cursor-pointer duration-300 hover:bg-primary-blue">
+                                <div
+                                    onClick={goToChat}
+                                    className="px-3 py-2 rounded text-white text-sm bg-second-blue flex gap-1 items-center cursor-pointer duration-300 hover:bg-primary-blue">
                                     <box-icon color="white" name='message-square-dots'></box-icon>
                                     <span>Nhắn tin</span>
                                 </div>
