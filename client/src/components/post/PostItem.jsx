@@ -1,23 +1,24 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { likePost, unLikePost } from "../../Api/postAPI";
+
 function PostItem(props) {
-  const { dataItem, handleLovedPost } = props;
+  const { dataItem } = props;
   const user = useSelector((state) => state.auth.user);
   const [loved, setLoved] = useState(() => {
-    if (dataItem) {
-      return [...dataItem.likes].some((id) => id === user._id);
+    if (dataItem?.likes) {
+      return [...dataItem?.likes].some((id) => id === user._id);
     }
   });
   const [saved, setSaved] = useState(false);
-
-  const handleToggle = () => {
+  const dispatch = useDispatch();
+  const handleLovedPost = async () => {
     setLoved(!loved);
-    //api
     if (!loved) {
-      handleLovedPost(dataItem._id, loved, user._id);
+      await likePost(dataItem._id, user._id, dispatch);
     } else {
-      handleLovedPost(dataItem._id, loved, user._id);
+      await unLikePost(dataItem._id, user._id, dispatch);
     }
   };
 
@@ -28,16 +29,16 @@ function PostItem(props) {
           <figure>
             <img
               className="w-12 rounded"
-              src={dataItem.author.urlAvatar}
+              src={dataItem?.author.urlAvatar}
               alt=""
             />
           </figure>
           <div>
             <p className="font-semibold">
-              {dataItem.author.fullName + " " + dataItem.author.studentCode}
+              {dataItem?.author.fullName + " " + dataItem?.author.studentCode}
             </p>
             <span className="font-light text-gray-500 text-xs">
-              {dataItem.createdAt}
+              {dataItem?.createdAt}
             </span>
           </div>
         </div>
@@ -45,18 +46,18 @@ function PostItem(props) {
           CT244
         </p>
       </div>
-      <Link to={`/post/${dataItem._id}`}>
+      <Link to={`/post/${dataItem?._id}`}>
         <p className="mt-5 text-sm cursor-pointer hover:font-semibold">
-          {dataItem.title}
+          {dataItem?.title}
         </p>
       </Link>
       <div className="mt-5 flex items-center gap-5 md:gap-2">
         <p
           className="bg-gray-500/5 cursor-pointer pt-1 px-1 rounded-lg flex items-center"
-          onClick={handleToggle}
+          onClick={handleLovedPost}
         >
           <span className="text-sm leading-4">
-            {dataItem.likes.length > 0 ? dataItem.likes.length : null}
+            {dataItem?.likes.length > 0 ? dataItem?.likes.length : null}
           </span>
           <box-icon
             name="heart"

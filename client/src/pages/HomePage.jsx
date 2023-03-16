@@ -4,7 +4,7 @@ import InfoPane from "../components/sidepane/InfoPane";
 import PostItem from "../components/post/PostItem";
 import Header from "../components/header/Header";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllPost, likePost, unLikePost } from "../Api/postAPI";
+import { getAllPost } from "../Api/postAPI";
 export default function HomePage() {
   const postList = useSelector((state) => state.post.postList);
   const dispatch = useDispatch();
@@ -15,15 +15,12 @@ export default function HomePage() {
       await unLikePost(id, userId, dispatch);
     }
   };
-
-  
-  // useEffect(() => {
-  //   const fetchPostList = async () => {
-  //     await getAllPost({}, dispatch);
-  //   };
-  //   fetchPostList();
-  // }, [handleLovedPost]);
-
+  useEffect(() => {
+    const fetchPostList = async () => {
+      await getAllPost({}, dispatch);
+    };
+    fetchPostList();
+  }, [handleLovedPost]);
   return (
     <div className="container mx-auto h-screen items-center self-center flex flex-col">
       <header className="header sticky top-0 w-full h-[10%] rounded-t-lg z-50">
@@ -34,7 +31,7 @@ export default function HomePage() {
           <SideNav />
         </div>
         <div className="basis-3/5 max-w-[56%] px-3 overflow-y-auto">
-          {/* {postList &&
+          {postList &&
             postList.map((postItem) => {
               return (
                 <PostItem
@@ -43,7 +40,7 @@ export default function HomePage() {
                   handleLovedPost={handleLovedPost}
                 />
               );
-            })} */}
+            })}
         </div>
         <div className=" basis-1/5 w-1/5 h-full max-h-full sticky top-28 bg-white rounded-lg z-1">
           <InfoPane />
