@@ -10,6 +10,7 @@ import AllCoursesSlice from "./AllCoursesSlice.js";
 import ManageSlice from './ManageSlice.js';
 import { parse, stringify } from "flatted";
 import createTransform from "redux-persist/es/createTransform";
+import ChatSlice from "./ChatSlice.js";
 
 const transformCircular = createTransform(
   (inboundState, key) => stringify(inboundState),
@@ -32,6 +33,7 @@ const reducer = combineReducers({
   post: PostSlice,
   socketInstance: SocketSlice,
   allCoursesList: AllCoursesSlice,
+  chat: ChatSlice
 });
 
 const persistedReducer = persistReducer(persistConfig, reducer);
