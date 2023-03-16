@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { likePost, unLikePost } from "../../Api/postAPI";
-
+import moment from "moment";
 function PostItem(props) {
   const { dataItem } = props;
   const user = useSelector((state) => state.auth.user);
@@ -38,7 +38,7 @@ function PostItem(props) {
               {dataItem?.author.fullName + " " + dataItem?.author.studentCode}
             </p>
             <span className="font-light text-gray-500 text-xs">
-              {dataItem?.createdAt}
+              {moment(dataItem?.createdAt).fromNow()}
             </span>
           </div>
         </div>

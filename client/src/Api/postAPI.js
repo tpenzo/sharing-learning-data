@@ -15,10 +15,10 @@ export const createPost = async (payload, dispatch) => {
     console.log(res);
 
     dispatch(createNewPost(res));
-
+    showToast(res.message, "success");
     return res;
   } catch (error) {
-    // showToast(error.message, error.status);
+    showToast(error.message, "error");
   }
 };
 export const getAllPost = async (params, dispatch) => {
@@ -27,8 +27,7 @@ export const getAllPost = async (params, dispatch) => {
 
     dispatch(getPosts(res));
   } catch (error) {
-    console.log(error);
-    // showToast(error.message, error.status);
+    showToast(error.message, "error");
   }
 };
 export const getPostById = async (id, dispatch) => {
@@ -39,9 +38,7 @@ export const getPostById = async (id, dispatch) => {
 
     dispatch(getPost(res));
   } catch (error) {
-    console.log(error);
-
-    // showToast(error.message, error.status);
+    showToast(error.message, "error");
   }
 };
 export const getUserPost = async (params, dispatch) => {
@@ -52,9 +49,7 @@ export const getUserPost = async (params, dispatch) => {
 
     dispatch(getAllPost(res));
   } catch (error) {
-    console.log(error);
-
-    // showToast(error.message, error.status);
+    showToast(error.message, "error");
   }
 };
 export const likePost = async (postId, userId, dispatch) => {
@@ -63,9 +58,7 @@ export const likePost = async (postId, userId, dispatch) => {
 
     dispatch(addFavoriteList({ postId, userId, res }));
   } catch (error) {
-    console.log(error);
-
-    // showToast(error.message, error.status);
+    showToast(error.message, "error");
   }
 };
 export const unLikePost = async (postId, userId, dispatch) => {
@@ -74,8 +67,6 @@ export const unLikePost = async (postId, userId, dispatch) => {
 
     dispatch(removeFavoriteList({ postId, userId, res }));
   } catch (error) {
-    console.log(error);
-
-    // showToast(error.message, error.status);
+    showToast(error.message, "error");
   }
 };
