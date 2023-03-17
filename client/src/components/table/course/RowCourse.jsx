@@ -20,7 +20,7 @@ function RowCourse(props) {
   }, []);
 
   return (
-    <Tr>
+    <Tr className="text-sm hover:bg-gray-200">
       <Td>{stt + 1}</Td>
       <Td>{course?.courseID}</Td>
       <Td>{course?.groupNumber}</Td>

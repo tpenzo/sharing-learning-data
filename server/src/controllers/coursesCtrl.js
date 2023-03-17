@@ -1,5 +1,6 @@
 import courseModel from "../models/courseModel.js";
 import userModel from "../models/userModel.js";
+import chatModel from "../models/chatModel.js"
 
 class coursesController {
   //@description     getAllcourse Info
@@ -132,7 +133,7 @@ class coursesController {
   //@access          verifyToken, role: Ministry
   async removeCourse(req, res) {
     try {
-      const { courseID, semester, schoolYear, groupNumber, teacher } =
+      const { courseID, semester, schoolYear, groupNumber, teacher, chatGroup } =
         req.body.course;
       const course = await courseModel.findOne({
         $and: [
@@ -148,14 +149,12 @@ class coursesController {
           { _id: teacher },
           { $pull: { managedCourses: course._id } }
         );
-        const removedCourse = await courseModel.findOneAndDelete({
-          $and: [
-            { courseID: courseID },
-            { semester: semester },
-            { schoolYear: schoolYear },
-            { groupNumber: groupNumber },
-          ],
-        });
+
+        //remove course
+        const removedCourse = await courseModel.findOneAndDelete({_id: course._id});
+
+        //remove chat group
+        await chatModel.findOneAndDelete({_id: chatGroup})
         return res.status(200).json({
           message: `remove course with id: ${courseID} successfully`,
           data: removedCourse,

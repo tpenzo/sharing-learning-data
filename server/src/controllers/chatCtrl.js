@@ -68,10 +68,12 @@ class ChatController {
     //@access          verifyToken
     async createGroupChat(req, res){
 		try {
+            console.log(req.body);
 			if (!req.body.participants || !req.body.name) {
 				return res.status(400).send({ message: "Please Fill all the feilds" });
             }
-			let participants = JSON.parse(req.body.participants);
+			// let participants = JSON.parse(req.body.participants);
+            const participants = req.body.participants
 			if(participants.length < 2){
 				return res.status(400).send({ message: "More than 2 users are required to form a group chat" });
 			}
