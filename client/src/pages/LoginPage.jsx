@@ -36,17 +36,18 @@ function LoginPage() {
     formik.handleSubmit();
     // [POST] api/auth/login
     await loginAPI(formik.values.email, formik.values.password, dispatch);
-    switch(auth.user.role){
-      case"ministry":
-       navigate("/ministry/manage")
-      break;
-      case"admin":
-        navigate("/admin/manage")
-      break;
-      default:
-         navigate("/")
-        break;
-    }
+    navigate("/")
+    // switch(auth.user.role){
+    //   case"ministry":
+    //    navigate("/ministry/manage")
+    //   break;
+    //   case"admin":
+    //     navigate("/admin/manage")
+    //   break;
+    //   default:
+    //      navigate("/")
+    //     break;
+    // }
     
   };
 
@@ -81,6 +82,7 @@ function LoginPage() {
                   E-mail
                 </label>
                 <input
+                autoComplete="off"
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:outline-none focus:ring-blue-600 focus:border-blue-700 block w-full p-2.5 "
                   type="email"
                   name="email"

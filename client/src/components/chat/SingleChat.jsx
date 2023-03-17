@@ -70,6 +70,12 @@ export default function SingleChat() {
 		setMessage('')
 	}
 
+	const handleEnterSendMessage = (e)=>{
+		if(e.key === "Enter"){
+			sendMessage()
+		}
+	}
+
 
 	return (
 		<>
@@ -123,8 +129,9 @@ export default function SingleChat() {
 											value={message}
 											placeholder='Aa'
 											onChange={(e) => setMessage(e.target.value)}
+											onKeyDown={handleEnterSendMessage}
 											type="text"
-											className="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
+											className="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 pr-10 h-10"
 										/>
 										<button
 											className="absolute flex items-center justify-center h-full w-12 right-0 top-0 text-gray-400 hover:text-gray-600">
