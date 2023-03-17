@@ -144,7 +144,9 @@ export default function CreateCourse(props) {
         const selectedCourse = courses.find((course) => {
           return course.courseId === courseID;
         });
-        setCourseName(selectedCourse.courseName);
+        if(selectedCourse){
+          setCourseName(selectedCourse.courseName);
+        }
       }
     }
   }, [courseID]);

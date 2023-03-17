@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   AlertDialog,
@@ -26,10 +26,9 @@ function ShowDialog(props) {
     requiredRemove,
     course,
   } = props;
-
   const dispatch = useDispatch();
 
-  const removeStudent = (student) => {
+  const removeStudentHandle = (student) => {
     setStudentList((studentList) => [
       ...studentList.filter((studentElem) => {
         return student._id !== studentElem._id;
@@ -38,24 +37,20 @@ function ShowDialog(props) {
     onClose();
   };
 
-  const removeCourse = (course) => {
-    console.log(course._id);
-    //dispatch(removeCourse(course._id))
-    removeCourseAPI(course);
-    const fetchData = async () => {
+  const removeCourseHandle = async (course) => {
+      await removeCourseAPI(course);
       await getCoursesList(dispatch);
-    };
-    fetchData();
-    onClose();
+      //loading here
+      onClose();
   };
 
   const handleClick = () => {
     switch (action) {
       case "removeCourse":
-        removeCourse(course)
+        removeCourseHandle(course?course:undefined)
         break;
       case "removeStudent":
-        removeStudent(requiredRemove.current);
+        removeStudentHandle(requiredRemove.current);
         break;
     }
   };

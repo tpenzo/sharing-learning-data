@@ -41,11 +41,12 @@ export const updateCourseAPI = async (course) => {
 
 export const removeCourseAPI = async(course) => {
     try {
-        console.log(course);
         const response = await axiosClient.post('/api/courses/delete', {course})
+        console.log(response);
+        //dispatch(removeCourse(course))
         showToast("Xoá nhóm học phần thành công", "success")
     } catch (error) {
-        showToast(error.data, 'error')
+        showToast(error, 'error')
     }
 }
 
