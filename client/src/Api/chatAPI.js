@@ -26,3 +26,17 @@ export const fetchChatsAPI = async (dispatch) => {
         showToast(error.data.message, 'error')
     }
 }
+
+export const createGroupChatAPI = async (course) => {
+    try {
+        const dataSubmit = {
+            participants: [course.teacher, ...course.studentList],
+            name: `${course.name}-${course.groupNumber}`,
+            adminId: course.teacher
+        }
+        const response = await axiosClient.post('/api/chat/creategroup', dataSubmit)
+         return response.data._id
+    } catch (error) {
+        showToast(error.data.message, 'error')
+    }
+}

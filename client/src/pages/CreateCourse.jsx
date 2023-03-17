@@ -18,6 +18,7 @@ import showToast from "../Api/showToast";
 import courses from "../data/CoursesData";
 import Header from "../components/header/Header";
 import StudentList from "../components/ministry/StudentList";
+import { createGroupChatAPI } from "../Api/chatAPI";
 
 export default function CreateCourse(props) {
   const [fileName, setFileName] = useState("");
@@ -103,7 +104,7 @@ export default function CreateCourse(props) {
     })?._id;
     const students_id = studentList.map((student) => student._id);
     //package data
-    const courseDataSubmit = {
+    let courseDataSubmit = {
       courseID: courseID,
       name: courseName,
       teacher: teacher,
@@ -112,7 +113,6 @@ export default function CreateCourse(props) {
       studentList: students_id,
       semester: semester,
       schoolyear: schoolYear,
-      chatGroup: null,
     };
     //submit api
     //if in manage func
@@ -121,7 +121,9 @@ export default function CreateCourse(props) {
       showToast("Cập nhật thông tin thành công", "success");
     } else {
       //if in create func
-      await createCourseAPI(courseDataSubmit);
+      const groupChat_id = await createGroupChatAPI(courseDataSubmit);
+      let chatGroup = groupChat_id
+      await createCourseAPI({...courseDataSubmit, chatGroup});
     }
 
     //update courses data

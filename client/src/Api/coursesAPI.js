@@ -5,9 +5,13 @@ import showToast from "./showToast";
 export const getCoursesList = async (dispatch) => {
     try {
         const response = await axiosClient.get('/api/courses/all');
-        await dispatch(setAllCoursesData(response.data))
+        console.log(response.data);
+        if(response.data){
+            await dispatch(setAllCoursesData(response.data))
+        }
     } catch (error) {
         console.log(error);
+        await dispatch(setAllCoursesData([]))
     }
 }
 
