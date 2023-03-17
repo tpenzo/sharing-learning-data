@@ -15,7 +15,7 @@ const router = express.Router();
 router.get('/all', coursesCtrl.getAllCourses)
 router.get('/:_courseId', coursesCtrl.getCourse)
 router.post('/create', coursesCtrl.createCourse)
-router.delete('/delete', coursesCtrl.removeCourse)
+router.post('/delete', coursesCtrl.removeCourse)
 router.post('/update', coursesCtrl.updateCourse)
 
 router.post('/addStudent', coursesCtrl.addStudentIntoCourse)

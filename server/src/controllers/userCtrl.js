@@ -21,6 +21,7 @@ class UserController {
         }
     }
 
+
     //@description     Search user
     //@route           [GET] /user/search?info=''
     //@body            No
@@ -100,6 +101,66 @@ class UserController {
             return res.status(500).json({message: error.message})
         }
     }
+
+    //@description     get All teacher Info
+    //@route           [GET] /api/teacher/all
+    //@body            {}
+    //@access          verifyToken
+    async getAllTeacher(req, res) {
+        try {
+
+            const teacherList = await UserModel.find({role: "teacher"})
+            return res.status(200).json({ message: "successful", data: teacherList });
+        } catch (error) {
+            return res.status(500).json({ message: error.message });
+        }
+    }
+
+    //@description     get All student Info
+    //@route           [GET] /api/student/all
+    //@body            {}
+    //@access          verifyToken
+    async getAllStudent(req, res) {
+        try {
+            const studentList = await UserModel.find({role: "student"})
+            return res.status(200).json({ message: "successful", data: studentList });
+        } catch (error) {
+            return res.status(500).json({ message: error.message });
+        }
+    }
+
+    //@description     getAll ministry Info
+    //@route           [GET] /api/ministry/all
+    //@body            {}
+    //@access          verifyToken
+    async getAllMinistry(req, res) {
+        try {
+            const ministryList = await UserModel.find({role: "ministry"})
+            return res.status(200).json({ message: "successful", data: ministryList });
+        } catch (error) {
+            return res.status(500).json({ message: error.message });
+        }
+    }
+
+    //@description     Get student by studentCode
+    //@route           [GET] /user/student/:userId
+    //@body            No
+    //@access          verifyToken
+    async getStudentByCode(req, res){
+        try {
+            const { studentCode } = req.params
+            console.log(studentCode);
+            const student = await UserModel.findOne({studentCode: studentCode})
+            if(!student){
+                return res.status(400).json({message: "This student info does not exist"}) 
+            }
+            const { password, ...others } = student._doc;
+            return res.status(200).json({ message: 'successful', data: others });
+        } catch (error) {
+            return res.status(500).json({message: error.message})
+        }
+    }
+
 }
 
 

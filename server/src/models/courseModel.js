@@ -5,6 +5,7 @@ const Schema = mongoose.Schema;
 const courseSchema = new Schema({
     courseID: {type: String},
     name: {type: String},
+    groupNumber: {type: String},
     description: {type: String},
     teacher: {type: Schema.Types.ObjectId, ref: 'user'},
     studentList: [{type: Schema.Types.ObjectId, ref: 'user'}],

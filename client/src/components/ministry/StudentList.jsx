@@ -1,5 +1,19 @@
-import React from "react";
+import React, {useRef} from "react";
+import { useDisclosure } from "@chakra-ui/react";
+import ModalAddStudent from "../modal/ModalAddStudent";
+import ShowDialog from "../dialog/ShowDialog";
+
 function StudentList(props) {
+  const addStudentModal = useDisclosure();
+  const showDialogDelete = useDisclosure();
+  const requiredRemove = useRef({})
+  const {setStudentList, studentList} = props 
+
+const setRemoveStudent = (student)=>{
+  requiredRemove.current = student
+  showDialogDelete.onOpen();
+}
+
 
   return (
     <div className="table-container max-h-max w-full">
@@ -25,7 +39,7 @@ function StudentList(props) {
             />
           </div>
           <div className="pr-3 ">
-            <button className="flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg py-1 px-2 mr-2 outline-none ">
+            <button onClick={addStudentModal.onOpen} className="flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg py-1 px-2 mr-2 outline-none ">
               <span className="translate-y-1">
                 <box-icon name="plus-circle" color="white"></box-icon>
               </span>
@@ -53,22 +67,22 @@ function StudentList(props) {
             </thead>
             <tbody className="">
             {
-              props.studentList &&
-              props.studentList.map((student, index)=>{
+              studentList && 
+              studentList.map((student, index)=>{
                 return (
                   <tr key={index + 1} className="bg-white border-b hover:bg-gray-50">
                 <td className="px-6 py-4 font-medium text-gray-900  dark:text-white">
                   {index + 1}
                 </td>
-                <td className="px-6 py-4 ">{student.studentCode}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{student.fullName}</td>
+                <td className="px-6 py-4 ">{student?.studentCode}</td>
+                <td className="px-6 py-4 whitespace-nowrap">{student?.fullName}</td>
                 <td className="px-3 py-4">
-                  <a
-                    href="#"
-                    className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                  <span
+                    onClick={()=>{setRemoveStudent(student)}}
+                    className="font-medium text-red-600 dark:text-red-500 hover:underline cursor-pointer select-none"
                   >
-                    Sửa
-                  </a>
+                    Xoá
+                  </span>
                 </td>
               </tr>
                 )
@@ -78,6 +92,24 @@ function StudentList(props) {
           </table>
         </div>
       </div>
+      <ModalAddStudent
+      studentList={studentList}
+      setStudentList={setStudentList}
+      isOpen={addStudentModal.isOpen}
+      onClose={addStudentModal.onClose}
+      />
+
+      <ShowDialog
+      action={"removeStudent"}
+      studentList={studentList}
+      setStudentList={setStudentList}
+      requiredRemove={requiredRemove}
+      isOpen={showDialogDelete.isOpen}
+      onClose={showDialogDelete.onClose}
+      title={"Xoá sinh viên khỏi nhóm học phần"}
+      content={`Bạn muốn xoá sinh viên ${requiredRemove.current?.fullName} khỏi nhóm học phần? Hành động này sẽ không thể hoàn tác.`}
+      actionName={"Xoá"}
+      colorButton={"red"} />
     </div>
   );
 }

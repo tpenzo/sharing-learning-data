@@ -10,7 +10,7 @@ function ManageCourses() {
   const [keyword, setKeyword] = useState("");
   const [closeX, setCloseX] = useState(false);
   const typingTimeoutRef = useRef(null);
-  // const [courses, setCourses] = useState([]);
+  const [courses, setCourses] = useState()
 
   const dispatch = useDispatch();
   const coursesData = useSelector(state => state.allCoursesList)
@@ -30,9 +30,17 @@ function ManageCourses() {
 
   //get all course from redux
   useEffect(()=> {
-    getCoursesList(dispatch)
+    const fetchData = async ()=>{
+     await getCoursesList(dispatch)
+    }
+    fetchData()
     setCourses(coursesData.courseList)
-  }, [])
+  }, []);
+
+  //watch change data courseList in store
+  useEffect(()=> {
+    setCourses(coursesData.courseList)
+  }, [coursesData.courseList]);
 
   useEffect(() => {
     if (keyword.length) {
@@ -41,12 +49,6 @@ function ManageCourses() {
       setCloseX(false);
     }
   }, [keyword]);
-  const handleChangeTab = (e) => {
-    setTab(e.target.id);
-  };
-
-  const [courses, setCourses] = useState(null)
-
   
   return (
     <div className="container mx-auto h-screen items-center self-center flex flex-col">
@@ -65,7 +67,7 @@ function ManageCourses() {
               <input
                 value={keyword}
                 onChange={handleSearching}
-                className="w-full py-2 xl:py-3 px-10 outline-none rounded-lg bg-gray-100 focus:outline-primary-blue peer"
+                className="w-full py-2 xl:py-3 px-10 outline-none rounded-lg bg-gray-100 focus:outline-fourth-blue peer"
                 type="text"
                 placeholder="Tìm kiếm"
               />
@@ -81,7 +83,7 @@ function ManageCourses() {
               )}
             </div>
             <Link to={"/ministry/create"}>
-            <span className="px-3 py-2 font-bold bg-gray-300 cursor-pointer rounded hover:bg-gray-400/60">
+            <span className="px-4 py-3 font-bold bg-gray-300 cursor-pointer text-sm rounded hover:bg-gray-400/60">
               Tạo nhóm học
             </span>
             </Link>

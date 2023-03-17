@@ -108,6 +108,34 @@ class AuthControlller {
         }
     }
 
+    //@description     Register ministry
+    //@route           [POST] /api/auth/register/ministry
+    //@body            {email, password,...,}
+    //@access          No
+    async registerMinistry(req, res){
+        // Display error when input data is invalid
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            const errMessage= {}
+            errors.array().forEach(err => {
+                errMessage[err.param] = err.msg
+            }) 
+            return res.status(400).json(errMessage);
+        }
+        try {
+            // Check teacherCode and email
+            const account = await UserModel.findOne({email: req.body.email})
+            if(account){
+                return res.status(400).json({message: "account already existed"}) 
+            }
+            // Create ministry
+            const newAccount = await UserModel.create({...req.body, role: 'ministry'})
+            return res.status(200).json({message: 'Creating successful ministry', data: newAccount})
+        } catch (error) {
+            return res.status(500).json({message: error.message})
+        }
+    }
+
     //@description     Perform accessToken and refreshToken when the current token expire
     //@route           [GET] /api/auth/refresh
     //@body            No
@@ -116,7 +144,7 @@ class AuthControlller {
         try {
             // Generate token
             const newAccessToken = generateAccessToken(req.userLogin._id,'120s')
-            const newRefreshToken = generateRefreshToken(req.userLogin._id,'420s')
+            const newRefreshToken = generateRefreshToken(req.userLogin._id,'42000s')
             res.cookie('refreshToken', newRefreshToken, {
                 httpOnly: true,
                 secure: false,

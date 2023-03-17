@@ -8,7 +8,6 @@ export const profileGetUserAPI = async (userId, dispatch) => {
         // Call API
         const res = await axiosClient.get(`/api/user/${userId}`)
         await dispatch(profileGetUser(res.data))
-
     } catch (error) {
        showToast(error.data.message, 'error')
     }
