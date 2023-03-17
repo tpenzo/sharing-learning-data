@@ -32,18 +32,17 @@ function MyChats() {
                             <Box
                                 key={chat._id}
                                 onClick={() => dispatch(setSelectedChat(chat))}
-                                bg={selectedChat?._id === chat._id ? "#38B2AC" : "white"}
-                                color={selectedChat?._id === chat._id ? "white" : "black"}
                             >
                                 <div
-                                    className="flex flex-row py-4 px-2 justify-center items-center border-b hover:bg-gray-100 cursor-pointer">
+                                    className={`flex flex-row py-4 px-2 justify-center items-center font-thin cursor-pointer text-gray-600 rounded-xl mb-[2px]
+                                    ${selectedChat?._id === chat._id ? "hover:bg-blue-500 bg-blue-600 text-white" : "hover:bg-gray-200 hover:text-gray-800"}`}>
                                     <div className="w-1/3">
                                         <Wrap>
                                             <Avatar src={showImageChat(chat, auth.user._id)}></Avatar>
                                         </Wrap>
                                     </div>
                                     <div className="w-full ml-2">
-                                        <div className="text-base font-semibold">{showNameChat(chat, auth.user._id)}</div>
+                                        <div className="text-sm font-semibold">{showNameChat(chat, auth.user._id)}</div>
                                     </div>
                                 </div>
                             </Box>
