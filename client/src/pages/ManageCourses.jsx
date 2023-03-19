@@ -60,7 +60,7 @@ function ManageCourses() {
             {/* <h3 className="text-lg font-bold">Danh sách Học phần</h3> */}
           <div className="flex justify-between items-center mt-3">
             {/* search area */}
-            <div className="flex relative">
+            <div className="flex relative ml-1">
               <span className="cursor-pointer pl-1 absolute top-[10px] left-2">
                 <box-icon name="search-alt-2" color="gray"></box-icon>
               </span>

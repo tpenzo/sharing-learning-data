@@ -29,7 +29,7 @@ export default function ChatPage() {
                         />
                     </div>
                     {/* Render chat */}
-                    <div className="user-group-list overflow-y-auto h-[90%] pr-[2px] pt-1 px-1">
+                    <div className="user-group-list overflow-y-auto h-[90%] pt-1 px-2">
                         <MyChats />
                     </div>
                 </div>
