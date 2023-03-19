@@ -1,14 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useDisclosure } from "@chakra-ui/react";
 import Header from "../components/header/Header";
 import TableAccount from "../components/table/account/TableAccount";
+import ModalAddAccountForm from "../components/modal/AddAccountForm";
 import { useSelector, useDispatch } from "react-redux";
 import { getTeacherListAccountAPI, getStudentListAccountAPI, getMinistryListAccountAPI } from "../Api/manageAPI";
+import EditInfo from "../components/modal/EditInfo";
 
 function ManageAccount() {
   const [tab, setTab] = useState("student");
   const [keyword, setKeyword] = useState("");
   const [closeX, setCloseX] = useState(false);
   const typingTimeoutRef = useRef(null);
+  const addAccountForm = useDisclosure();
   const dispatch = useDispatch();
 
   const [accounts, setAccounts] = useState([]);
@@ -45,27 +49,29 @@ function ManageAccount() {
 
   //fetch data when change tab
   useEffect(() => {
+    
     switch (tab) {
       case "student":
         getStudentListAccountAPI(dispatch);
         setAccounts(studentAccounts);
-        console.log(accounts);
         break;
 
       case "teacher":
         getTeacherListAccountAPI(dispatch);
         setAccounts(teacherAccounts);
-        console.log(accounts);
         break;
 
       case "ministry":
         getMinistryListAccountAPI(dispatch);
         setAccounts(ministryAccounts);
-        console.log(accounts);
         break;
     }
-  }, [tab]);
+  }, [tab, accounts]);
 
+
+  useEffect(()=>{
+
+  }, [studentAccounts, teacherAccounts, ministryAccounts])
 
   return (
     <div className="container mx-auto h-screen items-center self-center flex flex-col">
@@ -73,8 +79,8 @@ function ManageAccount() {
         <Header />
       </header>
 
-      <div className="main-content w-full h-[90%] pt-4 bg-white/60 rounded-b-lg z-0">
-        <div className="w-4/5 mx-auto h-full">
+      <div className="main-content w-full h-[88%] pt-4 bg-white/60 rounded-b-lg z-0">
+        <div className="w-[95%] mx-auto h-full">
           <div className=" flex justify-between">
             <span
               id="student"
@@ -113,22 +119,22 @@ function ManageAccount() {
               Tài khoản Giáo vụ
             </span>
           </div>
-          <div className="pt-10 flex justify-between items-center">
-            <h3 className="text-lg font-bold">Danh sách tài khoản</h3>
-            <div className="flex relative">
-              <span className="cursor-pointer pl-1 absolute top-2 xl:top-3 left-2">
+          <div className="pt-5 flex justify-between items-center">
+            {/* <h3 className="text-lg font-bold">Danh sách tài khoản</h3> */}
+            <div className="flex relative ml-1">
+              <span className="cursor-pointer pl-1 absolute top-[10px] left-2">
                 <box-icon name="search-alt-2" color="gray"></box-icon>
               </span>
               <input
                 value={keyword}
                 onChange={handleSearching}
-                className="w-full py-2 xl:py-3 px-10 outline-none rounded-lg bg-gray-100 focus:outline-primary-blue peer"
+                className="w-full py-2 px-10 border-gray-200 border outline-none rounded-lg bg-gray-100 focus:outline-fourth-blue peer"
                 type="text"
                 placeholder="Tìm kiếm"
               />
               {closeX && (
                 <span
-                  className="cursor-pointer absolute top-2 xl:top-3 right-2"
+                  className="cursor-pointer absolute top-2 right-2"
                   onClick={() => {
                     setKeyword("");
                   }}
@@ -137,13 +143,25 @@ function ManageAccount() {
                 </span>
               )}
             </div>
-            <span className="px-3 py-2 font-bold bg-gray-300 cursor-pointer rounded hover:bg-gray-400/60">
+            <span
+            onClick={addAccountForm.onOpen}
+            className="px-4 py-3 font-bold bg-gray-300 cursor-pointer text-sm rounded-lg text-gray-600 hover:bg-gray-400/60">
               Thêm tài khoản
             </span>
           </div>
-          <div className="mt-4 h-3/4 overflow-y-auto">
+          <div className="mt-4 h-[78%] overflow-y-auto w-full rounded-lg flex justify-center border border-gray-200">
             <TableAccount accounts={accounts} roles={tab} />
           </div>
+        </div>
+        
+        <div className="">
+          <ModalAddAccountForm
+          setAccounts={setAccounts}
+          setTab={setTab}
+          isOpen={addAccountForm.isOpen}
+          onClose={addAccountForm.onClose}
+          />
+
         </div>
       </div>
     </div>

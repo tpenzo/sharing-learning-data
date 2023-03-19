@@ -5,7 +5,7 @@ function TableAccount(props) {
   const { accounts, roles } = props;
 
   return (
-    <TableContainer overflowX="unset" overflowY="unset">
+    <TableContainer className="w-full" overflowX="unset" overflowY="unset">
       <Table>
         <Thead position={"sticky"} top={0} zIndex="docked" bg={"gray.300"}>
           <Tr>
@@ -17,9 +17,9 @@ function TableAccount(props) {
           </Tr>
         </Thead>
         <Tbody>
-          {accounts &&
+          {accounts && accounts.length> 0 && 
             accounts.map((account, index) => {
-              return <RowAccount key={account._id} account={account} stt={index} />;
+              return <RowAccount key={index} account={account} stt={index} />;
             })}
         </Tbody>
       </Table>

@@ -57,14 +57,14 @@ class AuthControlller {
     //@access          No
     async registerStudent(req, res){
         // Display error when input data is invalid
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            const errMessage= {}
-            errors.array().forEach(err => {
-                errMessage[err.param] = err.msg
-            }) 
-            return res.status(400).json(errMessage);
-        }
+        // const errors = validationResult(req);
+        // if (!errors.isEmpty()) {
+        //     const errMessage= {}
+        //     errors.array().forEach(err => {
+        //         errMessage[err.param] = err.msg
+        //     }) 
+        //     return res.status(400).json(errMessage);
+        // }
         try {
             // Check studentCode
             // studentCode:req.body.studentCode

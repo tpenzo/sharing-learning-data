@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import ModalAddAccountForm from "../../modal/AddAccountForm";
 import { Tr, Td, Select, Button } from "@chakra-ui/react";
 function RowAccount(props) {
   const { account, stt } = props;
@@ -9,28 +10,35 @@ function RowAccount(props) {
     return types.filter((type) => type !== currentAcc);
   };
 
+  const handleSaveButton = ()=>{
+    setIsOption(true);
+  }
+
+  const handleCancelButton = ()=>{
+    setIsOption(true);
+  }
+
   const handleChange = (e) => {
     if (e.target.value) {
       setIsOption(false);
     } else {
       setIsOption(true);
     }
-    console.log(e.target.value);
   };
   return (
-    <Tr>
+    <Tr className="text-sm hover:bg-gray-200">
       <Td>{stt + 1}</Td>
-      {account.role ==="student" ? <Td>{account?.studentCode}</Td> : <Td>{account?.teacherCode}</Td>}
-      <Td>{account.fullName}</Td>
+      {account?.role ==="student" ? <Td>{account?.studentCode}</Td> : <Td>{account?.teacherCode}</Td>}
+      <Td>{account?.fullName}</Td>
       <Td>
         <Select
-          placeholder={account.role}
-          defaultValue={account.role}
+          placeholder={account?.role}
+          defaultValue={account?.role}
           onChange={handleChange}
         >
           {renderTypeAcc(account.role).map((type) => {
             return (
-              <option key={type} value={type}>
+              <option className="border border-gray-100" key={type} value={type}>
                 {type}
               </option>
             );
@@ -53,10 +61,14 @@ function RowAccount(props) {
           </ul>
         ) : (
           <div className="flex items-center gap-2">
-            <Button colorScheme="teal" size="sm">
+            <Button
+            onClick={handleSaveButton}
+            className="bg-blue-600" colorScheme="blue" size="sm">
               Lưu
             </Button>
-            <Button colorScheme={"pink"} variant={"outline"} size="sm">
+            <Button
+            onClick={handleCancelButton}
+            colorScheme={"pink"} size="sm">
               Hủy
             </Button>
           </div>

@@ -5,7 +5,6 @@ import showToast from "./showToast";
 export const getCoursesList = async (dispatch) => {
     try {
         const response = await axiosClient.get('/api/courses/all');
-        console.log(response.data);
         if(response.data){
             await dispatch(setAllCoursesData(response.data))
         }
@@ -46,11 +45,10 @@ export const updateCourseAPI = async (course) => {
 export const removeCourseAPI = async(course) => {
     try {
         const response = await axiosClient.post('/api/courses/delete', {course})
-        console.log(response);
         //dispatch(removeCourse(course))
         showToast("Xoá nhóm học phần thành công", "success")
     } catch (error) {
-        showToast(error, 'error')
+        showToast(error.data.message, 'error')
     }
 }
 
