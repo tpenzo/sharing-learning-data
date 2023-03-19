@@ -57,14 +57,14 @@ class AuthControlller {
     //@access          No
     async registerStudent(req, res){
         // Display error when input data is invalid
-        // const errors = validationResult(req);
-        // if (!errors.isEmpty()) {
-        //     const errMessage= {}
-        //     errors.array().forEach(err => {
-        //         errMessage[err.param] = err.msg
-        //     }) 
-        //     return res.status(400).json(errMessage);
-        // }
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            const errMessage= {}
+            errors.array().forEach(err => {
+                errMessage[err.param] = err.msg
+            }) 
+            return res.status(400).json(errMessage);
+        }
         try {
             // Check studentCode
             // studentCode:req.body.studentCode
@@ -131,6 +131,26 @@ class AuthControlller {
             // Create ministry
             const newAccount = await UserModel.create({...req.body, role: 'ministry'})
             return res.status(200).json({message: 'Creating successful ministry', data: newAccount})
+        } catch (error) {
+            return res.status(500).json({message: error.message})
+        }
+    }
+
+    //@description     delete Account
+    //@route           [POST] /api/auth/account/remove
+    //@body            {accountId,}
+    //@access          No
+    async removeAccount(req, res){
+        try {
+            // Check teacherCode and email
+            const account = await UserModel.findOne({_id: req.body.accountId})
+            if(account){
+                const response = await UserModel.findOneAndDelete({_id: req.body.accountId})
+                return res.status(200).json({message: "Remove account successfully", data: response})
+            } else{
+            return res.status(404).json({message: "Can't find account to remove"})
+            }
+
         } catch (error) {
             return res.status(500).json({message: error.message})
         }

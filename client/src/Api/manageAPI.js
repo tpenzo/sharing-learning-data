@@ -35,7 +35,19 @@ export const createAccountAPI = async (role, user)=>{
         console.log(response.data);
         showToast("Thêm tài khoản thành công", "success");
     } catch (error) {
-        showToast(error.data.message, 'error');
+        // showToast(error.data.message, 'error');
         showToast("Tài khoản đã tồn tại", 'error');
+    }
+}
+
+export const removeAccountAPI = async (accountId) =>{
+    try {
+        console.log(accountId);
+        const response = await axiosClient.post('/api/auth/account/remove', {accountId})
+        console.log(response.data);
+        showToast("Xoá tài khoản thành công", "success");
+    } catch (error) {
+        showToast(error.data.message, 'error');
+        showToast("Không thể tìm thông tin tài khoản để xoá", 'error');
     }
 }

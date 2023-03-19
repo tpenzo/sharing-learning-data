@@ -1,10 +1,15 @@
 import React, { useState } from "react";
-import ModalAddAccountForm from "../../modal/AddAccountForm";
+import ShowDialog from "../../dialog/ShowDialog";
+import { useDisclosure } from "@chakra-ui/react";
+
 import { Tr, Td, Select, Button } from "@chakra-ui/react";
+import ModalAddAccountForm from "../../modal/AddAccountForm";
 function RowAccount(props) {
-  const { account, stt } = props;
+  const { account, stt, setAccounts } = props;
   const [isOption, setIsOption] = useState(true);
   const [types, setTypes] = useState(["student", "ministry", "teacher"]);
+  const showAcceptDeleteAccount = useDisclosure();
+  const modifyAccountForm = useDisclosure();
 
   const renderTypeAcc = (currentAcc) => {
     return types.filter((type) => type !== currentAcc);
@@ -44,16 +49,41 @@ function RowAccount(props) {
             );
           })}
         </Select>
+
+        {/* modal accept remove account */}
+        <ShowDialog
+          setAccounts={setAccounts}
+          account={account}
+          action={"removeAccount"}
+          isOpen={showAcceptDeleteAccount.isOpen}
+          onClose={showAcceptDeleteAccount.onClose}
+          title={"Xoá tài khoản"}
+          content={`Bạn muốn xoá tài khoản ${account.role==="student" ? account?.studentCode : account?.teacherCode}-${account.fullName}?
+           Hành động này sẽ không thể hoàn tác.`}
+          actionName={"Xoá"}
+          colorButton={"red"}
+        />
+
+          {/* modal modify account info */}
+        <ModalAddAccountForm
+        action={"modify"}
+        account={account}
+          title={"Chỉnh sửa thông tin"}
+          isOpen={modifyAccountForm.isOpen}
+          onClose={modifyAccountForm.onClose}
+          />
+
+        <ModalAddAccountForm />
       </Td>
       <Td>
         {isOption ? (
           <ul className="flex items-center gap-2">
-            <li className="cursor-pointer">
+            <li onClick={showAcceptDeleteAccount.onOpen} className="cursor-pointer">
               <span>
                 <box-icon name="trash"></box-icon>
               </span>
             </li>
-            <li className="cursor-pointer">
+            <li onClick={modifyAccountForm.onOpen} className="cursor-pointer">
               <span>
                 <box-icon name="pencil"></box-icon>
               </span>

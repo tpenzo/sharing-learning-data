@@ -5,7 +5,7 @@ import TableAccount from "../components/table/account/TableAccount";
 import ModalAddAccountForm from "../components/modal/AddAccountForm";
 import { useSelector, useDispatch } from "react-redux";
 import { getTeacherListAccountAPI, getStudentListAccountAPI, getMinistryListAccountAPI } from "../Api/manageAPI";
-import EditInfo from "../components/modal/EditInfo";
+
 
 function ManageAccount() {
   const [tab, setTab] = useState("student");
@@ -68,10 +68,6 @@ function ManageAccount() {
     }
   }, [tab, accounts]);
 
-
-  useEffect(()=>{
-
-  }, [studentAccounts, teacherAccounts, ministryAccounts])
 
   return (
     <div className="container mx-auto h-screen items-center self-center flex flex-col">
@@ -150,12 +146,13 @@ function ManageAccount() {
             </span>
           </div>
           <div className="mt-4 h-[78%] overflow-y-auto w-full rounded-lg flex justify-center border border-gray-200">
-            <TableAccount accounts={accounts} roles={tab} />
+            <TableAccount setAccounts={setAccounts} accounts={accounts} roles={tab} />
           </div>
         </div>
         
         <div className="">
           <ModalAddAccountForm
+          title={"Tạo tài khoản"}
           setAccounts={setAccounts}
           setTab={setTab}
           isOpen={addAccountForm.isOpen}

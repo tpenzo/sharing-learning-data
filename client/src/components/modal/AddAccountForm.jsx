@@ -11,7 +11,6 @@ import {
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import showToast from "../../Api/showToast";
 import { createAccountAPI } from "../../Api/manageAPI";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -67,7 +66,7 @@ function ModalAddAccountForm(props) {
     classId,
     major,
   } = values;
-  const { isOpen, onClose, setTab, setAccounts } = props;
+  const { isOpen, onClose, setAccounts, account, action, title } = props;
 
   //handle add account to db
   const handleAddAccount = async () => {
@@ -114,6 +113,13 @@ function ModalAddAccountForm(props) {
       onClose()
     }
   };
+
+  //set values for modify func
+  useEffect(()=>{
+    if(action==="modify"){
+      formik.setValues({...account, code:account?.studentCode || account?.teacherCode || "", classId: account?.class || ""})
+    }
+  }, [])
   return (
     <Modal
       isOpen={isOpen}
@@ -124,7 +130,7 @@ function ModalAddAccountForm(props) {
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Thêm Tài Khoản</ModalHeader>
+        <ModalHeader>{title}</ModalHeader>
         <ModalCloseButton />
         <form onSubmit={handleSubmit} className="container-modal">
           <ModalBody pb={6}>
@@ -280,6 +286,7 @@ function ModalAddAccountForm(props) {
                     name="gender"
                     className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                     disabled={role === ""}
+                    defaultChecked={gender==="male"}
                   />
                   <label
                     htmlFor="male"
@@ -296,6 +303,7 @@ function ModalAddAccountForm(props) {
                     name="gender"
                     className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                     disabled={role === ""}
+                    defaultChecked={gender==="female"}
                   />
                   <label
                     htmlFor="female"
@@ -332,7 +340,7 @@ function ModalAddAccountForm(props) {
 
           <ModalFooter>
             <Button type="submit" colorScheme="blue" mr={3}>
-              Thêm Tài Khoản
+              {action==="modify" ? "Cập nhật" : "Thêm tài khoản"}
             </Button>
             <Button onClick={onClose}>Huỷ</Button>
           </ModalFooter>
