@@ -15,13 +15,13 @@ function RowAccount(props) {
     return types.filter((type) => type !== currentAcc);
   };
 
-  const handleSaveButton = ()=>{
+  const handleSaveButton = () => {
     setIsOption(true);
-  }
+  };
 
-  const handleCancelButton = ()=>{
+  const handleCancelButton = () => {
     setIsOption(true);
-  }
+  };
 
   const handleChange = (e) => {
     if (e.target.value) {
@@ -33,7 +33,11 @@ function RowAccount(props) {
   return (
     <Tr className="text-sm hover:bg-gray-200">
       <Td>{stt + 1}</Td>
-      {account?.role ==="student" ? <Td>{account?.studentCode}</Td> : <Td>{account?.teacherCode}</Td>}
+      {account?.role === "student" ? (
+        <Td>{account?.studentCode}</Td>
+      ) : (
+        <Td>{account?.teacherCode}</Td>
+      )}
       <Td>{account?.fullName}</Td>
       <Td>
         <Select
@@ -43,7 +47,11 @@ function RowAccount(props) {
         >
           {renderTypeAcc(account.role).map((type) => {
             return (
-              <option className="border border-gray-100" key={type} value={type}>
+              <option
+                className="border border-gray-100"
+                key={type}
+                value={type}
+              >
                 {type}
               </option>
             );
@@ -58,27 +66,35 @@ function RowAccount(props) {
           isOpen={showAcceptDeleteAccount.isOpen}
           onClose={showAcceptDeleteAccount.onClose}
           title={"Xoá tài khoản"}
-          content={`Bạn muốn xoá tài khoản ${account.role==="student" ? account?.studentCode : account?.teacherCode}-${account.fullName}?
+          content={`Bạn muốn xoá tài khoản ${
+            account.role === "student"
+              ? account?.studentCode
+              : account?.teacherCode
+          }-${account.fullName}?
            Hành động này sẽ không thể hoàn tác.`}
           actionName={"Xoá"}
           colorButton={"red"}
         />
 
-          {/* modal modify account info */}
+        {/* modal modify account info */}
         <ModalAddAccountForm
-        action={"modify"}
-        account={account}
+          action={"modify"}
+          account={account}
           title={"Chỉnh sửa thông tin"}
           isOpen={modifyAccountForm.isOpen}
           onClose={modifyAccountForm.onClose}
-          />
+          setAccounts={setAccounts}
+        />
 
         <ModalAddAccountForm />
       </Td>
       <Td>
         {isOption ? (
           <ul className="flex items-center gap-2">
-            <li onClick={showAcceptDeleteAccount.onOpen} className="cursor-pointer">
+            <li
+              onClick={showAcceptDeleteAccount.onOpen}
+              className="cursor-pointer"
+            >
               <span>
                 <box-icon name="trash"></box-icon>
               </span>
@@ -92,13 +108,14 @@ function RowAccount(props) {
         ) : (
           <div className="flex items-center gap-2">
             <Button
-            onClick={handleSaveButton}
-            className="bg-blue-600" colorScheme="blue" size="sm">
+              onClick={handleSaveButton}
+              className="bg-blue-600"
+              colorScheme="blue"
+              size="sm"
+            >
               Lưu
             </Button>
-            <Button
-            onClick={handleCancelButton}
-            colorScheme={"pink"} size="sm">
+            <Button onClick={handleCancelButton} colorScheme={"pink"} size="sm">
               Hủy
             </Button>
           </div>

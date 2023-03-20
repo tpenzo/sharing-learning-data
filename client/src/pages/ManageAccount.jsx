@@ -152,9 +152,9 @@ function ManageAccount() {
         
         <div className="">
           <ModalAddAccountForm
+          action="create"
           title={"Tạo tài khoản"}
           setAccounts={setAccounts}
-          setTab={setTab}
           isOpen={addAccountForm.isOpen}
           onClose={addAccountForm.onClose}
           />

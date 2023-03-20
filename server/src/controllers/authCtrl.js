@@ -130,7 +130,7 @@ class AuthControlller {
             }
             // Create ministry
             const newAccount = await UserModel.create({...req.body, role: 'ministry'})
-            return res.status(200).json({message: 'Creating successful ministry', data: newAccount})
+            return res.status(200).json({message: 'Creating ministry successful', data: newAccount})
         } catch (error) {
             return res.status(500).json({message: error.message})
         }
@@ -151,6 +151,41 @@ class AuthControlller {
             return res.status(404).json({message: "Can't find account to remove"})
             }
 
+        } catch (error) {
+            return res.status(500).json({message: error.message})
+        }
+    }
+
+    //@description     update account info
+    //@route           [POST] /api/auth/account/update
+    //@body            {email, password,...,}
+    //@access          No
+    async updateAccountInfo(req, res){
+        // Display error when input data is invalid
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            const errMessage= {}
+            errors.array().forEach(err => {
+                errMessage[err.param] = err.msg
+            }) 
+            return res.status(400).json(errMessage);
+        }
+        try {
+            // Check teacherCode and email
+            const account = await UserModel.findById({_id: req.body._id})
+            if(account){
+                console.log(req.body.password, account.password);
+                if(req.body.password !== account.password){
+                    const salt = await bcrypt.genSalt(10);
+                    req.body.password = await bcrypt.hash(req.body.password, salt);
+                    console.log(req.body.password);
+                }
+                //replace all info updated
+                const updatedAccount = await UserModel.findOneAndUpdate({_id: account._id}, {$set: req.body})
+                return res.status(200).json({message: 'Account Info Updated', data: updatedAccount})
+            } else {
+                return res.status(404).json({message: "Can't find account to update"})
+            }
         } catch (error) {
             return res.status(500).json({message: error.message})
         }
