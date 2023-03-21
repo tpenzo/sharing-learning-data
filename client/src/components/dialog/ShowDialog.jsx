@@ -11,6 +11,8 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { removeCourseAPI, getCoursesList } from "../../Api/coursesAPI";
+import { removeAccountAPI } from "../../Api/manageAPI";
+import { getTeacherListAccountAPI, getStudentListAccountAPI, getMinistryListAccountAPI } from "../../Api/manageAPI";
 
 function ShowDialog(props) {
   const {
@@ -25,8 +27,13 @@ function ShowDialog(props) {
     setStudentList,
     requiredRemove,
     course,
+    account,
+    setAccounts
   } = props;
   const dispatch = useDispatch();
+  const studentAccounts = useSelector(state => state.manage.studentList)
+  const teacherAccounts = useSelector(state => state.manage.teacherList)
+  const ministryAccounts = useSelector(state => state.manage.ministryList)
 
   const removeStudentHandle = (student) => {
     setStudentList((studentList) => [
@@ -44,6 +51,26 @@ function ShowDialog(props) {
       onClose();
   };
 
+  const removeAccountHandle = async (account) =>{
+      await removeAccountAPI(account?._id)
+      switch (account?.role){
+        case "student":
+          await getStudentListAccountAPI(dispatch);
+          await setAccounts(studentAccounts);
+        break;
+        case "teacher":
+          await getTeacherListAccountAPI(dispatch);
+          await setAccounts(teacherAccounts);
+        break;
+        case "ministry":
+          await getMinistryListAccountAPI(dispatch);
+          await setAccounts(ministryAccounts);
+        break;
+      }
+      //loading
+      onClose("")
+  }
+
   const handleClick = () => {
     switch (action) {
       case "removeCourse":
@@ -52,6 +79,8 @@ function ShowDialog(props) {
       case "removeStudent":
         removeStudentHandle(requiredRemove.current);
         break;
+      case "removeAccount":
+        removeAccountHandle(account)
     }
   };
 

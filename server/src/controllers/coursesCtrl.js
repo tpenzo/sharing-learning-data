@@ -9,7 +9,7 @@ class coursesController {
   //@access          verifyToken
   async getAllCourses(req, res) {
     try {
-      let perPage = 15; //courses displayed for each time call API
+      let perPage = 20; //courses displayed for each time call API
       let page = req.params.page || 1;
 
       const coursesList = await courseModel

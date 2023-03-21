@@ -15,7 +15,10 @@ router.post('/login', loginValidation, authCtrl.login);
 
 router.post('/register/student' ,authCtrl.registerStudent);
 router.post('/register/teacher', registerTeacherValidation, authCtrl.registerTeacher);
+
 router.post('/register/ministry', authCtrl.registerMinistry)
+router.post('/account/remove', authCtrl.removeAccount)
+router.post('/account/update', authCtrl.updateAccountInfo)
 
 
 

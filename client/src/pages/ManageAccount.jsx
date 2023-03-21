@@ -3,9 +3,10 @@ import { useDisclosure } from "@chakra-ui/react";
 import Header from "../components/header/Header";
 import TableAccount from "../components/table/account/TableAccount";
 import ModalAddAccountForm from "../components/modal/AddAccountForm";
+import ModalAddAccountByFile from "../components/modal/AddAccountByFile";
 import { useSelector, useDispatch } from "react-redux";
 import { getTeacherListAccountAPI, getStudentListAccountAPI, getMinistryListAccountAPI } from "../Api/manageAPI";
-import EditInfo from "../components/modal/EditInfo";
+
 
 function ManageAccount() {
   const [tab, setTab] = useState("student");
@@ -13,6 +14,7 @@ function ManageAccount() {
   const [closeX, setCloseX] = useState(false);
   const typingTimeoutRef = useRef(null);
   const addAccountForm = useDisclosure();
+  const addAccountFile = useDisclosure();
   const dispatch = useDispatch();
 
   const [accounts, setAccounts] = useState([]);
@@ -69,17 +71,13 @@ function ManageAccount() {
   }, [tab, accounts]);
 
 
-  useEffect(()=>{
-
-  }, [studentAccounts, teacherAccounts, ministryAccounts])
-
   return (
     <div className="container mx-auto h-screen items-center self-center flex flex-col">
-      <header className="header sticky top-0 w-full h-[10%] rounded-t-lg z-50">
+      <header className="header sticky top-0 w-full h-[10%] rounded-t-lg z-50 border-b-[1px]">
         <Header />
       </header>
 
-      <div className="main-content w-full h-[88%] pt-4 bg-white/60 rounded-b-lg z-0">
+      <div className="main-content w-full h-[90%] pt-4 bg-white rounded-b-lg">
         <div className="w-[95%] mx-auto h-full">
           <div className=" flex justify-between">
             <span
@@ -143,25 +141,39 @@ function ManageAccount() {
                 </span>
               )}
             </div>
+            <div className="">
+            <span
+            onClick={addAccountFile.onOpen}
+            className="px-4 py-3 font-medium bg-orange-600 cursor-pointer text-sm rounded-lg text-gray-100 hover:bg-orange-700">
+              Nhập tập tin 
+            </span>
             <span
             onClick={addAccountForm.onOpen}
-            className="px-4 py-3 font-bold bg-gray-300 cursor-pointer text-sm rounded-lg text-gray-600 hover:bg-gray-400/60">
+            className="px-4 py-3 font-medium ml-4 bg-green-700 cursor-pointer text-sm rounded-lg text-gray-100 hover:bg-green-800">
               Thêm tài khoản
             </span>
+            </div>
           </div>
-          <div className="mt-4 h-[78%] overflow-y-auto w-full rounded-lg flex justify-center border border-gray-200">
-            <TableAccount accounts={accounts} roles={tab} />
+          <div className="mt-4 h-[79%] overflow-y-auto w-full rounded-lg flex justify-center border border-gray-200">
+            <TableAccount action={"modify"} setAccounts={setAccounts} accounts={accounts} roles={tab} />
           </div>
         </div>
         
         <div className="">
           <ModalAddAccountForm
+          action="create"
+          title={"Tạo tài khoản"}
           setAccounts={setAccounts}
-          setTab={setTab}
           isOpen={addAccountForm.isOpen}
           onClose={addAccountForm.onClose}
           />
 
+          <ModalAddAccountByFile
+          tab={tab}
+            setAccounts={setAccounts}
+            isOpen={addAccountFile.isOpen}
+            onClose={addAccountFile.onClose}
+          />
         </div>
       </div>
     </div>
