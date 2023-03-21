@@ -32,10 +32,10 @@ export const getMinistryListAccountAPI = async (dispatch) => {
 export const createAccountAPI = async (role, user)=>{
     try {
         const response = await axiosClient.post(`/api/auth/register/${role}`, user)
-        showToast("Thêm tài khoản thành công", "success");
+        showToast("Tài khoản được thêm thành công", "success");
     } catch (error) {
         // showToast(error.data.message, 'error');
-        showToast("Tài khoản đã tồn tại", 'error');
+        showToast(`Tài khoản ${user.email} đã tồn tại`, 'error');
     }
 }
 

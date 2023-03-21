@@ -5,7 +5,7 @@ import { useDisclosure } from "@chakra-ui/react";
 import { Tr, Td, Select, Button } from "@chakra-ui/react";
 import ModalAddAccountForm from "../../modal/AddAccountForm";
 function RowAccount(props) {
-  const { account, stt, setAccounts } = props;
+  const { account, stt, setAccounts, action } = props;
   const [isOption, setIsOption] = useState(true);
   const [types, setTypes] = useState(["student", "ministry", "teacher"]);
   const showAcceptDeleteAccount = useDisclosure();
@@ -78,19 +78,26 @@ function RowAccount(props) {
 
         {/* modal modify account info */}
         <ModalAddAccountForm
-          action={"modify"}
+          action={action}
           account={account}
           title={"Chỉnh sửa thông tin"}
           isOpen={modifyAccountForm.isOpen}
           onClose={modifyAccountForm.onClose}
           setAccounts={setAccounts}
         />
-
-        <ModalAddAccountForm />
       </Td>
       <Td>
         {isOption ? (
-          <ul className="flex items-center gap-2">
+          action ==="view" ?
+          (<ul className="flex items-center justify-center gap-2">
+          <li onClick={modifyAccountForm.onOpen}>
+            <span title="Xem thông tin chi tiết" className="-ml-7 cursor-pointer">
+              <box-icon name="show-alt"></box-icon>
+            </span>
+          </li>
+        </ul>)
+          : 
+          (<ul className="flex items-center gap-2">
             <li
               onClick={showAcceptDeleteAccount.onOpen}
               className="cursor-pointer"
@@ -104,7 +111,7 @@ function RowAccount(props) {
                 <box-icon name="pencil"></box-icon>
               </span>
             </li>
-          </ul>
+          </ul> )
         ) : (
           <div className="flex items-center gap-2">
             <Button
