@@ -40,7 +40,6 @@ export default function CreateCourse(props) {
       courseName: "",
       teacherName: "",
       groupNumber: "",
-      studentListLength: ""
     },
     validationSchema: Yup.object({
       courseID: Yup.string().required("Không được để trống"),
@@ -73,13 +72,7 @@ export default function CreateCourse(props) {
     if (courseId) {
       getCourseAPI(courseId).then((course) => {
         setCourseInfo(course),
-          setStudentList([]),
-          //after set data for course, fetch data for student list from _id stored in course
-          course.studentList.forEach((student) => {
-            getUserInfoAPI(student).then((studentInfo) => {
-              setStudentList((studentList) => [...studentList, studentInfo]);
-            });
-          });
+          setStudentList(course.studentList),
           setFieldValue("studentListLength", studentList.length)
       });
     }

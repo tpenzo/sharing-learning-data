@@ -15,7 +15,8 @@ class coursesController {
       const coursesList = await courseModel
         .find()
         .skip(perPage * page - perPage)
-        .limit(perPage);
+        .limit(perPage)
+        .populate("teacher", "fullName");
 
       return res.status(200).json({ message: "successful", data: coursesList });
     } catch (error) {
@@ -30,7 +31,7 @@ class coursesController {
   async getCourse(req, res) {
     try {
       let courseID = req.params._courseId;
-      const course = await courseModel.findOne({ _id: courseID });
+      const course = await courseModel.findOne({ _id: courseID }).populate("studentList", "-password");
       if (course) {
         return res.status(200).json({ message: "successful", data: course });
       } else {
