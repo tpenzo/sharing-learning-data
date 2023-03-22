@@ -38,7 +38,7 @@ function ShowDialog(props) {
   const removeStudentHandle = (student) => {
     setStudentList((studentList) => [
       ...studentList.filter((studentElem) => {
-        return student._id !== studentElem._id;
+        return student?._id !== studentElem?._id;
       }),
     ]);
     onClose();

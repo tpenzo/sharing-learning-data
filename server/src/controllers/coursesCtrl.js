@@ -15,7 +15,8 @@ class coursesController {
       const coursesList = await courseModel
         .find()
         .skip(perPage * page - perPage)
-        .limit(perPage);
+        .limit(perPage)
+        .populate("teacher", "fullName");
 
       return res.status(200).json({ message: "successful", data: coursesList });
     } catch (error) {
@@ -30,7 +31,7 @@ class coursesController {
   async getCourse(req, res) {
     try {
       let courseID = req.params._courseId;
-      const course = await courseModel.findOne({ _id: courseID });
+      const course = await courseModel.findOne({ _id: courseID }).populate("studentList", "-password");
       if (course) {
         return res.status(200).json({ message: "successful", data: course });
       } else {
@@ -69,6 +70,11 @@ class coursesController {
             { _id: teacher },
             { $push: { managedCourses: newCourse._id } }
           );
+            //add course id for student
+          await userModel.updateMany(
+            {_id: {$in: newCourse.studentList}},
+            {$push: {followingCourses: newCourse._id}}
+          );
           return res
             .status(200)
             .json({ message: "Course created successfully", data: newCourse });
@@ -89,8 +95,10 @@ class coursesController {
   //@access          verifyToken, role: Ministry
   async updateCourse(req, res) {
     try {
-      const { courseID, semester, schoolYear, groupNumber, teacher } =
-        req.body.course;
+      const { courseID, semester, schoolYear, groupNumber, teacher, studentList, _id } =
+        req.body.course; //updated course
+
+        //current course
       const course = await courseModel.findOne({
         $and: [
           { courseID: courseID },
@@ -109,6 +117,27 @@ class coursesController {
         await userModel.findOneAndUpdate(
           { _id: teacher },
           { $push: { managedCourses: course._id } }
+        );
+        //add new following course for new student
+       await userModel.updateMany(
+          {
+            $and: [
+              { _id: { $in: studentList } },
+              { _id: { $nin: course.studentList } },
+            ],
+          },
+          { $push: { followingCourses: _id } }
+        );
+
+        //remove following course for student
+        await userModel.updateMany(
+          {
+            $and: [
+              { _id: { $in: course.studentList } },
+              { _id: { $nin: studentList } },
+            ],
+          },
+          { $pull: { followingCourses: _id } }
         );
         const updatedCourse = await courseModel.findOneAndUpdate(
           { _id: course._id },
@@ -148,6 +177,12 @@ class coursesController {
         await userModel.findOneAndUpdate(
           { _id: teacher },
           { $pull: { managedCourses: course._id } }
+        );
+
+        //remove following courses for student
+        await userModel.updateMany(
+          {_id: {$in: course.studentList}},
+          {$pull: {followingCourses: course._id}}
         );
 
         //remove course
