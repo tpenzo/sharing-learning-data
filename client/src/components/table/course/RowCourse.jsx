@@ -25,7 +25,7 @@ function RowCourse(props) {
       <Td>{course?.courseID}</Td>
       <Td>{course?.groupNumber}</Td>
       <Td>{course?.name}</Td>
-      <Td>{teacherName}</Td>
+      <Td>{teacherName ? teacherName : ""}</Td>
       <Td>{course?.studentList.length}</Td>
       <Td>
         <ul className="flex items-center gap-2">

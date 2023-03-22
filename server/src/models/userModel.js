@@ -24,6 +24,7 @@ const userSchema = new Schema({
     studentCode: {type: String, min: 8},
     class: {type: String},
     major: {type: String},
+    followingCourses: [{type: Schema.Types.ObjectId, ref: 'course'}],
     bookmarkPost: [{type: Schema.Types.ObjectId, ref: 'post'}]
     
 },{timestamps: true});

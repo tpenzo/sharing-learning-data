@@ -36,6 +36,7 @@ export const createCourseAPI = async (course) => {
 export const updateCourseAPI = async (course) => {
     try {
         const response = await axiosClient.post('/api/courses/update', {course})
+        showToast("Cập nhật thông tin thành công", "success");
     } catch (error) {
         showToast(error.data.message, 'error')
     }
@@ -68,7 +69,8 @@ export const getUserInfoAPI = async (userId) => {
        const response = await axiosClient.get(`/api/user/${userId}`);
        return response.data
     } catch (error) {
-       showToast(error.data.message, 'error')
+       //showToast(error.data.message, 'error')
+       //console.log(error.data.message);
     }
 }
 

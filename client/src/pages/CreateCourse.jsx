@@ -19,18 +19,47 @@ import courses from "../data/CoursesData";
 import Header from "../components/header/Header";
 import StudentList from "../components/ministry/StudentList";
 import { createGroupChatAPI } from "../Api/chatAPI";
+import { useFormik } from "formik";
+import * as Yup from "yup"
 
 export default function CreateCourse(props) {
   const [fileName, setFileName] = useState("");
 
-  const [courseID, setcourseID] = useState("");
-  const [courseName, setCourseName] = useState("");
-  const [teacherName, setTeachername] = useState("");
+  // const [courseID, setcourseID] = useState("");
+  // const [courseName, setCourseName] = useState("");
+  // const [teacherName, setTeachername] = useState("");
   const [semester, setSemester] = useState("1");
   const [schoolYear, setSchoolYear] = useState("2022-2023");
   const [studentList, setStudentList] = useState([]);
   const [description, setdescription] = useState("");
-  const [groupNumber, setGroupNumber] = useState("");
+  // const [groupNumber, setGroupNumber] = useState("");
+
+  const formik = useFormik({
+    initialValues: {
+      courseID: "",
+      courseName: "",
+      teacherName: "",
+      groupNumber: "",
+      studentListLength: ""
+    },
+    validationSchema: Yup.object({
+      courseID: Yup.string().required("Không được để trống"),
+      courseName: Yup.string().required("Vui lòng nhập tên nhóm"),
+      teacherName: Yup.string().required("Vui lòng chọn giảng viên hướng dẫn"),
+      groupNumber: Yup.string().required("Không được để trống"),
+    }),
+    onSubmit: () => {
+      handleSubmitForm()
+    },
+  });
+
+  const { values, handleSubmit, setFieldValue } = formik;
+  const {
+    courseID,
+    courseName,
+    teacherName,
+    groupNumber,
+  } = values;
 
   const [teacherList, setTeacherList] = useState([]);
   const { courseId } = useParams();
@@ -51,6 +80,7 @@ export default function CreateCourse(props) {
               setStudentList((studentList) => [...studentList, studentInfo]);
             });
           });
+          setFieldValue("studentListLength", studentList.length)
       });
     }
   }, []);
@@ -68,8 +98,7 @@ export default function CreateCourse(props) {
               setStudentList((studentList) => [...studentList, studentInfo]);
             });
           });
-          // setStudentList(rows);
-          console.log(rows);
+          setFieldValue("studentListLength", rows.length)
         } else {
           showToast(
             "Vui lòng chọn lại tập tin đúng định dạng để nhập",
@@ -85,19 +114,17 @@ export default function CreateCourse(props) {
     const teacherInfo = teacherListData.find((teacher) => {
       return teacher._id == course.teacher;
     });
-    setcourseID(course.courseID);
-    setCourseName(course.name);
-    setTeachername(`${teacherInfo.teacherCode}-${teacherInfo.fullName}`);
+    setFieldValue("courseID", course.courseID);
+    setFieldValue("courseName",course.name);
+    setFieldValue("teacherName", `${teacherInfo ? teacherInfo?.teacherCode+"-"+teacherInfo?.fullName : "Chưa Phân Công"}`);
     setdescription(course.description);
-    setGroupNumber(course.groupNumber);
+    setFieldValue("groupNumber",course.groupNumber);
     setSemester(course.semester);
     setSchoolYear(course.schoolyear);
-    setGroupNumber(course.groupNumber);
   };
 
   //submit course handle
-  const handleSubmitForm = async (e) => {
-    e.preventDefault();
+  const handleSubmitForm = async () => {
     const teacherCode = teacherName.split("-")[0];
     const teacher = teacherList.find((teacher) => {
       return teacher.teacherCode === teacherCode;
@@ -105,6 +132,7 @@ export default function CreateCourse(props) {
     const students_id = studentList.map((student) => student._id);
     //package data
     let courseDataSubmit = {
+      _id: courseId,
       courseID: courseID,
       name: courseName,
       teacher: teacher,
@@ -118,7 +146,6 @@ export default function CreateCourse(props) {
     //if in manage func
     if (courseId) {
       await updateCourseAPI(courseDataSubmit);
-      showToast("Cập nhật thông tin thành công", "success");
     } else {
       //if in create func
       const groupChat_id = await createGroupChatAPI(courseDataSubmit);
@@ -147,7 +174,7 @@ export default function CreateCourse(props) {
           return course.courseId === courseID;
         });
         if(selectedCourse){
-          setCourseName(selectedCourse.courseName);
+          setFieldValue("courseName",selectedCourse.courseName);
         }
       }
     }
@@ -163,7 +190,7 @@ export default function CreateCourse(props) {
           <div className="title sticky bg-inherit top-0 text-lg font-semibold p-3 mt-4 text-center">
             QUẢN LÝ NHÓM HỌC PHẦN
           </div>
-          <form className="ml-6">
+          <form onSubmit={handleSubmit} className="ml-6">
             {/* courseID, coursename */}
             <div className="flex justify-start items-center w-full">
               <div className="mt-4 w-1/4">
@@ -172,9 +199,7 @@ export default function CreateCourse(props) {
                 </label>
                 <input
                   value={courseID}
-                  onChange={(e) => {
-                    setcourseID(e.target.value);
-                  }}
+                  onChange={formik.handleChange}
                   autoComplete="off"
                   className={`bg-gray-50 block w-full mt-1 border outline-none border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 
                             ${
@@ -186,9 +211,15 @@ export default function CreateCourse(props) {
                   name="courseID"
                   type="text"
                   list="courseIDList"
-                  required
                   disabled={courseId ? true : false}
                 />
+                <div className="h-1">
+                {formik.errors.courseID && formik.touched.courseID && (
+                <span className="text-[10px] text-red-400">
+                  {formik.errors.courseID}
+                </span>
+                )}
+                </div>
 
                 {/* suggestion for courseID */}
                 <datalist id="courseIDList">
@@ -208,7 +239,7 @@ export default function CreateCourse(props) {
                 </label>
                 <input
                   value={groupNumber}
-                  onChange={(e) => setGroupNumber(e.target.value)}
+                  onChange={formik.handleChange}
                   autoComplete="off"
                   className={`bg-gray-50 block mt-1 w-full border outline-none border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5
                              ${
@@ -219,9 +250,15 @@ export default function CreateCourse(props) {
                   id="groupNumber"
                   name="groupNumber"
                   type="text"
-                  required
                   disabled={courseId ? true : false}
                 />
+                <div className="h-1">
+                {formik.errors.groupNumber && formik.touched.groupNumber && (
+                <span className="text-[10px] text-red-400">
+                  {formik.errors.groupNumber}
+                </span>
+              )}
+                </div>
               </div>
             </div>
 
@@ -232,7 +269,7 @@ export default function CreateCourse(props) {
               </label>
               <input
                 value={courseName}
-                onChange={(e) => setCourseName(e.target.value)}
+                onChange={formik.handleChange}
                 autoComplete="off"
                 className={`bg-gray-50 block mt-1 w-[71%] border outline-none border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5
                           ${
@@ -243,9 +280,15 @@ export default function CreateCourse(props) {
                 id="courseName"
                 name="courseName"
                 type="text"
-                required
                 disabled={courseId ? true : false}
               />
+              <div className="h-1">
+              {formik.errors.courseName && formik.touched.courseName && (
+                <span className="text-xs text-red-400 ml-2">
+                  {formik.errors.courseName}
+                </span>
+              )}
+              </div>
             </div>
             {/* teacherName */}
             <div className="mt-4">
@@ -254,14 +297,20 @@ export default function CreateCourse(props) {
               </label>
               <input
                 value={teacherName}
-                onChange={(e) => setTeachername(e.target.value)}
+                onChange={formik.handleChange}
                 className="bg-gray-50 w-[71%] block mt-1 border outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
                 id="teacherName"
                 name="teacherName"
                 type="text"
                 list="teacherList"
-                required
               />
+              <div className="h-1">
+              {formik.errors.teacherName && formik.touched.teacherName && (
+                <span className="text-xs text-red-400 ml-2">
+                  {formik.errors.teacherName}
+                </span>
+              )}
+              </div>
 
               {/* suggestion for teachername */}
               {teacherName && (
@@ -366,7 +415,7 @@ export default function CreateCourse(props) {
               </label>
               <textarea
                 value={description}
-                onChange={(e) => setdescription(e.target.value)}
+                onChange={formik.handleChange}
                 rows="2"
                 className="bg-gray-50 block w-[90%] mt-1 border outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
                 name="description"
@@ -385,8 +434,8 @@ export default function CreateCourse(props) {
                 </button>
               </Link>
               <button
-                onClick={handleSubmitForm}
-                type="button"
+                // onClick={handleSubmitForm}
+                type="submit"
                 className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 outline-none "
               >
                 {courseId ? "Cập nhật" : "Lưu"}

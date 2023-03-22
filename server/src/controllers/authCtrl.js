@@ -1,5 +1,6 @@
 import { validationResult } from 'express-validator'
 import UserModel from '../models/userModel.js';
+import courseModel from '../models/courseModel.js'
 import bcrypt from 'bcryptjs'
 import { generateAccessToken, generateRefreshToken } from '../middlewares/auth.js';
 
@@ -145,6 +146,17 @@ class AuthControlller {
             // Check teacherCode and email
             const account = await UserModel.findOne({_id: req.body.accountId})
             if(account){
+                if(account.role==="student"){
+                    await courseModel.updateMany(
+                        {studentList: req.body.accountId},
+                        {$pull: {studentList: req.body.accountId}}
+                    )
+                } else if (account.role === "teacher"){
+                    await courseModel.updateMany(
+                        {teacher: req.body.accountId},
+                        {$set: {teacher: undefined}}
+                    )
+                }
                 const response = await UserModel.findOneAndDelete({_id: req.body.accountId})
                 return res.status(200).json({message: "Remove account successfully", data: response})
             } else{
