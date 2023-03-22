@@ -296,6 +296,7 @@ export default function CreateCourse(props) {
                 name="teacherName"
                 type="text"
                 list="teacherList"
+                autoComplete="off"
               />
               <div className="h-1">
               {formik.errors.teacherName && formik.touched.teacherName && (
