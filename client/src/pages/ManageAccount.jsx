@@ -33,7 +33,6 @@ function ManageAccount() {
        || JSON.stringify(`${item?.studentCode ? item?.studentCode : item?.teacherCode}`).toLowerCase().includes(searchKey.trim().toLowerCase())
        || JSON.stringify(item?.class).toLowerCase().includes(searchKey.trim().toLowerCase())
     } )
-    console.log(filterResultList);
     setFilterResultList(filterResult.length===0 ? accounts : filterResult)
   }
 

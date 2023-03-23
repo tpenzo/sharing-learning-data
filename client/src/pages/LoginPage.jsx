@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "boxicons";
 import { loginAPI } from "../Api/authAPI.js";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -10,7 +10,7 @@ import logo from "/assets/header-logo.png";
 function LoginPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const auth = useSelector(state => state.auth)
+
   
   const [isShowPassWord, setIsShowPassWord] = useState(false);
 
@@ -29,26 +29,28 @@ function LoginPage() {
         .min(8, "Mật khẩu tối thiểu 8 ký tự")
         .required("Không được để trống"),
     }),
+  onSubmit: ()=>{
+    handleLogin()
+  }
   });
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    formik.handleSubmit();
+  const handleLogin = () => {
     // [POST] api/auth/login
-    await loginAPI(formik.values.email, formik.values.password, dispatch);
-    navigate("/")
-    // switch(auth.user.role){
-    //   case"ministry":
-    //    navigate("/ministry/manage")
-    //   break;
-    //   case"admin":
-    //     navigate("/admin/manage")
-    //   break;
-    //   default:
-    //      navigate("/")
-    //     break;
-    // }
-    
+    loginAPI(formik.values.email, formik.values.password, dispatch).then(
+      (response)=>{
+        switch(response?.role){
+          case"ministry":
+           navigate("/ministry/manage")
+          break;
+          case"admin":
+            navigate("/admin/manage")
+          break;
+          default:
+             navigate("/")
+          break;
+        }
+      }
+    );
   };
 
   return (
@@ -73,7 +75,7 @@ function LoginPage() {
             Đăng nhập
           </div>
           <div className="form-container p-1 xl:p-5  border-gray-400">
-            <form action="" onSubmit={handleLogin}>
+            <form action="" onSubmit={formik.handleSubmit}>
               <div className="input-field mt-5">
                 <label
                   htmlFor="email"

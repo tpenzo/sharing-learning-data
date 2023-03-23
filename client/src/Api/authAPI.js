@@ -11,6 +11,7 @@ export const loginAPI = async (email, password, dispatch) => {
         await dispatch(authSaveData(res))
         // show
         showToast('Đăng nhập thành công', 'success')
+        return res.user
     } catch (error) {
         showToast(error.data.message, 'error')
     }

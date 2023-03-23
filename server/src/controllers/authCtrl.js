@@ -22,7 +22,7 @@ class AuthControlller {
             return res.status(400).json(errMessage);
         }
         try {
-            const user = await UserModel.findOne({email: req.body.email})
+            const user = await UserModel.findOne({email: req.body.email}).populate("followingCourses", "courseID name schoolyear semester")
             if(!user){
                return res.status(400).json({message: "This user does not exist"}) 
             }

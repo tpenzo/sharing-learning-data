@@ -14,7 +14,6 @@ function SideNav() {
         </div>
         </Link>
       </div>
-
       <div className="max-h-[76%] h-2/3 mt-5 ">
         <CourseList />
       </div>

@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CourseItem from "./CourseItem";
+import { useSelector } from "react-redux";
 import {
   Accordion,
   AccordionItem,
@@ -9,6 +10,10 @@ import {
   Box,
 } from "@chakra-ui/react";
 function CourseList() {
+  const auth = useSelector(state => state.auth)
+  useEffect(()=>{
+    console.log(auth.user, "ok");
+  }, [])
   const courseList = [
     {
       semester: "Học kì hiện tại",
