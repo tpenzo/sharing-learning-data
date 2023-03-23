@@ -40,7 +40,7 @@ class postController {
     }
   }
   //@description     get Info
-  //@route           [GET] /api/post/all
+  //@route           [GET] /api/post
   //@query           {page,limit}
   //@access          verifyToken
   async getAllPost(req, res) {
@@ -67,7 +67,8 @@ class postController {
   async getPost(req, res) {
     const id = req.params.id;
     try {
-      const post = await postModel.findOne({ _id: id });
+      const post = await postModel.findOne({ _id: id })
+        .populate("author", "-password");
       res.status(200).json({ message: "successful!", data: post });
     } catch (error) {
       return res.status(500).json({ message: error.message });

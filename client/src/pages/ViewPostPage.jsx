@@ -7,13 +7,18 @@ import CommentList from "../components/post/CommentList";
 import { useParams } from "react-router-dom";
 import { getPostById, likePost, unLikePost } from "../Api/postAPI";
 import { useDispatch, useSelector } from "react-redux";
+import { Spinner } from '@chakra-ui/react'
+import { countCmt } from "../utils/handleCmt";
 // import QuillEditor from "../components/form/QuillEditor";
 
 export default function ViewPostPage() {
   const { postId } = useParams();
   const dispatch = useDispatch();
-  const post = useSelector((state) => state.post.postItem);
+
   const user = useSelector((state) => state.auth.user);
+  const post = useSelector((state) => state.post.postItem);
+  const comments = useSelector((state) => state.post.commentsPostItem);
+
   const [lovedPost, setLovedPost] = useState(() => {
     if (post?.likes) {
       return [...post?.likes].some((id) => id === user._id);
@@ -41,12 +46,15 @@ export default function ViewPostPage() {
   const handleScrollComment = () => {
     CommentListRef.current.scrollIntoView({ behavior: "smooth" });
   };
+
+  const fetchPost = async (id) => {
+    await getPostById(id, dispatch);
+  };
   useEffect(() => {
-    const fetchPost = async (id) => {
-      await getPostById(id, dispatch);
-    };
-    fetchPost(postId);
+    if (postId !== post?._id)
+      fetchPost(postId);
   }, [postId]);
+
   return (
     <div className="container xl mx-auto h-screen items-center self-center flex flex-col scroll-smooth">
       {/* header */}
@@ -57,7 +65,7 @@ export default function ViewPostPage() {
       {/* content */}
       <div className="main-content w-full h-[90%] pt-4 flex flex-row justify-start gap-5 bg-white/60 rounded-b-lg z-0">
         {/* sidenav */}
-        <div className="basis-1/5 ml-3 max-w-[20%] max-h-full h-full bg-white sticky top-28 bg-light-gray/70 rounded-lg">
+        <div className="basis-1/5 max-w-[20%] max-h-full h-full bg-white sticky top-28 bg-light-gray/70 rounded-lg">
           <SideNav />
         </div>
 
@@ -85,7 +93,7 @@ export default function ViewPostPage() {
               className="like flex flex-col items-center justify-center rounded-lg py-2 px-4 cursor-pointer"
             >
               <box-icon size="md" name="message-square-dots"></box-icon>
-              <span>200</span>
+              <span>{countCmt(comments)}</span>
             </div>
             <div
               onClick={handleBookmarkPost}
@@ -114,27 +122,19 @@ export default function ViewPostPage() {
               <h1 className="text-center font-bold text-2xl my-4">
                 {post?.title}
               </h1>
-              {parse(post ? String(post?.content) : " ")}
-              {/* <QuillEditor
-                readOnly={readOnly}
-                isEdit={true}
-                content={post.content}
-              />
-
-              <button
-                onClick={() => {
-                  setReadOnly(false);
-                }}
-              >
-                Edit
-              </button>
-              <button
-                onClick={() => {
-                  setReadOnly(true);
-                }}
-              >
-                Cancel
-              </button> */}
+              <div className="pl-4 pr-4 h-screen text-justify">
+                {post?.content
+                  ? parse(post ? String(post?.content) : " ")
+                  :
+                  <Spinner
+                    thickness='4px'
+                    speed='0.65s'
+                    emptyColor='gray.200'
+                    color='blue.500'
+                    size='xl'
+                  />
+                }
+              </div>
             </div>
             <hr />
             <div id="comment" ref={CommentListRef} className="comment h-screen">

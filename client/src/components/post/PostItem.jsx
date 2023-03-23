@@ -56,14 +56,14 @@ function PostItem(props) {
           className="bg-gray-500/5 cursor-pointer pt-1 px-1 rounded-lg flex items-center"
           onClick={handleLovedPost}
         >
-          <span className="text-sm leading-4">
-            {dataItem?.likes.length > 0 ? dataItem?.likes.length : null}
-          </span>
           <box-icon
             name="heart"
             type={loved ? "solid" : "regular"}
             color={loved ? "red" : "black"}
           ></box-icon>
+          <span className="text-sm leading-4 ml-1">
+            {dataItem?.likes.length > 0 ? dataItem?.likes.length : null}
+          </span>
         </p>
         <span
           className="bg-gray-500/5 cursor-pointer pt-1 px-1 rounded-lg flex items-center"
@@ -79,7 +79,9 @@ function PostItem(props) {
         </span>
         <span className="bg-gray-500/5 cursor-pointer py-1 px-1 rounded-lg flex items-center gap-2">
           <box-icon name="message-square-dots"></box-icon>
-          <span className="text-sm leading-4">Bình luận</span>
+          <Link to={`/post/${dataItem?._id}`}>
+            <span className="text-sm leading-4">Bình luận</span>
+          </Link>
         </span>
       </div>
     </div>

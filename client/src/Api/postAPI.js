@@ -7,6 +7,7 @@ import {
   removeFavoriteList,
 } from "../redux/PostSlice";
 import showToast from "./showToast";
+import { fetchCmtsAPI } from "./commentAPI";
 
 export const createPost = async (payload, dispatch) => {
   try {
@@ -14,7 +15,7 @@ export const createPost = async (payload, dispatch) => {
 
     console.log(res);
 
-    dispatch(createNewPost(res));
+    await dispatch(createNewPost(res));
     showToast(res.message, "success");
     return res;
   } catch (error) {
@@ -25,18 +26,19 @@ export const getAllPost = async (params, dispatch) => {
   try {
     const res = await axiosClient.get("/api/post", params);
 
-    dispatch(getPosts(res));
+    await dispatch(getPosts(res));
   } catch (error) {
     showToast(error.message, "error");
   }
 };
 export const getPostById = async (id, dispatch) => {
   try {
+    // get post
     const res = await axiosClient.get(`/api/post/${id}`);
+    // get comment of post
+    const comments = await fetchCmtsAPI(id)
 
-    console.log(res.data);
-
-    dispatch(getPost(res));
+    await dispatch(getPost({post: res.data, comments}));
   } catch (error) {
     showToast(error.message, "error");
   }
@@ -47,7 +49,7 @@ export const getUserPost = async (params, dispatch) => {
 
     console.log(res.data);
 
-    dispatch(getAllPost(res));
+    await dispatch(getAllPost(res));
   } catch (error) {
     showToast(error.message, "error");
   }
@@ -56,7 +58,7 @@ export const likePost = async (postId, userId, dispatch) => {
   try {
     const res = await axiosClient.post(`/api/post/${postId}/like`);
 
-    dispatch(addFavoriteList({ postId, userId, res }));
+    await dispatch(addFavoriteList({ postId, userId, res }));
   } catch (error) {
     showToast(error.message, "error");
   }
@@ -65,8 +67,9 @@ export const unLikePost = async (postId, userId, dispatch) => {
   try {
     const res = await axiosClient.post(`/api/post/${postId}/unlike`);
 
-    dispatch(removeFavoriteList({ postId, userId, res }));
+    await dispatch(removeFavoriteList({ postId, userId, res }));
   } catch (error) {
     showToast(error.message, "error");
   }
 };
+
