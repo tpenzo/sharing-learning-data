@@ -23,7 +23,7 @@ function CourseItem(props) {
             {props.courseInfo.name}
           </span>
           <span className="text-[12px] block text-gray-400">
-            {props.courseInfo.courseID}
+            {`${props.courseInfo.courseID + "-" + `${props.courseInfo?.groupNumber.length===1 ? "0"+ props.courseInfo?.groupNumber : props.courseInfo?.groupNumber}`}`}
           </span>
         </div>
     </li>

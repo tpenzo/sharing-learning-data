@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PopularUserInfo from "./PopularUserInfo";
 import {
   Accordion,
@@ -8,7 +8,11 @@ import {
   AccordionIcon,
   Box,
 } from "@chakra-ui/react";
-function ListOfUser() {
+function ListOfUser(props) {
+  const {userList, title} = props
+  useEffect(()=>{
+    
+  }, [])
   return (
     <div className="mt-4 h-[75%] w-full">
       <Accordion  defaultIndex={[0]} allowToggle>
@@ -16,24 +20,17 @@ function ListOfUser() {
           <h2>
             <AccordionButton className="hover:bg-inherit rounded-lg">
               <Box className="text-primary-blue text-base font-semibold" as="span" flex="1" textAlign="left">
-                Người dùng nổi bật
+                {title}
               <AccordionIcon />
               </Box>
             </AccordionButton>
           </h2>
           <AccordionPanel className="overflow-y-auto h-44 2xl:h-72">
-            <PopularUserInfo />
-            <PopularUserInfo />
-            <PopularUserInfo />
-            <PopularUserInfo />
-            <PopularUserInfo />
-            <PopularUserInfo />
-            <PopularUserInfo />
-            <PopularUserInfo />
-            <PopularUserInfo />
-            <PopularUserInfo />
-            <PopularUserInfo />
-            <PopularUserInfo />
+            {
+            userList && userList.length>0 &&
+            userList.map((user=>{
+              return (<PopularUserInfo key={user._id} user={user} />)
+            }))}
           </AccordionPanel>
         </AccordionItem>
       </Accordion>

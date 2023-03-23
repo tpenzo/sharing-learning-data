@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SideNav from "../components/navigation/SideNav";
 import CourseInfoPane from "../components/sidepane/CourseInfoPane";
 import PostItem from "../components/post/PostItem";
 import Header from "../components/header/Header";
+import { getCourseAPI } from "../Api/coursesAPI";
+import { useParams } from "react-router-dom";
 export default function CoursePage() {
+  const [course, setCourse] = useState({})
   const [tab, setTab] = useState(false);
+  const { idCourse } = useParams();
   const handleChangeTab = (e) => {
     if (e.target.id === "post") {
       setTab(false);
@@ -12,6 +16,11 @@ export default function CoursePage() {
       setTab(true);
     }
   };
+  useEffect(()=>{
+      getCourseAPI(idCourse).then((course)=>{
+        setCourse(course)
+      })
+  }, [])
   return (
     <div className="container mx-auto h-screen items-center self-center flex flex-col">
       <header className="header sticky top-0 w-full h-[10%] rounded-t-lg z-50">
@@ -79,7 +88,7 @@ export default function CoursePage() {
           </div>
         </div>
         <div className="basis-1/5 w-1/5 h-full max-h-full sticky top-28 bg-white rounded-lg z-1">
-          <CourseInfoPane />
+          <CourseInfoPane course={course} />
         </div>
       </div>
     </div>

@@ -1,9 +1,8 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import {
   getTeacherListAPI,
   createCourseAPI,
   getCourseAPI,
-  getUserInfoAPI,
   getInfoByStudentCodeAPI,
   updateCourseAPI,
 } from "../Api/coursesAPI";
@@ -25,15 +24,10 @@ import * as Yup from "yup"
 export default function CreateCourse(props) {
   const [fileName, setFileName] = useState("");
 
-  // const [courseID, setcourseID] = useState("");
-  // const [courseName, setCourseName] = useState("");
-  // const [teacherName, setTeachername] = useState("");
   const [semester, setSemester] = useState("1");
   const [schoolYear, setSchoolYear] = useState("2022-2023");
   const [studentList, setStudentList] = useState([]);
   const [description, setdescription] = useState("");
-  // const [groupNumber, setGroupNumber] = useState("");
-
   const formik = useFormik({
     initialValues: {
       courseID: "",
