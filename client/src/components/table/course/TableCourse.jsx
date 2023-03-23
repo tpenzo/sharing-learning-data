@@ -14,9 +14,10 @@ function TableCourse(props) {
             <Th>STT</Th>
             <Th>Mã Học phần</Th>
             <Th>Nhóm</Th>
+            <Th>Niên Khoá</Th>
             <Th>Tên nhóm Học phần</Th>
             <Th>Giảng viên phụ trách</Th>
-            <Th>Số lượng Sinh viên</Th>
+            <Th>Số lượng</Th>
             <Th>Tùy chọn</Th>
             <Th></Th>
           </Tr>

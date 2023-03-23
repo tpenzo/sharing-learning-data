@@ -1,4 +1,4 @@
-import React, {useRef} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import { useDisclosure } from "@chakra-ui/react";
 import ModalAddStudent from "../modal/ModalAddStudent";
 import ShowDialog from "../dialog/ShowDialog";
@@ -6,14 +6,37 @@ import ShowDialog from "../dialog/ShowDialog";
 function StudentList(props) {
   const addStudentModal = useDisclosure();
   const showDialogDelete = useDisclosure();
-  const requiredRemove = useRef({})
-  const {setStudentList, studentList} = props 
+  const requiredRemove = useRef({});
+  const {setStudentList, studentList} = props;
+  const [filterResultList, setFilterResultList] = useState(studentList)
+  const [searchKey, setSearchKey] = useState("");
+
+  const handleSearch = ()=>{
+    var filterResult = [...studentList]
+    filterResult = filterResult.filter((item)=>{
+      //filter base on name and studentCode
+       return JSON.stringify(item?.fullName).toLowerCase().includes(searchKey.trim().toLowerCase()) 
+       || JSON.stringify(item.studentCode).toLowerCase().includes(searchKey.trim().toLowerCase())
+    } )
+    setFilterResultList(filterResult.length===0 ? studentList : filterResult);
+  }
+
+  useEffect(()=>{
+    handleSearch()
+  }, [searchKey])
+
+  useEffect(()=>{
+    setFilterResultList(studentList)
+  }, [])
+
+  useEffect(()=>{
+    setFilterResultList(studentList)
+  }, [studentList])
 
 const setRemoveStudent = (student)=>{
   requiredRemove.current = student
   showDialogDelete.onOpen();
 }
-
 
   return (
     <div className="table-container max-h-max w-full">
@@ -32,8 +55,12 @@ const setRemoveStudent = (student)=>{
               <box-icon color="gray" name="search"></box-icon>
             </div>
             <input
+              value={searchKey}
+              onChange={(e)=>{
+                setSearchKey(e.target.value)
+              }}
               type="text"
-              id="table-search"
+              id="searchKey"
               className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 outline-none"
               placeholder="Tìm kiếm"
             />
@@ -67,8 +94,8 @@ const setRemoveStudent = (student)=>{
             </thead>
             <tbody className="">
             {
-              studentList && 
-              studentList.map((student, index)=>{
+              studentList && studentList.length > 0 && 
+              filterResultList.map((student, index)=>{
                 return (
                   <tr key={index + 1} className="bg-white border-b hover:bg-gray-50">
                 <td className="px-6 py-4 font-medium text-gray-900  dark:text-white">
@@ -107,7 +134,7 @@ const setRemoveStudent = (student)=>{
       isOpen={showDialogDelete.isOpen}
       onClose={showDialogDelete.onClose}
       title={"Xoá sinh viên khỏi nhóm học phần"}
-      content={`Bạn muốn xoá sinh viên ${requiredRemove.current?.fullName} khỏi nhóm học phần? Hành động này sẽ không thể hoàn tác.`}
+      content={`Bạn muốn xoá sinh viên ${requiredRemove.current?.fullName} khỏi nhóm học phần?\n Hành động này sẽ không thể hoàn tác.`}
       actionName={"Xoá"}
       colorButton={"red"} />
     </div>

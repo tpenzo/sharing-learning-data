@@ -3,50 +3,56 @@ import { useDisclosure } from "@chakra-ui/react";
 import Header from "../components/header/Header";
 import TableAccount from "../components/table/account/TableAccount";
 import ModalAddAccountForm from "../components/modal/AddAccountForm";
+import ModalAddAccountByFile from "../components/modal/AddAccountByFile";
 import { useSelector, useDispatch } from "react-redux";
 import { getTeacherListAccountAPI, getStudentListAccountAPI, getMinistryListAccountAPI } from "../Api/manageAPI";
-import EditInfo from "../components/modal/EditInfo";
+
 
 function ManageAccount() {
   const [tab, setTab] = useState("student");
-  const [keyword, setKeyword] = useState("");
+  const [searchKey, setSearchKey] = useState("");
   const [closeX, setCloseX] = useState(false);
   const typingTimeoutRef = useRef(null);
   const addAccountForm = useDisclosure();
+  const addAccountFile = useDisclosure();
   const dispatch = useDispatch();
 
   const [accounts, setAccounts] = useState([]);
+  const [filterResultList, setFilterResultList] = useState([])
   const studentAccounts = useSelector(state => state.manage.studentList)
   const teacherAccounts = useSelector(state => state.manage.teacherList)
   const ministryAccounts = useSelector(state => state.manage.ministryList)
 
 
-  const handleSearching = (e) => {
-    const value = e.target.value;
-    setKeyword(value);
+  const handleSearch = ()=>{
+    var filterResult = [...accounts]
+    filterResult = filterResult.filter((item)=>{
+      //filter base on name and studentCode
+       return JSON.stringify(item?.email).toLowerCase().includes(searchKey.trim().toLowerCase()) 
+       || JSON.stringify(item?.fullName).toLowerCase().includes(searchKey.trim().toLowerCase())
+       || JSON.stringify(`${item?.studentCode ? item?.studentCode : item?.teacherCode}`).toLowerCase().includes(searchKey.trim().toLowerCase())
+       || JSON.stringify(item?.class).toLowerCase().includes(searchKey.trim().toLowerCase())
+    } )
+    console.log(filterResultList);
+    setFilterResultList(filterResult.length===0 ? accounts : filterResult)
+  }
 
-    if (typingTimeoutRef.current) {
-      clearTimeout(typingTimeoutRef.current);
-    }
-    typingTimeoutRef.current = setTimeout(() => {
-      console.log(value);
-      // callApi
-    }, 500);
-  };
+  useEffect(()=>{
+    handleSearch()
+  }, [searchKey])
+
+  useEffect(()=>{
+    setFilterResultList(accounts)
+  }, [])
+
+  useEffect(()=>{
+    setFilterResultList(accounts)
+  }, [accounts])
 
   const handleChangeTab = (e) => {
     setTab(e.target.id);
   };
-
-  useEffect(() => {
-    if (keyword.length) {
-      setCloseX(true);
-    } else {
-      setCloseX(false);
-    }
-  }, [keyword]);
   
-
   //fetch data when change tab
   useEffect(() => {
     
@@ -69,17 +75,13 @@ function ManageAccount() {
   }, [tab, accounts]);
 
 
-  useEffect(()=>{
-
-  }, [studentAccounts, teacherAccounts, ministryAccounts])
-
   return (
     <div className="container mx-auto h-screen items-center self-center flex flex-col">
-      <header className="header sticky top-0 w-full h-[10%] rounded-t-lg z-50">
+      <header className="header sticky top-0 w-full h-[10%] rounded-t-lg z-50 border-b-[1px]">
         <Header />
       </header>
 
-      <div className="main-content w-full h-[88%] pt-4 bg-white/60 rounded-b-lg z-0">
+      <div className="main-content w-full h-[90%] pt-4 bg-white rounded-b-lg">
         <div className="w-[95%] mx-auto h-full">
           <div className=" flex justify-between">
             <span
@@ -126,8 +128,10 @@ function ManageAccount() {
                 <box-icon name="search-alt-2" color="gray"></box-icon>
               </span>
               <input
-                value={keyword}
-                onChange={handleSearching}
+                value={searchKey}
+                onChange={(e)=>{
+                  setSearchKey(e.target.value)
+                }}
                 className="w-full py-2 px-10 border-gray-200 border outline-none rounded-lg bg-gray-100 focus:outline-fourth-blue peer"
                 type="text"
                 placeholder="Tìm kiếm"
@@ -143,25 +147,39 @@ function ManageAccount() {
                 </span>
               )}
             </div>
+            <div className="">
+            <span
+            onClick={addAccountFile.onOpen}
+            className="px-4 py-3 font-medium bg-orange-600 cursor-pointer text-sm rounded-lg text-gray-100 hover:bg-orange-700">
+              Nhập tập tin 
+            </span>
             <span
             onClick={addAccountForm.onOpen}
-            className="px-4 py-3 font-bold bg-gray-300 cursor-pointer text-sm rounded-lg text-gray-600 hover:bg-gray-400/60">
+            className="px-4 py-3 font-medium ml-4 bg-green-700 cursor-pointer text-sm rounded-lg text-gray-100 hover:bg-green-800">
               Thêm tài khoản
             </span>
+            </div>
           </div>
-          <div className="mt-4 h-[78%] overflow-y-auto w-full rounded-lg flex justify-center border border-gray-200">
-            <TableAccount accounts={accounts} roles={tab} />
+          <div className="mt-4 h-[79%] overflow-y-auto w-full rounded-lg flex justify-center border border-gray-200">
+            <TableAccount action={"modify"} setAccounts={setAccounts} accounts={filterResultList} roles={tab} />
           </div>
         </div>
         
         <div className="">
           <ModalAddAccountForm
+          action="create"
+          title={"Tạo tài khoản"}
           setAccounts={setAccounts}
-          setTab={setTab}
           isOpen={addAccountForm.isOpen}
           onClose={addAccountForm.onClose}
           />
 
+          <ModalAddAccountByFile
+          tab={tab}
+            setAccounts={setAccounts}
+            isOpen={addAccountFile.isOpen}
+            onClose={addAccountFile.onClose}
+          />
         </div>
       </div>
     </div>

@@ -11,8 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import showToast from "../../Api/showToast";
-import { createAccountAPI } from "../../Api/manageAPI";
+import { createAccountAPI, updateAccountAPI } from "../../Api/manageAPI";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getStudentListAccountAPI,
@@ -50,7 +49,7 @@ function ModalAddAccountForm(props) {
         .required("Vui lòng nhập mật khẩu"),
     }),
     onSubmit: () => {
-      handleAddAccount();
+      handleSubmitAccount();
     },
   });
 
@@ -67,10 +66,10 @@ function ModalAddAccountForm(props) {
     classId,
     major,
   } = values;
-  const { isOpen, onClose, setTab, setAccounts } = props;
+  const { isOpen, onClose, setAccounts, account, action, title } = props;
 
-  //handle add account to db
-  const handleAddAccount = async () => {
+  //handle add or modify account to db
+  const handleSubmitAccount = async () => {
     let submitData = {
       email,
       fullName,
@@ -88,8 +87,11 @@ function ModalAddAccountForm(props) {
           class: classId,
         };
         const SubmitStudentData = { ...submitData, ...specificStudentData };
-        await createAccountAPI(role, SubmitStudentData);
-
+        if (action === "create") {
+          await createAccountAPI(role, SubmitStudentData);
+        } else if (action === "modify") {
+          await updateAccountAPI({...SubmitStudentData, _id: account._id});
+        }
         //reload studentList
         await getStudentListAccountAPI(dispatch);
         setAccounts(studentAccounts);
@@ -98,9 +100,13 @@ function ModalAddAccountForm(props) {
           teacherCode: code.toUpperCase(),
         };
         const SubmitTeacherData = { ...submitData, ...specificTeacherData };
-        await createAccountAPI(role, SubmitTeacherData);
+        if (action === "create") {
+          await createAccountAPI(role, SubmitTeacherData);
+        } else if (action === "modify") {
+          await updateAccountAPI({...SubmitTeacherData, _id: account._id});
+        }
 
-        //reload ministryList and studentList
+        //reload ministryList and teacherList
         if (role === "teacher") {
           await getTeacherListAccountAPI(dispatch);
           setAccounts(teacherAccounts);
@@ -110,10 +116,21 @@ function ModalAddAccountForm(props) {
           setAccounts(ministryAccounts);
         }
       }
-      formik.resetForm()
-      onClose()
+      formik.resetForm();
+      onClose();
     }
   };
+
+  //set values for modify func
+  useEffect(() => {
+    if (action === "modify" || action === "view") {
+      formik.setValues({
+        ...account,
+        code: account?.studentCode || account?.teacherCode || "",
+        classId: account?.class || "",
+      });
+    }
+  }, [isOpen]);
   return (
     <Modal
       isOpen={isOpen}
@@ -124,7 +141,7 @@ function ModalAddAccountForm(props) {
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Thêm Tài Khoản</ModalHeader>
+        <ModalHeader>{action==="view" ? "Thông tin chi tiết" : title}</ModalHeader>
         <ModalCloseButton />
         <form onSubmit={handleSubmit} className="container-modal">
           <ModalBody pb={6}>
@@ -134,10 +151,11 @@ function ModalAddAccountForm(props) {
                 <select
                   value={role}
                   onChange={formik.handleChange}
-                  className="bg-gray-50 block w-full mt-1 border outline-none border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                  className="bg-gray-50 block w-full mt-1 border outline-none border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 disabled:text-gray-400 disabled:cursor-not-allowed"
                   placeholder="Loại tài khoản"
                   name="role"
                   id="role"
+                  disabled={action === "modify" || action==="view"}
                 >
                   <option value="" defaultValue={""}>
                     Chọn Loại Tài Khoản
@@ -161,9 +179,9 @@ function ModalAddAccountForm(props) {
                   id="email"
                   value={email}
                   onChange={formik.handleChange}
-                  className="bg-gray-50 block w-full mt-1 border outline-none border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                  className="bg-gray-50 block w-full mt-1 border outline-none border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 disabled:text-gray-400 disabled:cursor-not-allowed"
                   type="text"
-                  disabled={role === ""}
+                  disabled={role === "" || action==="modify" || action==="view"}
                 />
                 <div className="h-1">
                   {formik.errors.email && formik.touched.email && (
@@ -183,9 +201,9 @@ function ModalAddAccountForm(props) {
                   id="code"
                   value={code}
                   onChange={formik.handleChange}
-                  className="bg-gray-50 block w-full mt-1 border outline-none border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                  className="bg-gray-50 block w-full mt-1 border outline-none border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 disabled:text-gray-400 disabled:cursor-not-allowed"
                   type="text"
-                  disabled={role === ""}
+                  disabled={role === "" || action==="modify" || action==="view"}
                 />
                 <div className="h-1">
                   {formik.errors.code && formik.touched.code && (
@@ -201,9 +219,9 @@ function ModalAddAccountForm(props) {
                   id="fullName"
                   value={fullName}
                   onChange={formik.handleChange}
-                  className="bg-gray-50 block w-full mt-1 border outline-none border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                  className="bg-gray-50 block w-full mt-1 border outline-none border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 disabled:text-gray-400 disabled:cursor-not-allowed"
                   type="text"
-                  disabled={role === ""}
+                  disabled={role === "" || action==="view"}
                 />
                 <div className="h-1">
                   {formik.errors.fullName && formik.touched.fullName && (
@@ -225,9 +243,10 @@ function ModalAddAccountForm(props) {
                   id="classId"
                   value={classId}
                   onChange={formik.handleChange}
-                  className="bg-gray-50 block w-full mt-1 border outline-none border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                  className="bg-gray-50 block w-full mt-1 border outline-none border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 disabled:text-gray-400 disabled:cursor-not-allowed"
                   type="text"
-                  disabled={role === ""}
+                  autoComplete="off"
+                  disabled={role === "" || action==="view"}
                 />
               </div>
               <div className="mt-4 w-3/5">
@@ -236,9 +255,10 @@ function ModalAddAccountForm(props) {
                   id="major"
                   value={major}
                   onChange={formik.handleChange}
-                  className="bg-gray-50 block w-full mt-1 border outline-none border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                  className="bg-gray-50 block w-full mt-1 border outline-none border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 disabled:text-gray-400 disabled:cursor-not-allowed"
                   type="text"
-                  disabled={role === ""}
+                  autoComplete="off"
+                  disabled={role === "" || action==="view"}
                 />
               </div>
             </div>
@@ -248,9 +268,9 @@ function ModalAddAccountForm(props) {
                 id="password"
                 value={password}
                 onChange={formik.handleChange}
-                className="bg-gray-50 block w-full mt-1 border outline-none border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                className="bg-gray-50 block w-full mt-1 border outline-none border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 disabled:text-gray-400 disabled:cursor-not-allowed"
                 type="text"
-                disabled={role === ""}
+                disabled={role === "" || action==="view"}
               />
               <div className="h-1">
                 {formik.errors.password && formik.touched.password && (
@@ -278,8 +298,9 @@ function ModalAddAccountForm(props) {
                     type="radio"
                     value="male"
                     name="gender"
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                    disabled={role === ""}
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed"
+                    disabled={role === "" || action==="view"}
+                    defaultChecked={gender === "male" || gender==="nam"}
                   />
                   <label
                     htmlFor="male"
@@ -294,12 +315,13 @@ function ModalAddAccountForm(props) {
                     type="radio"
                     value="female"
                     name="gender"
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                    disabled={role === ""}
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed"
+                    disabled={role === "" || action==="view"}
+                    defaultChecked={gender === "female" || gender==="nữ"}
                   />
                   <label
                     htmlFor="female"
-                    className="ml-2 mb-[2px] text-sm font-medium text-gray-900 dark:text-gray-300"
+                    className="ml-2 mb-[2px] text-sm font-medium text-gray-900 disabled:text-gray-400 disabled:cursor-not-allowed"
                   >
                     Nữ
                   </label>
@@ -312,9 +334,9 @@ function ModalAddAccountForm(props) {
                 id="phoneNumber"
                 value={phoneNumber}
                 onChange={formik.handleChange}
-                className="bg-gray-50 block w-full mt-1 border outline-none border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                className="bg-gray-50 block w-full mt-1 border outline-none border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 disabled:text-gray-400 disabled:cursor-not-allowed"
                 type="text"
-                disabled={role === ""}
+                disabled={role === "" || action==="view"}
               />
             </div>
             <div className="mt-4">
@@ -323,17 +345,19 @@ function ModalAddAccountForm(props) {
                 id="address"
                 value={address}
                 onChange={formik.handleChange}
-                className="bg-gray-50 block w-full mt-1 border outline-none border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                className="bg-gray-50 block w-full mt-1 border outline-none border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 disabled:text-gray-400 disabled:cursor-not-allowed"
                 type="text"
-                disabled={role === ""}
+                disabled={role === "" || action==="view"}
               />
             </div>
           </ModalBody>
 
           <ModalFooter>
+            <span className={`${action==="view" ? "hidden" : ""}`}>
             <Button type="submit" colorScheme="blue" mr={3}>
-              Thêm Tài Khoản
+              {action === "modify" ? "Cập nhật" : "Thêm tài khoản"}
             </Button>
+            </span>
             <Button onClick={onClose}>Huỷ</Button>
           </ModalFooter>
         </form>

@@ -7,26 +7,25 @@ import { getCoursesList } from "../Api/coursesAPI";
 
 function ManageCourses() {
   const [tab, setTab] = useState("student");
-  const [keyword, setKeyword] = useState("");
   const [closeX, setCloseX] = useState(false);
   const typingTimeoutRef = useRef(null);
-  const [courses, setCourses] = useState()
+  const [courses, setCourses] = useState([]);
+  const [filterResultList, setFilterResultList] = useState(courses)
+  const [searchKey, setSearchKey] = useState("");
 
   const dispatch = useDispatch();
   const coursesData = useSelector(state => state.allCoursesList)
 
-  const handleSearching = (e) => {
-    const value = e.target.value;
-    setKeyword(value);
-
-    if (typingTimeoutRef.current) {
-      clearTimeout(typingTimeoutRef.current);
-    }
-    typingTimeoutRef.current = setTimeout(() => {
-      console.log(value);
-      // callApi
-    }, 500);
-  };
+  const handleSearch = ()=>{
+    var filterResult = [...courses]
+    filterResult = filterResult.filter((item)=>{
+      console.log(Object.values(item));
+      //filter base on name and studentCode
+       return JSON.stringify(item?.courseID).toLowerCase().includes(searchKey.trim().toLowerCase()) 
+       || JSON.stringify(item?.name).toLowerCase().includes(searchKey.trim().toLowerCase())
+    } )
+    setFilterResultList(filterResult.length===0 ? courses : filterResult)
+  }
 
   //get all course from redux
   useEffect(()=> {
@@ -42,13 +41,17 @@ function ManageCourses() {
     setCourses(coursesData.courseList)
   }, [coursesData.courseList]);
 
-  useEffect(() => {
-    if (keyword.length) {
-      setCloseX(true);
-    } else {
-      setCloseX(false);
-    }
-  }, [keyword]);
+  useEffect(()=>{
+    handleSearch()
+  }, [searchKey])
+
+  useEffect(()=>{
+    setFilterResultList(courses)
+  }, [])
+
+  useEffect(()=>{
+    setFilterResultList(courses)
+  }, [courses])
   
   return (
     <div className="container mx-auto h-screen items-center self-center flex flex-col">
@@ -65,10 +68,12 @@ function ManageCourses() {
                 <box-icon name="search-alt-2" color="gray"></box-icon>
               </span>
               <input
-                value={keyword}
-                onChange={handleSearching}
-                className="w-full py-2 px-10 border-gray-200 border outline-none rounded-lg bg-gray-100 focus:outline-fourth-blue peer"
-                type="text"
+                value={searchKey}
+                onChange={(e)=>{
+                  setSearchKey(e.target.value)
+                }}
+                className="w-full py-2 pl-10 pr-2 border-gray-200 border outline-none rounded-lg bg-gray-100 focus:outline-fourth-blue peer"
+                type="search"
                 placeholder="Tìm kiếm"
               />
               {closeX && (
@@ -90,7 +95,7 @@ function ManageCourses() {
           </div>
           <div className="mt-4 h-[89%] overflow-y-auto w-full rounded-lg flex justify-center border border-gray-200">
             { courses &&
-              <TableCourse courses={courses} />}
+              <TableCourse courses={filterResultList} />}
           </div>
         </div>
       </div>

@@ -10,22 +10,14 @@ function RowCourse(props) {
   const [teacherName, setTeacherName] = useState("");
   const showDialogDelete = useDisclosure();
 
-  const getTeacherName = async (teacherId) => {
-    const teacherData = await getUserInfoAPI(teacherId);
-    setTeacherName(teacherData?.fullName);
-  };
-
-  useEffect(() => {
-    getTeacherName(course.teacher);
-  }, []);
-
   return (
-    <Tr className="text-sm hover:bg-gray-200">
+    <Tr className="text-[13px] hover:bg-gray-200">
       <Td>{stt + 1}</Td>
       <Td>{course?.courseID}</Td>
       <Td>{course?.groupNumber}</Td>
+      <Td>{course?.semester + "/" + course?.schoolyear}</Td>
       <Td>{course?.name}</Td>
-      <Td>{teacherName}</Td>
+      <Td>{course?.teacher?.fullName}</Td>
       <Td>{course?.studentList.length}</Td>
       <Td>
         <ul className="flex items-center gap-2">
