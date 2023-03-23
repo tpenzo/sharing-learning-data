@@ -27,11 +27,13 @@ function ManageAccount() {
   const handleSearch = ()=>{
     var filterResult = [...accounts]
     filterResult = filterResult.filter((item)=>{
-      console.log(Object.values(item));
       //filter base on name and studentCode
-       return JSON.stringify(Object.values(item)[1]).toLowerCase().includes(searchKey.trim().toLowerCase()) 
-       || JSON.stringify(Object.values(item)[2]).toLowerCase().includes(searchKey.trim().toLowerCase())
+       return JSON.stringify(item?.email).toLowerCase().includes(searchKey.trim().toLowerCase()) 
+       || JSON.stringify(item?.fullName).toLowerCase().includes(searchKey.trim().toLowerCase())
+       || JSON.stringify(`${item?.studentCode ? item?.studentCode : item?.teacherCode}`).toLowerCase().includes(searchKey.trim().toLowerCase())
+       || JSON.stringify(item?.class).toLowerCase().includes(searchKey.trim().toLowerCase())
     } )
+    console.log(filterResultList);
     setFilterResultList(filterResult.length===0 ? accounts : filterResult)
   }
 

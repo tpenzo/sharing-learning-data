@@ -8,11 +8,10 @@ import { getCoursesList } from "../Api/coursesAPI";
 function ManageCourses() {
   const [tab, setTab] = useState("student");
   const [closeX, setCloseX] = useState(false);
+  const typingTimeoutRef = useRef(null);
   const [courses, setCourses] = useState([]);
   const [filterResultList, setFilterResultList] = useState(courses)
   const [searchKey, setSearchKey] = useState("");
-  //send page to load more data
-  var page = useRef(1);
 
   const dispatch = useDispatch();
   const coursesData = useSelector(state => state.allCoursesList)
@@ -21,10 +20,9 @@ function ManageCourses() {
     var filterResult = [...courses]
     filterResult = filterResult.filter((item)=>{
       console.log(Object.values(item));
-      //filter base on name, code and email
-       return JSON.stringify(Object.values(item)[1]).toLowerCase().includes(searchKey.trim().toLowerCase()) 
-       || JSON.stringify(Object.values(item)[3]).toLowerCase().includes(searchKey.trim().toLowerCase())
-       || JSON.stringify(Object.values(item)[11]).toLowerCase().includes(searchKey.trim().toLowerCase())
+      //filter base on name and studentCode
+       return JSON.stringify(item?.courseID).toLowerCase().includes(searchKey.trim().toLowerCase()) 
+       || JSON.stringify(item?.name).toLowerCase().includes(searchKey.trim().toLowerCase())
     } )
     setFilterResultList(filterResult.length===0 ? courses : filterResult)
   }
