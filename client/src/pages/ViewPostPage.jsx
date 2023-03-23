@@ -7,24 +7,25 @@ import CommentList from "../components/post/CommentList";
 import { useParams } from "react-router-dom";
 import { getPostById, likePost, unLikePost } from "../Api/postAPI";
 import { useDispatch, useSelector } from "react-redux";
-import { Spinner } from '@chakra-ui/react'
+import { Spinner, useDisclosure } from "@chakra-ui/react";
 import { countCmt } from "../utils/handleCmt";
-// import QuillEditor from "../components/form/QuillEditor";
+import { renderDocType } from "../utils/handleDoc";
+import PreviewFile from "../components/post/PreviewFile";
+import ModalInstance from "../components/modal/ModalInstance";
 
 export default function ViewPostPage() {
   const { postId } = useParams();
   const dispatch = useDispatch();
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const user = useSelector((state) => state.auth.user);
   const post = useSelector((state) => state.post.postItem);
   const comments = useSelector((state) => state.post.commentsPostItem);
+  const documents = useSelector((state) => state.post.documentsPostItem);
 
-  const [lovedPost, setLovedPost] = useState(() => {
-    if (post?.likes) {
-      return [...post?.likes].some((id) => id === user._id);
-    }
-  });
-  // const [readOnly, setReadOnly] = useState(true);
+  const [file, setFile] = useState(null);
+  const [lovedPost, setLovedPost] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
   const CommentListRef = useRef(null);
 
@@ -42,6 +43,10 @@ export default function ViewPostPage() {
     setBookmarked(!bookmarked);
     //api
   };
+  const handlePreview = (url) => {
+    setFile(url);
+    onOpen();
+  };
 
   const handleScrollComment = () => {
     CommentListRef.current.scrollIntoView({ behavior: "smooth" });
@@ -51,10 +56,14 @@ export default function ViewPostPage() {
     await getPostById(id, dispatch);
   };
   useEffect(() => {
-    if (postId !== post?._id)
-      fetchPost(postId);
+    if (post?.likes) {
+      setLovedPost([...post?.likes].some((id) => id === user._id));
+    }
+  }, [post]);
+  useEffect(() => {
+    fetchPost(postId);
   }, [postId]);
-
+  console.log(post);
   return (
     <div className="container xl mx-auto h-screen items-center self-center flex flex-col scroll-smooth">
       {/* header */}
@@ -116,24 +125,66 @@ export default function ViewPostPage() {
         </div>
 
         {/* post view */}
+
         <div className=" basis-4/6 h-full max-h-full sticky self-start bg-white rounded-lg z-1 overflow-y-auto">
           <div className="h-full scroll-smooth">
-            <div id="post" className="post-content h-screen">
+            <div id="post" className="post-content h-screen overflow-y-auto">
               <h1 className="text-center font-bold text-2xl my-4">
                 {post?.title}
               </h1>
               <div className="pl-4 pr-4 h-screen text-justify">
-                {post?.content
-                  ? parse(post ? String(post?.content) : " ")
-                  :
+                {post?.content ? (
+                  parse(post ? String(post?.content) : " ")
+                ) : (
                   <Spinner
-                    thickness='4px'
-                    speed='0.65s'
-                    emptyColor='gray.200'
-                    color='blue.500'
-                    size='xl'
+                    thickness="4px"
+                    speed="0.65s"
+                    emptyColor="gray.200"
+                    color="blue.500"
+                    size="xl"
                   />
-                }
+                )}
+                <hr />
+                <div className="py-6">
+                  <h4 className="font-bold">Tệp đính kèm</h4>
+                  <ul className="flex">
+                    {documents && documents.length > 0 ? (
+                      documents.map((doc) => {
+                        return (
+                          <li
+                            key={doc._id}
+                            className={`flex items-start cursor-pointer`}
+                            onClick={() => {
+                              handlePreview(doc.urlDoc);
+                            }}
+                          >
+                            <span
+                              className="font-bold text-sm text-gray-400"
+                              title={doc.title}
+                            >
+                              <box-icon
+                                name={renderDocType("file")}
+                                type={"solid"}
+                              ></box-icon>
+                            </span>
+                          </li>
+                        );
+                      })
+                    ) : (
+                      <span className="font-bold text-sm text-gray-400">
+                        Không có tệp nào
+                      </span>
+                    )}
+                  </ul>
+                  <div>
+                    <ModalInstance
+                      isOpen={isOpen}
+                      onClose={onClose}
+                      modalBody={<PreviewFile file={file} onClose={onClose} />}
+                      modalName={"Xem trước"}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
             <hr />

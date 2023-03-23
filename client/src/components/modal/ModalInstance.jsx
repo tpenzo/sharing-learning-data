@@ -7,7 +7,7 @@ import {
   ModalBody,
   ModalCloseButton,
 } from "@chakra-ui/react";
-function CreatePost(props) {
+function ModalInstance(props) {
   const { isOpen, onClose, modalBody, modalName } = props;
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="5xl">
@@ -21,4 +21,4 @@ function CreatePost(props) {
   );
 }
 
-export default CreatePost;
+export default ModalInstance;
