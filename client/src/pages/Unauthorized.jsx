@@ -16,7 +16,7 @@ export default function Unauthorized() {
           <Link to="/">
             <button
               type="button"
-              class="text-white font-semibold text-lg mt-7 bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 rounded-lg px-10 py-2.5 text-center mr-2 mb-2"
+              className="text-white font-semibold text-lg mt-7 bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 rounded-lg px-10 py-2.5 text-center mr-2 mb-2"
             >
               Trang chủ
             </button>

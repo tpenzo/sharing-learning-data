@@ -17,6 +17,7 @@ function CommentList() {
 			<CommentInput />
 			<div className="list-comment">
 				{
+					comments && comments.length>0 &&
 					comments.map(comment =>
 						<Comment
 							comment={comment}
