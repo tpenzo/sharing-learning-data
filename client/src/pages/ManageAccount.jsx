@@ -10,7 +10,7 @@ import { getTeacherListAccountAPI, getStudentListAccountAPI, getMinistryListAcco
 
 function ManageAccount() {
   const [tab, setTab] = useState("student");
-  const [keyword, setKeyword] = useState("");
+  const [searchKey, setSearchKey] = useState("");
   const [closeX, setCloseX] = useState(false);
   const typingTimeoutRef = useRef(null);
   const addAccountForm = useDisclosure();
@@ -18,37 +18,39 @@ function ManageAccount() {
   const dispatch = useDispatch();
 
   const [accounts, setAccounts] = useState([]);
+  const [filterResultList, setFilterResultList] = useState([])
   const studentAccounts = useSelector(state => state.manage.studentList)
   const teacherAccounts = useSelector(state => state.manage.teacherList)
   const ministryAccounts = useSelector(state => state.manage.ministryList)
 
 
-  const handleSearching = (e) => {
-    const value = e.target.value;
-    setKeyword(value);
+  const handleSearch = ()=>{
+    var filterResult = [...accounts]
+    filterResult = filterResult.filter((item)=>{
+      console.log(Object.values(item));
+      //filter base on name and studentCode
+       return JSON.stringify(Object.values(item)[1]).toLowerCase().includes(searchKey.trim().toLowerCase()) 
+       || JSON.stringify(Object.values(item)[2]).toLowerCase().includes(searchKey.trim().toLowerCase())
+    } )
+    setFilterResultList(filterResult.length===0 ? accounts : filterResult)
+  }
 
-    if (typingTimeoutRef.current) {
-      clearTimeout(typingTimeoutRef.current);
-    }
-    typingTimeoutRef.current = setTimeout(() => {
-      console.log(value);
-      // callApi
-    }, 500);
-  };
+  useEffect(()=>{
+    handleSearch()
+  }, [searchKey])
+
+  useEffect(()=>{
+    setFilterResultList(accounts)
+  }, [])
+
+  useEffect(()=>{
+    setFilterResultList(accounts)
+  }, [accounts])
 
   const handleChangeTab = (e) => {
     setTab(e.target.id);
   };
-
-  useEffect(() => {
-    if (keyword.length) {
-      setCloseX(true);
-    } else {
-      setCloseX(false);
-    }
-  }, [keyword]);
   
-
   //fetch data when change tab
   useEffect(() => {
     
@@ -124,8 +126,10 @@ function ManageAccount() {
                 <box-icon name="search-alt-2" color="gray"></box-icon>
               </span>
               <input
-                value={keyword}
-                onChange={handleSearching}
+                value={searchKey}
+                onChange={(e)=>{
+                  setSearchKey(e.target.value)
+                }}
                 className="w-full py-2 px-10 border-gray-200 border outline-none rounded-lg bg-gray-100 focus:outline-fourth-blue peer"
                 type="text"
                 placeholder="Tìm kiếm"
@@ -155,7 +159,7 @@ function ManageAccount() {
             </div>
           </div>
           <div className="mt-4 h-[79%] overflow-y-auto w-full rounded-lg flex justify-center border border-gray-200">
-            <TableAccount action={"modify"} setAccounts={setAccounts} accounts={accounts} roles={tab} />
+            <TableAccount action={"modify"} setAccounts={setAccounts} accounts={filterResultList} roles={tab} />
           </div>
         </div>
         
