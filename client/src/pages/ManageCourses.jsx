@@ -21,8 +21,8 @@ function ManageCourses() {
     filterResult = filterResult.filter((item)=>{
       console.log(Object.values(item));
       //filter base on name and studentCode
-       return JSON.stringify(Object.values(item)[1]).toLowerCase().includes(searchKey.trim().toLowerCase()) 
-       || JSON.stringify(Object.values(item)[2]).toLowerCase().includes(searchKey.trim().toLowerCase())
+       return JSON.stringify(item?.courseID).toLowerCase().includes(searchKey.trim().toLowerCase()) 
+       || JSON.stringify(item?.name).toLowerCase().includes(searchKey.trim().toLowerCase())
     } )
     setFilterResultList(filterResult.length===0 ? courses : filterResult)
   }

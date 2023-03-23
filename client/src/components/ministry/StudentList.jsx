@@ -15,8 +15,8 @@ function StudentList(props) {
     var filterResult = [...studentList]
     filterResult = filterResult.filter((item)=>{
       //filter base on name and studentCode
-       return JSON.stringify(Object.values(item)[2]).toLowerCase().includes(searchKey.trim().toLowerCase()) 
-       || JSON.stringify(Object.values(item)[10]).toLowerCase().includes(searchKey.trim().toLowerCase())
+       return JSON.stringify(item?.fullName).toLowerCase().includes(searchKey.trim().toLowerCase()) 
+       || JSON.stringify(item.studentCode).toLowerCase().includes(searchKey.trim().toLowerCase())
     } )
     setFilterResultList(filterResult.length===0 ? studentList : filterResult);
   }
