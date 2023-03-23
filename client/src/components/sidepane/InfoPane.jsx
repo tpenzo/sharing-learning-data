@@ -26,7 +26,7 @@ function InfoPane() {
         </div>
 
         <div className="mt-4">
-          <ListOfUser />
+          <ListOfUser userList={[]} title={"Người dùng nổi bật"} />
         </div>
         <div className="mt-5 w-full mb-1 mx-auto px-2">
           <PopularCoursesList />
