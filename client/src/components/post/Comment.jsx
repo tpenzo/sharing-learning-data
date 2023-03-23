@@ -22,8 +22,6 @@ function Comment({ comment, authorId, reply, cmtDadId }) {
         setContent(comment?.content)
     }, [comment?.content])
 
-    console.log(content)
-
     // Like comment
     const handleLoveComment = async () => {
         if (!loved) {
@@ -49,9 +47,6 @@ function Comment({ comment, authorId, reply, cmtDadId }) {
             setLoved(!loved); // Love
         }
     }, [])
-
-
-
 
 
     return (
@@ -153,7 +148,7 @@ function Comment({ comment, authorId, reply, cmtDadId }) {
                             ></box-icon>
                             {
                                 comment?.reply.length !== 0 &&
-                                <span class="absolute -top-1 -right-3.5 px-1 rounded-full bg-red-600 text-white text-xs">
+                                <span className="absolute -top-1 -right-3.5 px-1 rounded-full bg-red-600 text-white text-xs">
                                     {comment?.reply.length}
                                 </span>
                             }
