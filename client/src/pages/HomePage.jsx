@@ -5,16 +5,10 @@ import PostItem from "../components/post/PostItem";
 import Header from "../components/header/Header";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllPost } from "../Api/postAPI";
+import { Box, SkeletonCircle, SkeletonText, Spinner } from "@chakra-ui/react";
 export default function HomePage() {
   const postList = useSelector((state) => state.post.postList);
   const dispatch = useDispatch();
-  const handleLovedPost = async (id, loved, userId) => {
-    if (!loved) {
-      await likePost(id, userId, dispatch);
-    } else {
-      await unLikePost(id, userId, dispatch);
-    }
-  };
   useEffect(() => {
     const fetchPostList = async () => {
       await getAllPost({}, dispatch);
@@ -31,16 +25,50 @@ export default function HomePage() {
           <SideNav />
         </div>
         <div className="basis-3/5 max-w-[56%] px-3 overflow-y-auto">
-          {postList &&
+          {postList && postList.length > 0 ? (
             postList.map((postItem) => {
-              return (
-                <PostItem
-                  key={postItem._id}
-                  dataItem={postItem}
-                  handleLovedPost={handleLovedPost}
+              return <PostItem key={postItem._id} dataItem={postItem} />;
+            })
+          ) : (
+            <div>
+              <Box padding="6" boxShadow="lg" bg="white">
+                <SkeletonCircle size="10" />
+                <SkeletonText
+                  mt="4"
+                  noOfLines={4}
+                  spacing="4"
+                  skeletonHeight="2"
                 />
-              );
-            })}
+              </Box>
+              <Box padding="6" boxShadow="lg" bg="white">
+                <SkeletonCircle size="10" />
+                <SkeletonText
+                  mt="4"
+                  noOfLines={4}
+                  spacing="4"
+                  skeletonHeight="2"
+                />
+              </Box>
+              <Box padding="6" boxShadow="lg" bg="white">
+                <SkeletonCircle size="10" />
+                <SkeletonText
+                  mt="4"
+                  noOfLines={4}
+                  spacing="4"
+                  skeletonHeight="2"
+                />
+              </Box>
+              <Box padding="6" boxShadow="lg" bg="white">
+                <SkeletonCircle size="10" />
+                <SkeletonText
+                  mt="4"
+                  noOfLines={4}
+                  spacing="4"
+                  skeletonHeight="2"
+                />
+              </Box>
+            </div>
+          )}
         </div>
         <div className=" basis-1/5 w-1/5 h-full max-h-full sticky top-28 bg-white rounded-lg z-1">
           <InfoPane />

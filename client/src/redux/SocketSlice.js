@@ -10,11 +10,12 @@ export const socketSlice = createSlice({
     reducers: {
         setSocket(state, action){
             state.socket = action.payload
-        }
+        },
+        resetSocketSlice: () => initialState
     }
 })
 
-export const { setSocket } = socketSlice.actions
+export const { setSocket, resetSocketSlice } = socketSlice.actions
 
 
 export default socketSlice.reducer

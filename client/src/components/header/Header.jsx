@@ -6,6 +6,7 @@ import { logoutAPI } from "../../Api/authAPI.js";
 import { searchAPI } from "../../Api/userAPI.js";
 import SearchResult from "./SearchResult.jsx";
 import { useDetectClickOutside } from "react-detect-click-outside";
+import { Avatar, Wrap } from "@chakra-ui/react";
 
 function Header() {
   const auth = useSelector((state) => state.auth);
@@ -44,6 +45,7 @@ function Header() {
       setCloseX(false);
     }
   }, [keyword]);
+
 
   const handleLogout = async () => {
     await logoutAPI(dispatch);
@@ -102,11 +104,14 @@ function Header() {
           <span className="text-xs text-gray-400">{auth.user.role}</span>
         </div>
         <figure className="relative">
-          <img
+          {/* <img
             className="w-10 rounded-full"
-            src="https://res.cloudinary.com/devatchannel/image/upload/v1602752402/avatar/avatar_cugq40.png"
+            src={auth.user.urlAvatar}
             alt=""
-          />
+          /> */}
+          <Wrap>
+            <Avatar size='md' src={auth.user.urlAvatar}></Avatar>
+          </Wrap>
           <p
             className="absolute top-6 -right-2 h-6 rounded-full bg-white scale-[70%] cursor-pointer"
             onClick={() => {

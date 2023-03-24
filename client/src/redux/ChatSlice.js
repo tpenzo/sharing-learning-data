@@ -15,10 +15,11 @@ const chatSlice = createSlice({
         },
         setSelectedChat: (state, action) => {
             state.selectedChat = action.payload
-        }
+        },
+        resetChatSlice: () => initialState
     }
 })
 
-export const { fetchChats, setSelectedChat }  = chatSlice.actions
+export const { fetchChats, setSelectedChat, resetChatSlice }  = chatSlice.actions
 
 export default chatSlice.reducer

@@ -25,7 +25,8 @@ const userSchema = new Schema({
     class: {type: String},
     major: {type: String},
     followingCourses: [{type: Schema.Types.ObjectId, ref: 'course'}],
-    bookmarkPost: [{type: Schema.Types.ObjectId, ref: 'post'}]
+    bookmarkPost: [{type: Schema.Types.ObjectId, ref: 'post'}],
+    address: {type: String}
     
 },{timestamps: true});
 

@@ -67,7 +67,8 @@ class postController {
   async getPost(req, res) {
     const id = req.params.id;
     try {
-      const post = await postModel.findOne({ _id: id })
+      const post = await postModel
+        .findOne({ _id: id })
         .populate("author", "-password");
       res.status(200).json({ message: "successful!", data: post });
     } catch (error) {
@@ -78,9 +79,9 @@ class postController {
   //@route           [GET] /api/post/me
   //@access          verifyToken
   async getUserPost(req, res) {
-    const { _id } = req.userLogin;
+    const author = req.params.userId;
     try {
-      const postList = await postModel.find({ author: _id });
+      const postList = await postModel.find({ author });
       res.status(200).json({ message: "successful!", data: postList });
     } catch (error) {
       return res.status(500).json({ message: error.message });

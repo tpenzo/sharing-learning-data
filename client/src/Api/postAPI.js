@@ -8,6 +8,7 @@ import {
 } from "../redux/PostSlice";
 import showToast from "./showToast";
 import { fetchCmtsAPI } from "./commentAPI";
+import { getAllDocument } from "./documentAPI";
 
 export const createPost = async (payload, dispatch) => {
   try {
@@ -19,16 +20,16 @@ export const createPost = async (payload, dispatch) => {
     showToast(res.message, "success");
     return res;
   } catch (error) {
-    showToast(error.message, "error");
+    showToast(error.data.message, "error");
   }
 };
 export const getAllPost = async (params, dispatch) => {
   try {
     const res = await axiosClient.get("/api/post", params);
-
+    await getAllDocument(dispatch);
     await dispatch(getPosts(res));
   } catch (error) {
-    showToast(error.message, "error");
+    showToast(error.data.message, "error");
   }
 };
 export const getPostById = async (id, dispatch) => {
@@ -36,22 +37,22 @@ export const getPostById = async (id, dispatch) => {
     // get post
     const res = await axiosClient.get(`/api/post/${id}`);
     // get comment of post
-    const comments = await fetchCmtsAPI(id)
-
-    await dispatch(getPost({post: res.data, comments}));
+    const comments = await fetchCmtsAPI(id);
+    // get document of post
+    const documents = await getAllDocument(dispatch, { postId: id });
+    console.log(res.data);
+    await dispatch(getPost({ post: res.data, comments, documents }));
   } catch (error) {
-    showToast(error.message, "error");
+    showToast(error.data.message, "error");
   }
 };
-export const getUserPost = async (params, dispatch) => {
+export const getUserPost = async (userId) => {
   try {
-    const res = await axiosClient.get(`/api/post/me`, params);
-
-    console.log(res.data);
-
-    await dispatch(getAllPost(res));
+    //get post of user
+    const res = await axiosClient.get(`/api/post/${userId}/user`);
+    return res.data;
   } catch (error) {
-    showToast(error.message, "error");
+    showToast(error.data.message, "error");
   }
 };
 export const likePost = async (postId, userId, dispatch) => {
@@ -60,7 +61,7 @@ export const likePost = async (postId, userId, dispatch) => {
 
     await dispatch(addFavoriteList({ postId, userId, res }));
   } catch (error) {
-    showToast(error.message, "error");
+    showToast(error.data.message, "error");
   }
 };
 export const unLikePost = async (postId, userId, dispatch) => {
@@ -69,7 +70,6 @@ export const unLikePost = async (postId, userId, dispatch) => {
 
     await dispatch(removeFavoriteList({ postId, userId, res }));
   } catch (error) {
-    showToast(error.message, "error");
+    showToast(error.data.message, "error");
   }
 };
-

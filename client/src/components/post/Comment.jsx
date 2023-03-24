@@ -3,6 +3,7 @@ import moment from "moment";
 import { useSelector, useDispatch } from "react-redux";
 import { deleteCmtAPI, likeCmtAPI, unLikeCmtAPI, updateCmtAPI } from "../../Api/commentAPI";
 import CommentInput from "./CommentInput";
+import { Avatar, Wrap } from "@chakra-ui/react";
 
 function Comment({ comment, authorId, reply, cmtDadId }) {
 
@@ -51,7 +52,9 @@ function Comment({ comment, authorId, reply, cmtDadId }) {
 
     return (
         <div className="comment mt-6 flex flex-row items-start justify-center">
-            <img className="avatar w-10 h-10 mx-5 bg-gray-700 rounded-full" src={comment?.user.urlAvatar} />
+            <Wrap>
+                <Avatar size='md' src={comment?.user.urlAvatar}/>
+            </Wrap>
             <div className="content-area w-10/12">
                 <div className={`${reply ? 'w-[565px]' : 'w-full'} relative mb-4 border border-gray-200 rounded-lg bg-gray-50`}>
                     <div className="info-cmt pr-3 flex flex-row justify-start items-center self-end">
@@ -158,7 +161,7 @@ function Comment({ comment, authorId, reply, cmtDadId }) {
 
 
                 {/* reply form */}
-                {isReply && (<CommentInput isReply={true} cmtDadId={reply ? cmtDadId : comment._id} />)}
+                {isReply && (<CommentInput isReply={true} cmtDadId={reply ? cmtDadId : comment._id} setIsReply={setIsReply}/>)}
 
 
                 {/* reply comment area */}
