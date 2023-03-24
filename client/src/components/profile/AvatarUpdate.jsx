@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
+import showToast from '../../Api/showToast';
+import { checkImage } from '../../utils/handleDoc';
 
 function AvatarUpdate({ urlAvatar, setFileAvatar }) {
 
     const [avatarUrl, setAvatarUrl] = useState(urlAvatar);
-    const [file, setFile] = useState(null);
 
     const handleInputChange = (event) => {
-        setAvatarUrl(URL.createObjectURL(event.target.files[0]));
-        setFile(event.target.files[0]);
+        const err = checkImage(event.target.files[0])
+        if (!err) {
+            setAvatarUrl(URL.createObjectURL(event.target.files[0]));
+            setFileAvatar(event.target.files[0]);
+        } else {
+            showToast(err, "error")
+        }
     }
 
     return (

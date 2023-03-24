@@ -3,8 +3,13 @@ import Header from "../components/header/Header";
 import ProfilePane from "../components/profile/ProfilePane";
 import PostItem from "../components/post/PostItem";
 import SideNav from "../components/navigation/SideNav";
+import ModalInstance from "../components/modal/ModalInstance";
+import CreatePost from "../components/form/CreatePost";
+import { Spinner, useDisclosure } from "@chakra-ui/react";
 
 export default function ProfilePage() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const [tab, setTab] = useState(false);
   const handleChangeTab = (e) => {
     if (e.target.id === "post") {
@@ -26,9 +31,20 @@ export default function ProfilePage() {
           <div className="w-[80%] p-4 bg-white rounded-xl">
             <div className="flex items-start">
               <ProfilePane />
-              <div className="mt-6 mr-3 ml-auto w-[20%] px-3 py-2 rounded text-white bg-second-blue flex gap-1 justify-center items-center cursor-pointer duration-300 hover:bg-primary-blue">
+              <div
+                onClick={onOpen}
+                className="mt-6 mr-3 ml-auto w-[20%] px-3 py-2 rounded text-white bg-second-blue flex gap-1 justify-center items-center cursor-pointer duration-300 hover:bg-primary-blue"
+              >
                 <box-icon name="plus-circle" color="white"></box-icon>
                 <span>Đăng bài</span>
+              </div>
+              <div>
+                <ModalInstance
+                  isOpen={isOpen}
+                  onClose={onClose}
+                  modalBody={<CreatePost onClose={onClose} />}
+                  modalName={"Tạo bài viết"}
+                />
               </div>
             </div>
             <div className="w-full h-[1px] bg-gray-300 mt-6"></div>
@@ -59,18 +75,17 @@ export default function ProfilePage() {
               </span>
             </div>
 
-                     <div className="mt-6 h-[56%] bg-gray-200/20 pr-1 grid grid-cols-2 gap-2 overflow-y-auto">
-                        {/* <PostItem />
+            <div className="mt-6 h-[56%] bg-gray-200/20 pr-1 grid grid-cols-2 gap-2 overflow-y-auto">
+              {/* <PostItem />
                             <PostItem />
                             <PostItem />
                             <PostItem />
                             <PostItem />
                             <PostItem /> */}
-                     </div>
-                  </div>
-               </div>
             </div>
-         </div>
-      </>
-   );
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }

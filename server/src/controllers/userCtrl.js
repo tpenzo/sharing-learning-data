@@ -19,6 +19,23 @@ class UserController {
     }
   }
 
+  //@description     update user
+  //@route           [PATCH] /user/:userId/update
+  //@body            {...}
+  //@access          verifyToken
+  async updateUser(req, res) {
+    try {
+      const { userId } = req.params;
+      const user = await UserModel.findByIdAndUpdate({ _id: userId }, req.body);
+      if (!user) {
+        return res.status(400).json({ message: "This user does not exist" });
+      }
+      return res.status(200).json({ message: "successful"});
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  }
+
   //@description     Search user
   //@route           [GET] /user/search?info=''
   //@body            No

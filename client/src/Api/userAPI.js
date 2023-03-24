@@ -1,4 +1,4 @@
-import { followUser, unfollowUser } from "../redux/AuthSlice.js";
+import { followUser, unfollowUser, updateUser } from "../redux/AuthSlice.js";
 import {
   profileGetUser,
   profileUpdateFollower,
@@ -53,5 +53,19 @@ export const searchAPI = async (value) => {
     return res.data;
   } catch (error) {
     return [];
+  }
+};
+
+export const updateUserAPI = async (userId, data, dispatch) => {
+  try {
+    
+    const res = await axiosClient.post(`/api/user/${userId}/update`, data);
+    // update 
+    await dispatch(updateUser(data))
+
+    showToast("Chỉnh sửa thành công", 'success')
+  } catch (error) {
+    console.log(error)
+    // showToast(error, "error");
   }
 };

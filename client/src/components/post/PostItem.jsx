@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { likePost, unLikePost } from "../../Api/postAPI";
 import moment from "moment";
 import { countDocs } from "../../utils/handleDoc";
+import { Avatar, Wrap } from "@chakra-ui/react";
 function PostItem(props) {
   const { dataItem } = props;
   const { auth, document } = useSelector((state) => state);
@@ -28,13 +29,9 @@ function PostItem(props) {
     <div className="w-full bg-white pb-4 pt-1 px-6 rounded-lg mb-5 shadow-sm">
       <div className="flex items-center gap-4 justify-between mt-5 flex-wrap-reverse">
         <div className="flex items-center gap-4">
-          <figure>
-            <img
-              className="w-12 rounded"
-              src={dataItem?.author.urlAvatar}
-              alt=""
-            />
-          </figure>
+          <Wrap>
+            <Avatar size='md' src={user.urlAvatar}></Avatar>
+          </Wrap>
           <div>
             <p className="font-semibold">
               {dataItem?.author.fullName + " " + dataItem?.author.studentCode}

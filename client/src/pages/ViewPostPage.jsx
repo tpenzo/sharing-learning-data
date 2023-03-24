@@ -55,15 +55,17 @@ export default function ViewPostPage() {
   const fetchPost = async (id) => {
     await getPostById(id, dispatch);
   };
+
   useEffect(() => {
     if (post?.likes) {
       setLovedPost([...post?.likes].some((id) => id === user._id));
     }
   }, [post]);
+  
   useEffect(() => {
     fetchPost(postId);
   }, [postId]);
-  console.log(post);
+
   return (
     <div className="container xl mx-auto h-screen items-center self-center flex flex-col scroll-smooth">
       {/* header */}
