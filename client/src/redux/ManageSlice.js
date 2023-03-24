@@ -19,11 +19,11 @@ export const manageSlice = createSlice({
         setMinistryList: (state, action)=>{
             state.ministryList = action.payload
         },
-        
+        resetManageSlice: () => initialState
     }
 });
 
 
-export const {setStudentList, setTeacherList, setMinistryList} = manageSlice.actions
+export const {setStudentList, setTeacherList, setMinistryList, resetManageSlice} = manageSlice.actions
 
 export default manageSlice.reducer

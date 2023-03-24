@@ -161,7 +161,7 @@ function Comment({ comment, authorId, reply, cmtDadId }) {
 
 
                 {/* reply form */}
-                {isReply && (<CommentInput isReply={true} cmtDadId={reply ? cmtDadId : comment._id} />)}
+                {isReply && (<CommentInput isReply={true} cmtDadId={reply ? cmtDadId : comment._id} setIsReply={setIsReply}/>)}
 
 
                 {/* reply comment area */}

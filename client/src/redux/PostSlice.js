@@ -1,18 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const PostSlice = createSlice({
-  name: "post",
-  initialState: {
+const initialState = {
     postList: [],
     postItem: {},
     commentsPostItem: [],
     documentsPostItem: [],
-  },
+  }
+
+const PostSlice = createSlice({
+  name: "post",
+  initialState,
   reducers: {
     createNewPost: (state, actions) => {
       state.postList.push(actions.payload.data);
     },
-
+    resetPostSlice: () => initialState,
     getPosts: (state, actions) => {
       state.postList = actions.payload.data;
     },
@@ -213,5 +215,6 @@ export const {
   createReplyComment,
   deleteReplyComment,
   updateReplyComment,
+  resetPostSlice
 } = PostSlice.actions;
 export default PostSlice.reducer;

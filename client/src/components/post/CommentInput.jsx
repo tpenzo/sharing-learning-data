@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { createCmtAPI, replyCmtAPI } from '../../Api/commentAPI';
 
-export default function CommentInput({ isReply, cmtDadId }) {
+export default function CommentInput({ isReply, cmtDadId, setIsReply }) {
 
     const dispatch = useDispatch()
 
@@ -17,6 +17,7 @@ export default function CommentInput({ isReply, cmtDadId }) {
         if (content) {
             if (isReply) {
                 await replyCmtAPI({ content, idCmtReply: cmtDadId }, cmtDadId, dispatch)
+                setIsReply(false)
             } else {
                 await createCmtAPI({ content, postId: post._id }, dispatch)
             }

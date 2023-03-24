@@ -32,7 +32,7 @@ function AvatarUpdate({ urlAvatar, setFileAvatar }) {
                         className="hidden"
                         onChange={handleInputChange}
                     />
-                    <label htmlFor="avatarInput" className='absolute -bottom-2 px-4 pb-1  rounded-full bg-red-600 text-white text-xs'>
+                    <label htmlFor="avatarInput" className='absolute -bottom-2 px-4 py-1  rounded-full bg-red-600 text-white text-xs'>
                         Chỉnh sửa
                     </label>
                 </div>

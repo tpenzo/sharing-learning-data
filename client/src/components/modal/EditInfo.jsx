@@ -59,7 +59,7 @@ function EditInfo(props) {
 				motionPreset="scale"
 				size="2xl"
 			>
-				<ModalOverlay />
+				<ModalOverlay/>
 				<ModalContent>
 					<ModalHeader>Chỉnh Sửa Thông Tin</ModalHeader>
 					<ModalCloseButton />
@@ -77,6 +77,7 @@ function EditInfo(props) {
 											type="text"
 											value={fullName}
 											onChange={(e) => setFullName(e.target.value)}
+											required
 										/>
 									</div>
 									<div>
@@ -197,6 +198,7 @@ function EditInfo(props) {
 					</ModalBody>
 					<ModalFooter>
 						<Button
+							type="submit"
 							colorScheme="blue" mr={3}
 							onClick={handleEdit}
 							isLoading={isLoading}

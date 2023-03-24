@@ -19,6 +19,7 @@ export const allCoursesSlice = createSlice({
     setCurrentCourse: (state, action) => {
       state.currentCourse = action.payload;
     },
+    resetAllCoursesSlice: () => initialState
   },
 });
 
@@ -26,6 +27,7 @@ export const {
   setAllCoursesData,
   setTeacherList,
   setCurrentCourse,
+  resetAllCoursesSlice,
 } = allCoursesSlice.actions;
 
 export default allCoursesSlice.reducer;
