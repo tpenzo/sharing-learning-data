@@ -7,7 +7,7 @@ import axiosClient from "../../Api/axiosClient.js";
 import { setSelectedChat } from "../../redux/ChatSlice.js";
 import { useNavigate } from 'react-router-dom'
 
-function ProfilePane() {
+function ProfilePane({ onOpen }) {
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -64,7 +64,8 @@ function ProfilePane() {
                 <div className="mt-6 flex gap-3 font-semibold ">
                     {
                         auth.user._id === info?._id ? (
-                            <div className="px-3 py-2 rounded bg-bold-gray text-sm flex gap-1 items-center cursor-pointer duration-300 hover:bg-gray-300">
+                            <div className="px-3 py-2 rounded bg-bold-gray text-sm flex gap-1 items-center cursor-pointer duration-300 hover:bg-gray-300"
+                                onClick={() => onOpen()}>
                                 <box-icon name="pencil"></box-icon>
                                 <span>Chỉnh sửa thông tin</span>
                             </div>
