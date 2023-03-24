@@ -82,12 +82,15 @@ export default function SingleChat() {
 			{
 				selectedChat ? (
 					<div className="flex flex-col flex-auto h-full p-2">
-						<div className="flex flex-col flex-auto flex-shrink-0 rounded-lg bg-gray-100 h-full px-1 pt-1 pb-1">
+						<div className="flex flex-col flex-auto flex-shrink-0 rounded-lg bg-gray-50 h-full px-1 pt-1 pb-1">
 							<div className="flex flex-col h-full overflow-x-auto mb-2">
 								<div className="flex flex-col h-full">
 									{
 										messages.length === 0 ?
-											<img className='w-full' src='../assets/no-messages.png' />
+											(<div className="flex justify-center items-center flex-col mt-7">
+												<img className='w-1/2' src='../assets/no-messages.png' />
+												<span className='-mt-2 text-xl text-blue-400'>Bạn chưa có tin nhắn nào.</span>
+											</div>)
 											:
 											<div className="grid grid-cols-12 gap-y-2">
 												{
@@ -166,7 +169,16 @@ export default function SingleChat() {
 						</div>
 					</div>
 				) : (
-						<h1>Click on a user to start chatting</h1>
+						<div className="flex flex-col justify-center items-center h-full -mt-6">
+							<div className="">
+								<img className='w-1/2 h-auto mx-auto' src="../assets/empty-message.jpg" alt="empty msg" />
+							</div>
+							<div className="-mt-5">
+								<span className='text-blue-400 font-semibold text-lg'>
+									Chọn tên người dùng hoặc nhóm học để bắt đầu nhắn tin.
+								</span>
+							</div>
+						</div>
 				)
 			}
 		</>

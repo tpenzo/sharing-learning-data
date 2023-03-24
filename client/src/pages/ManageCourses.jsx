@@ -19,7 +19,6 @@ function ManageCourses() {
   const handleSearch = ()=>{
     var filterResult = [...courses]
     filterResult = filterResult.filter((item)=>{
-      console.log(Object.values(item));
       //filter base on name and studentCode
        return JSON.stringify(item?.courseID).toLowerCase().includes(searchKey.trim().toLowerCase()) 
        || JSON.stringify(item?.name).toLowerCase().includes(searchKey.trim().toLowerCase())

@@ -12,7 +12,6 @@ function ManageAccount() {
   const [tab, setTab] = useState("student");
   const [searchKey, setSearchKey] = useState("");
   const [closeX, setCloseX] = useState(false);
-  const typingTimeoutRef = useRef(null);
   const addAccountForm = useDisclosure();
   const addAccountFile = useDisclosure();
   const dispatch = useDispatch();

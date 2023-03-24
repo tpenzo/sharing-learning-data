@@ -28,7 +28,7 @@ function PostItem(props) {
         <div className="flex items-center gap-4">
           <figure>
             <img
-              className="w-12 rounded"
+              className="w-12 h-12 object-cover rounded"
               src={dataItem?.author.urlAvatar}
               alt=""
             />
