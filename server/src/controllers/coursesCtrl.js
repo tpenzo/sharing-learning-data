@@ -31,7 +31,7 @@ class coursesController {
   async getCourse(req, res) {
     try {
       let courseID = req.params._courseId;
-      const course = await courseModel.findOne({ _id: courseID }).populate("studentList", "-password");
+      const course = await courseModel.findOne({ _id: courseID }).populate("studentList teacher", "-password")
       if (course) {
         return res.status(200).json({ message: "successful", data: course });
       } else {

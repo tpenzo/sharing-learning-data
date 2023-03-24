@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import CourseItem from "./CourseItem";
 import { useSelector } from "react-redux";
+import _ from "lodash";
 import {
   Accordion,
   AccordionItem,
@@ -10,136 +11,73 @@ import {
   Box,
 } from "@chakra-ui/react";
 function CourseList() {
-  const auth = useSelector(state => state.auth)
-  useEffect(()=>{
-    console.log(auth.user, "ok");
-  }, [])
-  const courseList = [
-    {
-      semester: "Học kì hiện tại",
-      subjects: [
-        {
-          courseId: "CT222",
-          courseName: "Phân tích & thiết kế hệ thống thông tin",
+  const auth = useSelector((state) => state.auth);
+  const [courseList, setCourseList] = useState([]);
+
+  useEffect(() => {
+    const formatSemester = async (arr) => {
+      const mergedSemester = await arr.reduce(
+        (acc, { schoolyear, name, courseID, groupNumber, _id }) => {
+          acc[schoolyear] ??= { schoolyear, subjects: [] };
+          if (Array.isArray(name)) {
+            // if it's array type then concat
+            acc[schoolyear].subjects = acc[schoolyear].subjects.concat({
+              name,
+              courseID,
+              _id,
+              groupNumber,
+            });
+          } else {
+            acc[schoolyear].subjects.push({ name, courseID, _id, groupNumber });
+          }
+          return acc;
         },
-        {
-          courseId: "CT223",
-          courseName: "Nhập môn CNTT",
-        },
-        {
-          courseId: "CT224",
-          courseName: "Nhập môn CNTT",
-        },
-        {
-          courseId: "CT225",
-          courseName: "Nhập môn CNTT",
-        },
-        {
-          courseId: "CT226",
-          courseName: "Nhập môn CNTT",
-        },
-        {
-          courseId: "CT222",
-          courseName: "Phân tích & thiết kế hệ thống thông tin Phân tích & thiết kế hệ thống thông tinPhân tích & thiết kế hệ thống thông tin",
-        },
-        {
-          courseId: "CT223",
-          courseName: "Nhập môn CNTT",
-        },
-        {
-          courseId: "CT224",
-          courseName: "Nhập môn CNTT",
-        },
-        {
-          courseId: "CT225",
-          courseName: "Nhập môn CNTT",
-        },
-        {
-          courseId: "CT226",
-          courseName: "Nhập môn CNTT",
-        },
-      ],
-    },
-    {
-      semester: "2021-2022",
-      subjects: [
-        {
-          courseId: "CT222",
-          courseName: "Nhập môn CNTT",
-        },
-        {
-          courseId: "CT222",
-          courseName: "Nhập môn CNTT",
-        },
-        {
-          courseId: "CT222",
-          courseName: "Nhập môn CNTT",
-        },
-        {
-          courseId: "CT222",
-          courseName: "Nhập môn CNTT",
-        },
-        {
-          courseId: "CT222",
-          courseName: "Nhập môn CNTT",
-        },
-      ],
-    },
-    {
-      semester: "2020-2021",
-      subjects: [
-        {
-          courseId: "CT222",
-          courseName: "Nhập môn CNTT",
-        },
-        {
-          courseId: "CT222",
-          courseName: "Nhập môn CNTT",
-        },
-        {
-          courseId: "CT222",
-          courseName: "Nhập môn CNTT",
-        },
-        {
-          courseId: "CT222",
-          courseName: "Nhập môn CNTT",
-        },
-        {
-          courseId: "CT222",
-          courseName: "Nhập môn CNTT",
-        },
-      ],
-    },
-  ];
+        []
+      );
+
+      //map obj to array to render
+      const mergedArr = Object.keys(mergedSemester).map((key) => {
+        return { schoolyear: key, semesterInfomation: mergedSemester[key] };
+      });
+      return mergedArr;
+    };
+
+    formatSemester(auth.user.followingCourses).then((response) => {
+      setCourseList(response);
+    });
+  }, []);
+
   return (
     <div className="mt-4 h-[75%] w-full">
       <Accordion allowToggle defaultIndex={[0]}>
-        {courseList.map((semesterInfo, index) => {
-          return (
-            <AccordionItem key={index} border={0}>
-              <h2>
-                <AccordionButton className="hover:bg-inherit rounded-lg">
-                  <Box
-                    className="text-primary-blue text-base font-semibold"
-                    as="span"
-                    flex="1"
-                    textAlign="left"
-                  >
-                    {`${semesterInfo.semester} (${semesterInfo.subjects.length})`}
-                    <AccordionIcon />
-                  </Box>
-                </AccordionButton>
-              </h2>
-              <AccordionPanel className="overflow-y-auto h-[200px] 2xl:h-[320px] ">
-                {semesterInfo.subjects.map((courseInfo, index) => {
-                  return (
-                    <CourseItem courseInfo={courseInfo} key={index} />
-                  )
-                })}
-              </AccordionPanel>
-            </AccordionItem>
-          )
-        })}
+        {courseList &&
+          courseList.length > 0 &&
+          courseList.map((semesterInfo, index) => {
+            return (
+              <AccordionItem key={index} border={0}>
+                <h2>
+                  <AccordionButton className="hover:bg-inherit rounded-lg">
+                    <Box
+                      className="text-primary-blue text-base font-semibold"
+                      as="span"
+                      flex="1"
+                      textAlign="left"
+                    >
+                      {`${semesterInfo.schoolyear} (${semesterInfo.semesterInfomation.subjects.length})`}
+                      <AccordionIcon />
+                    </Box>
+                  </AccordionButton>
+                </h2>
+                <AccordionPanel className="overflow-y-auto h-[200px] 2xl:h-[320px] ">
+                  {semesterInfo.semesterInfomation.subjects.map(
+                    (courseInfo, index) => {
+                      return <CourseItem courseInfo={courseInfo} key={index} />;
+                    }
+                  )}
+                </AccordionPanel>
+              </AccordionItem>
+            );
+          })}
       </Accordion>
     </div>
   );

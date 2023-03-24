@@ -4,13 +4,14 @@ import ListOfUser from "./ListOfUser";
 import TeacherInfo from "./teacherInfo";
 import ModalInstance from "../modal/ModalInstance";
 import CreatePost from "../form/CreatePost";
-function InfoPane() {
+function InfoPane(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {course} = props
 
   return (
     <>
       <div className="absolute flex-col flex h-full max-h-full w-full">
-        <div className="w-full h-1/5 bg-inherit -mt-6">
+        <div className="w-full bg-inherit -mt-6">
           <div
             onClick={onOpen}
             className="flex flex-row items-center justify-center mx-auto bg-third-blue w-[80%] mt-10 2xl:mt-14 p-2 2xl:p-3 text-center text-white rounded-xl hover:bg-fourth-blue cursor-pointer"
@@ -24,11 +25,11 @@ function InfoPane() {
           </div>
         </div>
 
-        <div className=" mt-6">
-          <TeacherInfo />
+        <div className=" mt-8">
+          <TeacherInfo teacherInfo={course.teacher} />
         </div>
         <div className="my-4 overflow-hidden">
-          <ListOfUser />
+          <ListOfUser title={"Danh sách sinh viên"} userList={course.studentList} />
         </div>
       </div>
       <ModalInstance
