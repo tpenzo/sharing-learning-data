@@ -20,7 +20,7 @@ export default function CoursePage() {
       getCourseAPI(idCourse).then((course)=>{
         setCourse(course)
       })
-  }, [])
+  }, [idCourse])
   return (
     <div className="container mx-auto h-screen items-center self-center flex flex-col">
       <header className="header sticky top-0 w-full h-[10%] rounded-t-lg z-50">

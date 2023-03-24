@@ -16,7 +16,10 @@ function CourseList() {
 
   useEffect(() => {
     const formatSemester = async (arr) => {
-      const mergedSemester = await arr.reduce(
+      const formatedSemester = arr.map((element)=>{
+        return {...element, schoolyear: `HK${element.semester} ${element.schoolyear}`}
+      })
+      const mergedSemester = await formatedSemester.reduce(
         (acc, { schoolyear, name, courseID, groupNumber, _id }) => {
           acc[schoolyear] ??= { schoolyear, subjects: [] };
           if (Array.isArray(name)) {
@@ -63,7 +66,7 @@ function CourseList() {
                       flex="1"
                       textAlign="left"
                     >
-                      {`${semesterInfo.schoolyear} (${semesterInfo.semesterInfomation.subjects.length})`}
+                      {`${semesterInfo.schoolyear.replace("HK 3", "HK Hè")} (${semesterInfo.semesterInfomation.subjects.length})`}
                       <AccordionIcon />
                     </Box>
                   </AccordionButton>

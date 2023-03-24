@@ -6,6 +6,7 @@ export const getStudentListAccountAPI = async (dispatch) => {
     try {
         const response = await axiosClient.get('/api/user/student/all');
         dispatch(setStudentList(response.data));
+        return response.data
     } catch (error) {
         showToast(error.data.message, 'warning');
     }
