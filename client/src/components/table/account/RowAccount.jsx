@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ShowDialog from "../../dialog/ShowDialog";
 import { useDisclosure } from "@chakra-ui/react";
 
-import { Tr, Td, Select, Button } from "@chakra-ui/react";
+import { Tr, Td, Select, Button, SkeletonText } from "@chakra-ui/react";
 import ModalAddAccountForm from "../../modal/AddAccountForm";
 function RowAccount(props) {
   const { account, stt, setAccounts, action } = props;
@@ -40,23 +40,7 @@ function RowAccount(props) {
       )}
       <Td>{account?.fullName}</Td>
       <Td>
-        <Select
-          placeholder={account?.role}
-          defaultValue={account?.role}
-          onChange={handleChange}
-        >
-          {renderTypeAcc(account.role).map((type) => {
-            return (
-              <option
-                className="border border-gray-100"
-                key={type}
-                value={type}
-              >
-                {type}
-              </option>
-            );
-          })}
-        </Select>
+        {account?.role === "student"? "Sinh viên" : account?.role === "teacher" ? "Giảng viên" : account?.role === "ministry"? "Giáo vụ" : "Không có"}
 
         {/* modal accept remove account */}
         <ShowDialog
