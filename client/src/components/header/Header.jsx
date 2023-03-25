@@ -104,16 +104,11 @@ function Header() {
           <span className="text-xs text-gray-400">{auth.user.role}</span>
         </div>
         <figure className="relative">
-          {/* <img
-            className="w-10 rounded-full"
-            src={auth.user.urlAvatar}
-            alt=""
-          /> */}
           <Wrap>
             <Avatar size='md' src={auth.user.urlAvatar}></Avatar>
           </Wrap>
           <p
-            className="absolute top-6 -right-2 h-6 rounded-full bg-white scale-[70%] cursor-pointer"
+            className="absolute top-7 -right-2 h-6 rounded-full bg-white scale-[70%] cursor-pointer"
             onClick={() => {
               setDropdown(!dropdown);
             }}

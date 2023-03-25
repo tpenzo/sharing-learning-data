@@ -30,7 +30,7 @@ function PostItem(props) {
       <div className="flex items-center gap-4 justify-between mt-5 flex-wrap-reverse">
         <div className="flex items-center gap-4">
           <Wrap>
-            <Avatar size="md" src={user.urlAvatar}></Avatar>
+            <Avatar size='md' src={dataItem?.author.urlAvatar}></Avatar>
           </Wrap>
           <div>
             <p className="font-semibold">

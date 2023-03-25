@@ -55,7 +55,7 @@ function Comment({ comment, authorId, reply, cmtDadId }) {
             <Wrap>
                 <Avatar size='md' src={comment?.user.urlAvatar}/>
             </Wrap>
-            <div className="content-area w-10/12">
+            <div className="content-area ml-2 w-10/12">
                 <div className={`${reply ? 'w-[565px]' : 'w-full'} relative mb-4 border border-gray-200 rounded-lg bg-gray-50`}>
                     <div className="info-cmt pr-3 flex flex-row justify-start items-center self-end">
                         <div className="user-name ml-2 font-semibold text-base p-2">
@@ -180,6 +180,8 @@ function Comment({ comment, authorId, reply, cmtDadId }) {
                                 />
                             )
                         }
+
+                        {/* <div ref={bottomCommentRef} className="bottomComment"></div> */}
                     </div>
                 )}
             </div>

@@ -18,15 +18,21 @@ function CommentList() {
       <CommentInput />
       <div className="list-comment">
         {comments &&
-          comments.length > 0 &&
+          comments.length > 0 ?
           comments.map((comment) => (
             <Comment
               comment={comment}
               authorId={post?.author?._id}
               key={comment._id}
             />
-          ))}
+          ))
+        :(
+          <div className="text-center mt-10 text-lg text-gray-400 font-semibold mx-auto">
+            Chưa có bình luận nào
+          </div>
+        )}
       </div>
+      
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   AlertDialog,
@@ -31,6 +31,7 @@ function ShowDialog(props) {
     setAccounts
   } = props;
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false)
   const studentAccounts = useSelector(state => state.manage.studentList)
   const teacherAccounts = useSelector(state => state.manage.teacherList)
   const ministryAccounts = useSelector(state => state.manage.ministryList)
@@ -41,13 +42,14 @@ function ShowDialog(props) {
         return student?._id !== studentElem?._id;
       }),
     ]);
+    setIsLoading(false)
     onClose();
   };
 
   const removeCourseHandle = async (course) => {
       await removeCourseAPI(course);
       await getCoursesList(dispatch);
-      //loading here
+      setIsLoading(false)
       onClose();
   };
 
@@ -57,30 +59,34 @@ function ShowDialog(props) {
         case "student":
           await getStudentListAccountAPI(dispatch);
           await setAccounts(studentAccounts);
+          setIsLoading(false)
         break;
         case "teacher":
           await getTeacherListAccountAPI(dispatch);
           await setAccounts(teacherAccounts);
+          setIsLoading(false)
         break;
         case "ministry":
           await getMinistryListAccountAPI(dispatch);
           await setAccounts(ministryAccounts);
+          setIsLoading(false)
         break;
       }
       //loading
-      onClose("")
+      onClose()
   }
 
   const handleClick = () => {
+    setIsLoading(true)
     switch (action) {
       case "removeCourse":
-        removeCourseHandle(course?course:undefined)
+        removeCourseHandle(course?course:undefined);
         break;
       case "removeStudent":
         removeStudentHandle(requiredRemove.current);
         break;
       case "removeAccount":
-        removeAccountHandle(account)
+        removeAccountHandle(account);
     }
   };
 
@@ -101,6 +107,7 @@ function ShowDialog(props) {
           <AlertDialogFooter>
             <Button onClick={onClose}>Huỷ</Button>
             <Button
+            isLoading={isLoading}
               onClick={() => {
                 handleClick();
               }}

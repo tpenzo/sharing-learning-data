@@ -20,6 +20,7 @@ import {
 } from "../../Api/manageAPI";
 function ModalAddAccountForm(props) {
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
   const studentAccounts = useSelector((state) => state.manage.studentList);
   const teacherAccounts = useSelector((state) => state.manage.teacherList);
   const ministryAccounts = useSelector((state) => state.manage.ministryList);
@@ -88,9 +89,13 @@ function ModalAddAccountForm(props) {
         };
         const SubmitStudentData = { ...submitData, ...specificStudentData };
         if (action === "create") {
+          setIsLoading(true)
           await createAccountAPI(role, SubmitStudentData);
+          setIsLoading(false)
         } else if (action === "modify") {
+          setIsLoading(true)
           await updateAccountAPI({...SubmitStudentData, _id: account._id});
+          setIsLoading(false)
         }
         //reload studentList
         await getStudentListAccountAPI(dispatch);
@@ -101,9 +106,13 @@ function ModalAddAccountForm(props) {
         };
         const SubmitTeacherData = { ...submitData, ...specificTeacherData };
         if (action === "create") {
+          setIsLoading(true)
           await createAccountAPI(role, SubmitTeacherData);
+          setIsLoading(false)
         } else if (action === "modify") {
+          setIsLoading(true)
           await updateAccountAPI({...SubmitTeacherData, _id: account._id});
+          setIsLoading(false)
         }
 
         //reload ministryList and teacherList
@@ -354,7 +363,7 @@ function ModalAddAccountForm(props) {
 
           <ModalFooter>
             <span className={`${action==="view" ? "hidden" : ""}`}>
-            <Button type="submit" colorScheme="blue" mr={3}>
+            <Button isLoading={isLoading} type="submit" colorScheme="blue" mr={3}>
               {action === "modify" ? "Cập nhật" : "Thêm tài khoản"}
             </Button>
             </span>

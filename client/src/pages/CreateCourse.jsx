@@ -6,7 +6,7 @@ import {
   getInfoByStudentCodeAPI,
   updateCourseAPI,
 } from "../Api/coursesAPI";
-import { useDisclosure } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
@@ -19,10 +19,11 @@ import Header from "../components/header/Header";
 import StudentList from "../components/ministry/StudentList";
 import { createGroupChatAPI } from "../Api/chatAPI";
 import { useFormik } from "formik";
-import * as Yup from "yup"
+import * as Yup from "yup";
 
-export default function CreateCourse(props) {
+export default function CreateCourse() {
   const [fileName, setFileName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const [semester, setSemester] = useState("1");
   const [schoolYear, setSchoolYear] = useState("2022-2023");
@@ -34,6 +35,7 @@ export default function CreateCourse(props) {
       courseName: "",
       teacherName: "",
       groupNumber: "",
+      studentListLength: "",
     },
     validationSchema: Yup.object({
       courseID: Yup.string().required("Không được để trống"),
@@ -42,17 +44,13 @@ export default function CreateCourse(props) {
       groupNumber: Yup.string().required("Không được để trống"),
     }),
     onSubmit: () => {
-      handleSubmitForm()
+      handleSubmitForm();
     },
   });
 
   const { values, handleSubmit, setFieldValue } = formik;
-  const {
-    courseID,
-    courseName,
-    teacherName,
-    groupNumber,
-  } = values;
+  const { courseID, courseName, teacherName, groupNumber, studentListLength } =
+    values;
 
   const [teacherList, setTeacherList] = useState([]);
   const { courseId } = useParams();
@@ -61,16 +59,36 @@ export default function CreateCourse(props) {
     (state) => state.allCoursesList.teacherList
   );
 
+  //get teacher data to display suggestion auto fill
+  useEffect(() => {
+    getTeacherListAPI(dispatch);
+    setTeacherList(teacherListData);
+  }, []);
+
+  const resetData = ()=>{
+      setSemester("1")
+      setSchoolYear("2022-2023")
+      setdescription("")
+      setStudentList([])
+      setFileName("")
+      formik.resetForm();
+  }
+
   //fetch data for manage func
   useEffect(() => {
     if (courseId) {
       getCourseAPI(courseId).then((course) => {
         setCourseInfo(course),
           setStudentList(course.studentList),
-          setFieldValue("studentListLength", studentList.length)
+          setFieldValue("studentListLength", studentList.length);
       });
     }
   }, []);
+
+   //watch studentList to update the number of students
+   useEffect(() => {
+    setFieldValue("studentListLength", studentList.length);
+  }, [studentList]);
 
   const handleSubmitFile = (e) => {
     //schema for input excel file
@@ -79,13 +97,13 @@ export default function CreateCourse(props) {
       readXlsxFile(e.target.files[0], { schema }).then(({ rows, errors }) => {
         if (errors.length === 0) {
           setFileName(e.target.files[0].name);
-          setStudentList([])
+          setStudentList([]);
           rows.forEach((student) => {
             getInfoByStudentCodeAPI(student.studentCode).then((studentInfo) => {
               setStudentList((studentList) => [...studentList, studentInfo]);
             });
           });
-          setFieldValue("studentListLength", rows.length)
+          setFieldValue("studentListLength", rows.length);
         } else {
           showToast(
             "Vui lòng chọn lại tập tin đúng định dạng để nhập",
@@ -98,14 +116,14 @@ export default function CreateCourse(props) {
 
   //set course info for manage func
   const setCourseInfo = async (course) => {
-    const teacherInfo = teacherListData.find((teacher) => {
-      return teacher._id == course.teacher;
-    });
     setFieldValue("courseID", course.courseID);
-    setFieldValue("courseName",course.name);
-    setFieldValue("teacherName", `${teacherInfo ? teacherInfo?.teacherCode+"-"+teacherInfo?.fullName : "Chưa Phân Công"}`);
+    setFieldValue("courseName", course.name);
+    setFieldValue(
+      "teacherName",
+      `${course?.teacher?.teacherCode +"-"+course?.teacher.fullName || "Chưa Phân Công"}`
+    );
     setdescription(course.description);
-    setFieldValue("groupNumber",course.groupNumber);
+    setFieldValue("groupNumber", course.groupNumber);
     setSemester(course.semester);
     setSchoolYear(course.schoolyear);
   };
@@ -132,26 +150,27 @@ export default function CreateCourse(props) {
     //submit api
     //if in manage func
     if (courseId) {
+      setIsLoading(true);
       await updateCourseAPI(courseDataSubmit);
+      setIsLoading(false);
     } else {
       //if in create func
+      setIsLoading(true);
       const groupChat_id = await createGroupChatAPI(courseDataSubmit);
-      let chatGroup = groupChat_id
-      await createCourseAPI({...courseDataSubmit, chatGroup});
+      let chatGroup = groupChat_id;
+      await createCourseAPI({ ...courseDataSubmit, chatGroup });
+      setIsLoading(false);
+
+      //reset data after create course
+      resetData()
     }
 
     //update courses data
-    const fetchData = async ()=>{
-      await getCoursesList(dispatch)
-     }
-     fetchData()
+    const fetchData = async () => {
+      await getCoursesList(dispatch);
+    };
+    fetchData();
   };
-
-  //get teacher data to display suggestion
-  useEffect(() => {
-    getTeacherListAPI(dispatch);
-    setTeacherList(teacherListData);
-  }, []);
 
   //watch courseID to auto fill courseName when in create func
   useEffect(() => {
@@ -160,8 +179,8 @@ export default function CreateCourse(props) {
         const selectedCourse = courses.find((course) => {
           return course.courseId === courseID;
         });
-        if(selectedCourse){
-          setFieldValue("courseName",selectedCourse.courseName);
+        if (selectedCourse) {
+          setFieldValue("courseName", selectedCourse.courseName);
         }
       }
     }
@@ -172,7 +191,7 @@ export default function CreateCourse(props) {
       <header className="header sticky top-0 w-full h-[12%] max-h-full rounded-t-lg z-50">
         <Header />
       </header>
-      <div className="main-content w-full h-[88%] pt-4 flex flex-row justify-around gap-5 bg-white/60 rounded-b-lg z-0">
+      <div className="main-content w-full h-[88%] pt-4 flex flex-row justify-around gap-5 bg-white/60 rounded-b-lg">
         <div className="form-create-course basis-2/5 bg-white shadow ml-4 mb-1 rounded-lg overflow-y-auto">
           <div className="title sticky bg-inherit top-0 text-lg font-semibold p-3 mt-4 text-center">
             QUẢN LÝ NHÓM HỌC PHẦN
@@ -201,11 +220,11 @@ export default function CreateCourse(props) {
                   disabled={courseId ? true : false}
                 />
                 <div className="h-1">
-                {formik.errors.courseID && formik.touched.courseID && (
-                <span className="text-[10px] text-red-400">
-                  {formik.errors.courseID}
-                </span>
-                )}
+                  {formik.errors.courseID && formik.touched.courseID && (
+                    <span className="text-[10px] text-red-400">
+                      {formik.errors.courseID}
+                    </span>
+                  )}
                 </div>
 
                 {/* suggestion for courseID */}
@@ -240,11 +259,11 @@ export default function CreateCourse(props) {
                   disabled={courseId ? true : false}
                 />
                 <div className="h-1">
-                {formik.errors.groupNumber && formik.touched.groupNumber && (
-                <span className="text-[10px] text-red-400">
-                  {formik.errors.groupNumber}
-                </span>
-              )}
+                  {formik.errors.groupNumber && formik.touched.groupNumber && (
+                    <span className="text-[10px] text-red-400">
+                      {formik.errors.groupNumber}
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
@@ -270,11 +289,11 @@ export default function CreateCourse(props) {
                 disabled={courseId ? true : false}
               />
               <div className="h-1">
-              {formik.errors.courseName && formik.touched.courseName && (
-                <span className="text-xs text-red-400 ml-2">
-                  {formik.errors.courseName}
-                </span>
-              )}
+                {formik.errors.courseName && formik.touched.courseName && (
+                  <span className="text-xs text-red-400 ml-2">
+                    {formik.errors.courseName}
+                  </span>
+                )}
               </div>
             </div>
             {/* teacherName */}
@@ -293,11 +312,11 @@ export default function CreateCourse(props) {
                 autoComplete="off"
               />
               <div className="h-1">
-              {formik.errors.teacherName && formik.touched.teacherName && (
-                <span className="text-xs text-red-400 ml-2">
-                  {formik.errors.teacherName}
-                </span>
-              )}
+                {formik.errors.teacherName && formik.touched.teacherName && (
+                  <span className="text-xs text-red-400 ml-2">
+                    {formik.errors.teacherName}
+                  </span>
+                )}
               </div>
 
               {/* suggestion for teachername */}
@@ -367,7 +386,7 @@ export default function CreateCourse(props) {
               <div className="text-sm font-medium" htmlFor="studentList">
                 Danh sách sinh viên
               </div>
-              <label className="text-lg font-medium mr-5" htmlFor="studentList">
+              <label className="flex-row flex items-center text-lg font-medium mr-5" htmlFor="studentList">
                 <div
                   className={`px-2.5 py-2 flex justify-center items-center bg-gray-100 w-full ml-2 rounded-lg  
                  ${
@@ -384,6 +403,9 @@ export default function CreateCourse(props) {
                     color={courseId ? "gray" : "black"}
                   ></box-icon>
                 </div>
+                  {/* <span className="text-sm ml-1">
+                  ({studentListLength && studentListLength} sinh vien)
+                  </span> */}
               </label>
               <input
                 onChange={handleSubmitFile}
@@ -414,20 +436,24 @@ export default function CreateCourse(props) {
             {/* button field */}
             <div className=" flex justify-end items-center mr-12 mt-6">
               <Link to={"/ministry/manage"}>
-                <button
+                <Button
+                  fontWeight="light"
+                  colorScheme="#94a3b8"
                   type="button"
                   className="text-white bg-gray-400 hover:bg-gray-500 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 outline-none "
                 >
                   Huỷ
-                </button>
+                </Button>
               </Link>
-              <button
-                // onClick={handleSubmitForm}
+              <Button
+                isLoading={isLoading}
+                colorScheme="#1d4ed8"
                 type="submit"
-                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 outline-none "
+                fontWeight="light"
+                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 outline-none "
               >
                 {courseId ? "Cập nhật" : "Lưu"}
-              </button>
+              </Button>
             </div>
           </form>
         </div>
