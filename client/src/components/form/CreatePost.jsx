@@ -12,7 +12,7 @@ import * as Yup from "yup";
 
 import QuillEditor from "./QuillEditor";
 import { createPost } from "../../Api/postAPI";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { uploadDocs } from "../../utils/uploadDocs";
 
 function CreatePost(props) {
@@ -21,6 +21,9 @@ function CreatePost(props) {
   const [scope, setScope] = useState(false);
   const [docs, setDocs] = useState([]);
   const [loading, setLoading] = useState(false);
+  const followingCourses = useSelector((state) => state.auth.user.followingCourses)
+
+
 
   const dispatch = useDispatch();
   const handleSelectedFile = (e) => {
@@ -94,9 +97,16 @@ function CreatePost(props) {
               onChange={handleChange}
               onBlur={handleBlur}
             >
-              <option value="1">CT242</option>
+              {/* <option value="1">CT242</option>
               <option value="2">CT495</option>
-              <option value="3">CT131</option>
+              <option value="3">CT131</option> */}
+              {
+                followingCourses && followingCourses.length > 0 &&
+                followingCourses.map((course)=>{
+                  return (<option value="course._id">{`${course.courseID}-${course.groupNumber.length<2 ? `0${course.groupNumber}` : course.groupNumber}-HK${course.semester} ${course.schoolyear}`}</option>)
+                })
+              }
+              
             </Select>
             {errors.courseId && touched.courseId && (
               <FormErrorMessage>{errors.courseId}</FormErrorMessage>

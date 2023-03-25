@@ -129,12 +129,13 @@ export default function ViewPostPage() {
         {/* post view */}
 
         <div className=" basis-4/6 h-full max-h-full sticky self-start bg-white rounded-lg z-1 overflow-y-auto">
-          <div className="h-full scroll-smooth">
-            <div id="post" className="post-content h-screen overflow-y-auto">
+          <div className="h-auto scroll-smooth">
+            <div id="post" className="post-content h-auto">
               <h1 className="text-center font-bold text-2xl my-4">
                 {post?.title}
               </h1>
-              <div className="pl-4 pr-4 h-screen text-justify">
+              <div className="px-6 text-justify break-words overflow-x-hidden">
+                <div className="pb-3">
                 {post?.content ? (
                   parse(post ? String(post?.content) : " ")
                 ) : (
@@ -146,6 +147,7 @@ export default function ViewPostPage() {
                     size="xl"
                   />
                 )}
+                </div>
                 <hr />
                 <div className="py-6">
                   <h4 className="font-bold">Tệp đính kèm</h4>
@@ -190,7 +192,7 @@ export default function ViewPostPage() {
               </div>
             </div>
             <hr />
-            <div id="comment" ref={CommentListRef} className="comment h-screen">
+            <div id="comment" ref={CommentListRef} className="comment min-h-[85vh]">
               <CommentList />
             </div>
           </div>

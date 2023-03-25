@@ -28,6 +28,7 @@ function ModalAddAccountByFile(props) {
   const teacherAccounts = useSelector((state) => state.manage.teacherList);
   const ministryAccounts = useSelector((state) => state.manage.ministryList);
   const { onClose, isOpen, setAccounts, tab } = props;
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
 
   const handleSubmitFile = (e) => {
@@ -74,12 +75,14 @@ function ModalAddAccountByFile(props) {
 
   const handleAddAccount = async (accountList) => {
     if (accountList.length > 0) {
+      setIsLoading(true)
       for await (const account of accountList) {
         let accountInfo = standardizedData(account);
         await createAccountAPI(account.role, accountInfo);
         //loading
       }
-       reloadAccountList()
+      setIsLoading(false)
+      reloadAccountList()
     } else {
       showToast("Vui lòng chọn tập tin dữ liệu", "warning");
     }
@@ -175,8 +178,9 @@ function ModalAddAccountByFile(props) {
             type="button"
             colorScheme="blue"
             mr={3}
+            isLoading={isLoading}
           >
-            Thêm
+            {isLoading ? "Đang cập nhật":"Thêm"}
           </Button>
           <Button onClick={onClose}>Huỷ</Button>
         </ModalFooter>
