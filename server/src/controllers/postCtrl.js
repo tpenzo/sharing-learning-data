@@ -10,29 +10,34 @@ class postController {
     const { title, content, description, courseId, docs } = req.body;
     const { _id, role } = req.userLogin;
     try {
+      const refDocs = [];
+      if (docs.length > 0) {
+        for (let file of [...docs]) {
+          const newDocument = new documentModel({
+            title,
+            course: courseId || null,
+            description,
+            name: file.name,
+            urlDoc: file?.url,
+            type: file?.type || null,
+            user: _id,
+          });
+
+          await newDocument.save();
+
+          refDocs.push(newDocument);
+        }
+      }
+
       const newPost = new postModel({
         author: _id,
         title,
         content,
         course: courseId || null,
-        status: role === "student" ? "deny" : "posted",
+        status: courseId ? "deny" : "posted",
+        docs: refDocs,
       });
       await newPost.save();
-      if (docs.length > 0) {
-        for (let i = 0; i <= [...docs].length; i++) {
-          const newDocument = new documentModel({
-            title,
-            course: courseId || null,
-            description,
-            urlDoc: [...docs][i]?.url,
-            type: [...docs][i]?.type || null,
-            post: newPost._id,
-            user: _id,
-          });
-
-          await newDocument.save();
-        }
-      }
 
       res.status(200).json({ message: "successful!", data: newPost });
     } catch (error) {
@@ -53,7 +58,8 @@ class postController {
         .find()
         .skip(pageOptions.page * pageOptions.limit)
         .limit(pageOptions.limit)
-        .populate("author", "-password");
+        .populate("author", "-password")
+        .populate("docs");
 
       res.status(200).json({ message: "successful!", data: postList });
     } catch (error) {
@@ -69,7 +75,8 @@ class postController {
     try {
       const post = await postModel
         .findOne({ _id: id })
-        .populate("author", "-password");
+        .populate("author", "-password")
+        .populate("docs");
       res.status(200).json({ message: "successful!", data: post });
     } catch (error) {
       return res.status(500).json({ message: error.message });

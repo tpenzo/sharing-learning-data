@@ -84,14 +84,15 @@ function PostItem(props) {
             </Link>
           </span>
         </div>
-        {dataItem?._id && countDocs(docs, dataItem?._id) > 0 ? (
+
+        {dataItem?.docs?.length > 0 && (
           <Link to={`/post/${dataItem?._id}`}>
             <p className="flex items-center " title="Tệp đính kèm">
               <box-icon name="file"></box-icon>
-              <span>{countDocs(docs, dataItem?._id)}</span>
+              <span>{dataItem.docs.length}</span>
             </p>
           </Link>
-        ) : null}
+        )}
       </div>
     </div>
   );

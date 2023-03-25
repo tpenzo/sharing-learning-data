@@ -61,7 +61,7 @@ export default function ViewPostPage() {
       setLovedPost([...post?.likes].some((id) => id === user._id));
     }
   }, [post]);
-  
+
   useEffect(() => {
     fetchPost(postId);
   }, [postId]);
@@ -151,9 +151,9 @@ export default function ViewPostPage() {
                 <hr />
                 <div className="py-6">
                   <h4 className="font-bold">Tệp đính kèm</h4>
-                  <ul className="flex">
-                    {documents && documents.length > 0 ? (
-                      documents.map((doc) => {
+                  <ul className="mt-2">
+                    {post && post?.docs.length > 0 ? (
+                      post?.docs.map((doc) => {
                         return (
                           <li
                             key={doc._id}
@@ -161,6 +161,7 @@ export default function ViewPostPage() {
                             onClick={() => {
                               handlePreview(doc.urlDoc);
                             }}
+                            title={doc.title}
                           >
                             <span
                               className="font-bold text-sm text-gray-400"
@@ -171,6 +172,7 @@ export default function ViewPostPage() {
                                 type={"solid"}
                               ></box-icon>
                             </span>
+                            <span>{doc.name}</span>
                           </li>
                         );
                       })

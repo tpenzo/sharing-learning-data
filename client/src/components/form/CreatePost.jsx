@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   FormControl,
@@ -28,10 +28,13 @@ function CreatePost(props) {
   const dispatch = useDispatch();
   const handleSelectedFile = (e) => {
     if (!e.target.files) return;
-    setDocs(e.target.files);
+    setDocs([...docs, ...e.target.files]);
   };
   const handleChangeQuill = (html, editor, urls) => {
     setContent(html);
+  };
+  const handleRemoveFile = (index) => {
+    setDocs([...docs.filter((doc, i) => i !== index)]);
   };
   const { values, errors, handleChange, handleBlur, handleSubmit, touched } =
     useFormik({
@@ -55,12 +58,12 @@ function CreatePost(props) {
         let arr = [];
         if (docs.length > 0) {
           arr = await uploadDocs(docs);
-          setLoading(false);
         }
         values.docs = arr;
         values.content = content;
         const { message } = await createPost(values, dispatch);
         if (message === "successful!") {
+          setLoading(false);
           onClose();
         }
       },
@@ -157,8 +160,29 @@ function CreatePost(props) {
               <span className="text-sm">Đính kèm tệp</span>
             </p>
           </FormLabel>
+
           {docs.length > 0 ? (
-            <span className="text-sm font-bold">{docs.length} Tài liệu</span>
+            <div>
+              <span className="text-sm font-bold">{docs.length} Tài liệu</span>
+              <ul className="flex gap-2">
+                {docs.map((doc, index) => {
+                  return (
+                    <li className="relative">
+                      <box-icon name="file" size={"48px"}></box-icon>
+                      <p
+                        onClick={() => {
+                          handleRemoveFile(index);
+                        }}
+                        title={doc.name}
+                        className="absolute top-0 right-0 cursor-pointer bg-gray-500 w-5 h-5 rounded-full flex items-center justify-center"
+                      >
+                        <box-icon name="x" color={"white"}></box-icon>
+                      </p>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
           ) : null}
 
           <Input
