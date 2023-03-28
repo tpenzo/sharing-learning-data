@@ -25,17 +25,22 @@ function PostItem(props) {
       await unLikePost(dataItem._id, user._id, dispatch);
     }
   };
+
   return (
     <div className="w-full bg-white pb-4 pt-1 px-6 rounded-lg mb-5 shadow-sm">
       <div className="flex items-center gap-4 justify-between mt-5 flex-wrap-reverse">
         <div className="flex items-center gap-4">
-          <Wrap>
-            <Avatar size='md' src={dataItem?.author.urlAvatar}></Avatar>
-          </Wrap>
+          <Link to={`/profile/${dataItem?.author._id}`}>
+            <Wrap>
+              <Avatar size='md' src={dataItem?.author.urlAvatar}></Avatar>
+            </Wrap>
+          </Link>
           <div>
-            <p className="font-semibold">
-              {dataItem?.author.fullName + " " + dataItem?.author.studentCode}
-            </p>
+            <Link to={`/profile/${dataItem?.author._id}`}>
+              <p className="font-semibold">
+                {dataItem?.author.fullName + " " + dataItem?.author.studentCode || dataItem?.author.studentCode}
+              </p>
+            </Link>
             <span className="font-light text-gray-500 text-xs">
               {moment(dataItem?.createdAt).fromNow()}
             </span>
@@ -74,7 +79,7 @@ function PostItem(props) {
             <box-icon
               name="bookmark"
               type={saved ? "solid" : "regular"}
-              // color={saved ? "yellow" : "black"}
+            // color={saved ? "yellow" : "black"}
             ></box-icon>
           </span>
           <span className="bg-gray-500/5 cursor-pointer py-1 px-1 rounded-lg flex items-center gap-2">

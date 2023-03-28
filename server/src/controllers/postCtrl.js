@@ -38,8 +38,12 @@ class postController {
         docs: refDocs,
       });
       await newPost.save();
-
-      res.status(200).json({ message: "successful!", data: newPost });
+      // get post
+      const post = await postModel
+        .findOne({ _id: newPost._id })
+        .populate("author", "fullName urlAvatar teacherCode studentCode")
+        .populate("docs");
+      res.status(200).json({ message: "successful!", data: post });
     } catch (error) {
       return res.status(500).json({ message: error.message });
     }
@@ -58,7 +62,8 @@ class postController {
         .find()
         .skip(pageOptions.page * pageOptions.limit)
         .limit(pageOptions.limit)
-        .populate("author", "-password")
+        .populate("author", "fullName urlAvatar teacherCode studentCode")
+        .sort({createdAt: -1})
         .populate("docs");
 
       res.status(200).json({ message: "successful!", data: postList });
@@ -75,7 +80,7 @@ class postController {
     try {
       const post = await postModel
         .findOne({ _id: id })
-        .populate("author", "-password")
+        .populate("author", "fullName urlAvatar teacherCode studentCode")
         .populate("docs");
       res.status(200).json({ message: "successful!", data: post });
     } catch (error) {

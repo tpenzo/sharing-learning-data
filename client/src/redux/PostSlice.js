@@ -4,7 +4,6 @@ const initialState = {
     postList: [],
     postItem: {},
     commentsPostItem: [],
-    documentsPostItem: [],
   }
 
 const PostSlice = createSlice({
@@ -12,7 +11,7 @@ const PostSlice = createSlice({
   initialState,
   reducers: {
     createNewPost: (state, actions) => {
-      state.postList.push(actions.payload.data);
+      state.postList.unshift(actions.payload.data);
     },
     resetPostSlice: () => initialState,
     getPosts: (state, actions) => {
@@ -22,7 +21,6 @@ const PostSlice = createSlice({
     getPost: (state, actions) => {
       state.postItem = actions.payload.post;
       state.commentsPostItem = actions.payload.comments;
-      state.documentsPostItem = actions.payload.documents;
     },
 
     addFavoriteList: (state, actions) => {

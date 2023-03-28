@@ -7,7 +7,7 @@ import CommentList from "../components/post/CommentList";
 import { useParams } from "react-router-dom";
 import { getPostById, likePost, unLikePost } from "../Api/postAPI";
 import { useDispatch, useSelector } from "react-redux";
-import { Spinner, useDisclosure } from "@chakra-ui/react";
+import { Box, SkeletonCircle, SkeletonText, Spinner, useDisclosure } from "@chakra-ui/react";
 import { countCmt } from "../utils/handleCmt";
 import { renderDocType } from "../utils/handleDoc";
 import PreviewFile from "../components/post/PreviewFile";
@@ -22,7 +22,6 @@ export default function ViewPostPage() {
   const user = useSelector((state) => state.auth.user);
   const post = useSelector((state) => state.post.postItem);
   const comments = useSelector((state) => state.post.commentsPostItem);
-  const documents = useSelector((state) => state.post.documentsPostItem);
 
   const [file, setFile] = useState(null);
   const [lovedPost, setLovedPost] = useState(false);
@@ -139,20 +138,40 @@ export default function ViewPostPage() {
                 {post?.content ? (
                   parse(post ? String(post?.content) : " ")
                 ) : (
-                  <Spinner
-                    thickness="4px"
-                    speed="0.65s"
-                    emptyColor="gray.200"
-                    color="blue.500"
-                    size="xl"
-                  />
+                  // <Spinner
+                  //   thickness="4px"
+                  //   speed="0.65s"
+                  //   emptyColor="gray.200"
+                  //   color="blue.500"
+                  //   size="xl"
+                  // />
+                      <>
+                        <SkeletonText
+                          mt="4"
+                          noOfLines={4}
+                          spacing="4"
+                          skeletonHeight="2"
+                        />
+                          <SkeletonText
+                            mt="4"
+                            noOfLines={4}
+                            spacing="4"
+                            skeletonHeight="2"
+                          />
+                          <SkeletonText
+                            mt="4"
+                            noOfLines={4}
+                            spacing="4"
+                            skeletonHeight="2"
+                          />
+                      </>
                 )}
                 </div>
                 <hr />
                 <div className="py-6">
                   <h4 className="font-bold">Tệp đính kèm</h4>
                   <ul className="mt-2">
-                    {post && post?.docs.length > 0 ? (
+                    {post && post?.docs?.length > 0 ? (
                       post?.docs.map((doc) => {
                         return (
                           <li

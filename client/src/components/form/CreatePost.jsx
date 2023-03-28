@@ -68,6 +68,7 @@ function CreatePost(props) {
         }
       },
     });
+  
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -77,9 +78,12 @@ function CreatePost(props) {
             <Select
               placeholder="Chọn Chế độ"
               size={"md"}
-              value={scope || false}
+              value={Boolean(scope)}
               onChange={(e) => {
-                setScope(e.target.value);
+                if(scope){
+                  values.courseId = ""
+                }
+                setScope(!scope);
               }}
             >
               <option value={false}>Công khai</option>
@@ -88,7 +92,7 @@ function CreatePost(props) {
           </FormControl>
           <FormControl
             className="mt-4"
-            isInvalid={errors.courseId && touched.courseId}
+            isInvalid={errors.courseId && touched.courseId && scope}
           >
             <FormLabel>Lớp học phần:</FormLabel>
             <Select
@@ -106,12 +110,12 @@ function CreatePost(props) {
               {
                 followingCourses && followingCourses.length > 0 &&
                 followingCourses.map((course)=>{
-                  return (<option value="course._id">{`${course.courseID}-${course.groupNumber.length<2 ? `0${course.groupNumber}` : course.groupNumber}-HK${course.semester} ${course.schoolyear}`}</option>)
+                  return (<option key={course._id} value="course._id">{`${course.courseID}-${course.groupNumber.length<2 ? `0${course.groupNumber}` : course.groupNumber}-HK${course.semester} ${course.schoolyear}`}</option>)
                 })
               }
               
             </Select>
-            {errors.courseId && touched.courseId && (
+            {errors.courseId && touched.courseId && scope && (
               <FormErrorMessage>{errors.courseId}</FormErrorMessage>
             )}
           </FormControl>
