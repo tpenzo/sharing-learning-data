@@ -1,29 +1,35 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { likePost, unLikePost } from "../../Api/postAPI";
 import moment from "moment";
 import { countDocs } from "../../utils/handleDoc";
 import { Avatar, Wrap } from "@chakra-ui/react";
-function PostItem(props) {
-  const { dataItem } = props;
+
+function PostItem({ dataItem, funcLikePost, funcUnLikePost }) {
+
   const { auth, document } = useSelector((state) => state);
   const { user } = auth;
-  const { docs } = document;
-  const [loved, setLoved] = useState(() => {
+
+  const [loved, setLoved] = useState(false);
+
+  useEffect(() => {
     if (dataItem?.likes) {
-      return [...dataItem?.likes].some((id) => id === user._id);
+      let isLove = [...dataItem?.likes].some((id) => id === user._id);
+      console.log(isLove)
+      setLoved(isLove)
     }
-  });
+  }, [dataItem])
+
+
   const [saved, setSaved] = useState(false);
-  const dispatch = useDispatch();
+
   const handleLovedPost = async () => {
-    setLoved(!loved);
     if (!loved) {
-      await likePost(dataItem._id, user._id, dispatch);
+      await funcLikePost(dataItem._id, user._id);
     } else {
-      await unLikePost(dataItem._id, user._id, dispatch);
+      await funcUnLikePost(dataItem._id, user._id);
     }
+    setLoved(!loved);
   };
 
   return (

@@ -6,6 +6,10 @@ import SideNav from "../components/navigation/SideNav";
 import ModalInstance from "../components/modal/ModalInstance";
 import CreatePost from "../components/form/CreatePost";
 import { Spinner, useDisclosure } from "@chakra-ui/react";
+import PostListProfile from "../components/profile/PostListProfile";
+import { getUserPost } from "../Api/postAPI";
+import { useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
 
 export default function ProfilePage() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -18,6 +22,7 @@ export default function ProfilePage() {
       setTab(true);
     }
   };
+
   return (
     <div className="w-[90%] mx-auto h-screen ">
       <div className="container mx-auto h-screen">
@@ -48,7 +53,7 @@ export default function ProfilePage() {
               </div>
             </div>
             <div className="w-full h-[1px] bg-gray-300 mt-6"></div>
-            <div className="flex justify-between">
+            <div className="flex justify-between bg-gray-200">
               <span
                 id="post"
                 onClick={handleChangeTab}
@@ -75,13 +80,8 @@ export default function ProfilePage() {
               </span>
             </div>
 
-            <div className="mt-6 h-[56%] bg-gray-200/20 pr-1 grid grid-cols-2 gap-2 overflow-y-auto">
-              {/* <PostItem />
-                            <PostItem />
-                            <PostItem />
-                            <PostItem />
-                            <PostItem />
-                            <PostItem /> */}
+            <div className="mt-5 h-[60%] bg-gray-200/20 pr-1 grid grid-cols-2 gap-2 overflow-y-auto">
+              <PostListProfile/>
             </div>
           </div>
         </div>

@@ -93,7 +93,10 @@ class postController {
   async getUserPost(req, res) {
     const author = req.params.userId;
     try {
-      const postList = await postModel.find({ author });
+      const postList = await postModel.find({ author })
+      .populate("author", "fullName urlAvatar teacherCode studentCode")
+      .populate("docs")
+      .sort({createdAt: -1})
       res.status(200).json({ message: "successful!", data: postList });
     } catch (error) {
       return res.status(500).json({ message: error.message });

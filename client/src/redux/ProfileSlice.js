@@ -24,8 +24,33 @@ export const profileSlice = createSlice({
                 ...state.user,
                 follower: state.user.follower.filter((item) => item !== action.payload),
             };
-      },
-      resetProfileSlice: () => initialState
+        },
+        // POST
+        getPostsUser(state, action){
+            state.posts = action.payload   
+        },
+
+        likePostProfile: (state, actions) => {
+            const { postId, userId  } = actions.payload;
+            state.posts = state.posts.map((post) => {
+                if (post._id === postId) {
+                    post?.likes.push(userId);
+                }
+                return post;
+            });
+        },
+
+        unLikePostProfile: (state, actions) => {
+            const { postId, userId } = actions.payload;
+            state.posts = state.posts.map((post) => {
+                if (post._id === postId) {
+                    post?.likes.pop(userId);
+                }
+                return post;
+            });
+        },
+
+        resetProfileSlice: () => initialState
     }
 })
 
@@ -33,7 +58,10 @@ export const {
     profileGetUser, 
     profileUpdateFollower, 
     profileUpdateUnFollower,
-    resetProfileSlice
+    resetProfileSlice,
+    getPostsUser,
+    likePostProfile,
+    unLikePostProfile
 } = profileSlice.actions
 
 
