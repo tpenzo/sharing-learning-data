@@ -4,17 +4,28 @@ import InfoPane from "../components/sidepane/InfoPane";
 import PostItem from "../components/post/PostItem";
 import Header from "../components/header/Header";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllPost } from "../Api/postAPI";
+import { getAllPost, likePost, unLikePost } from "../Api/postAPI";
 import { Box, SkeletonCircle, SkeletonText, Spinner } from "@chakra-ui/react";
 export default function HomePage() {
   const postList = useSelector((state) => state.post.postList);
   const dispatch = useDispatch();
+
   useEffect(() => {
     const fetchPostList = async () => {
       await getAllPost({}, dispatch);
     };
     fetchPostList();
   }, []);
+
+  // Call API and update store HomePage
+  const likePostHome = async (postId, userId) => {
+    await likePost(postId, userId, dispatch)
+  }
+
+  const unLikePostHome = async  (postId, userId) => {
+    await unLikePost(postId, userId, dispatch)
+  }
+
   return (
     <div className="container mx-auto h-screen items-center self-center flex flex-col">
       <header className="header sticky top-0 w-full h-[10%] rounded-t-lg z-50">
@@ -27,7 +38,12 @@ export default function HomePage() {
         <div className="basis-3/5 max-w-[56%] px-3 overflow-y-auto">
           {postList && postList.length > 0 ? (
             postList.map((postItem) => {
-              return <PostItem key={postItem._id} dataItem={postItem} />;
+              return <PostItem 
+                        key={postItem._id} 
+                        dataItem={postItem} 
+                        funcLikePost={likePostHome} 
+                        funcUnLikePost={unLikePostHome} 
+                      />;
             })
           ) : (
             <div>

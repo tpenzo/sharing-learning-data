@@ -1,41 +1,52 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { likePost, unLikePost } from "../../Api/postAPI";
 import moment from "moment";
 import { countDocs } from "../../utils/handleDoc";
 import { Avatar, Wrap } from "@chakra-ui/react";
-function PostItem(props) {
-  const { dataItem } = props;
+
+function PostItem({ dataItem, funcLikePost, funcUnLikePost }) {
+
   const { auth, document } = useSelector((state) => state);
   const { user } = auth;
-  const { docs } = document;
-  const [loved, setLoved] = useState(() => {
+
+  const [loved, setLoved] = useState(false);
+
+  useEffect(() => {
     if (dataItem?.likes) {
-      return [...dataItem?.likes].some((id) => id === user._id);
+      let isLove = [...dataItem?.likes].some((id) => id === user._id);
+      console.log(isLove)
+      setLoved(isLove)
     }
-  });
+  }, [dataItem])
+
+
   const [saved, setSaved] = useState(false);
-  const dispatch = useDispatch();
+
   const handleLovedPost = async () => {
-    setLoved(!loved);
     if (!loved) {
-      await likePost(dataItem._id, user._id, dispatch);
+      await funcLikePost(dataItem._id, user._id);
     } else {
-      await unLikePost(dataItem._id, user._id, dispatch);
+      await funcUnLikePost(dataItem._id, user._id);
     }
+    setLoved(!loved);
   };
+
   return (
     <div className="w-full bg-white pb-4 pt-1 px-6 rounded-lg mb-5 shadow-sm">
       <div className="flex items-center gap-4 justify-between mt-5 flex-wrap-reverse">
         <div className="flex items-center gap-4">
-          <Wrap>
-            <Avatar size='md' src={dataItem?.author.urlAvatar}></Avatar>
-          </Wrap>
+          <Link to={`/profile/${dataItem?.author._id}`}>
+            <Wrap>
+              <Avatar size='md' src={dataItem?.author.urlAvatar}></Avatar>
+            </Wrap>
+          </Link>
           <div>
-            <p className="font-semibold">
-              {dataItem?.author.fullName + " " + dataItem?.author.studentCode}
-            </p>
+            <Link to={`/profile/${dataItem?.author._id}`}>
+              <p className="font-semibold">
+                {dataItem?.author.fullName + " " + dataItem?.author.studentCode || dataItem?.author.studentCode}
+              </p>
+            </Link>
             <span className="font-light text-gray-500 text-xs">
               {moment(dataItem?.createdAt).fromNow()}
             </span>
@@ -74,7 +85,7 @@ function PostItem(props) {
             <box-icon
               name="bookmark"
               type={saved ? "solid" : "regular"}
-              // color={saved ? "yellow" : "black"}
+            // color={saved ? "yellow" : "black"}
             ></box-icon>
           </span>
           <span className="bg-gray-500/5 cursor-pointer py-1 px-1 rounded-lg flex items-center gap-2">

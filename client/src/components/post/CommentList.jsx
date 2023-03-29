@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Comment from "./Comment";
-import { fetchCmtsAPI } from "../../Api/commentAPI";
 import { useSelector } from "react-redux";
 import CommentInput from "./CommentInput.jsx";
 import { countCmt } from "../../utils/handleCmt";
 function CommentList() {
+  
   const post = useSelector((state) => state.post.postItem);
   const comments = useSelector((state) => state.post.commentsPostItem);
-
-  console.log(comments);
 
   return (
     <div className="px-6">

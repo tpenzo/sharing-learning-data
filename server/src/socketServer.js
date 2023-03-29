@@ -10,6 +10,7 @@ const socketServer = (socket) => {
     // Disconnect user
     socket.on('disconnect', () => {
         users = users.filter(user => user.socketId !== socket.id)
+        console.log(users)
     })
 
     // Follow user

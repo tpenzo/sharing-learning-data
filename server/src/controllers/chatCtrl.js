@@ -23,7 +23,6 @@ class ChatController {
                 ]
             })
                 .populate('participant', 'fullName urlAvatar teacherCode studentCode')
-                .populate("lastestMessage")
             if (isChat.length > 0) {
                 return res.status(200).json({message: 'successful', data: isChat[0]});
             }
