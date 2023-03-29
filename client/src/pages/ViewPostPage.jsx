@@ -152,7 +152,7 @@ export default function ViewPostPage() {
                 <div className="py-6">
                   <h4 className="font-bold">Tệp đính kèm</h4>
                   <ul className="mt-2">
-                    {post && post?.docs.length > 0 ? (
+                    {post && post?.docs?.length > 0 ? (
                       post?.docs.map((doc) => {
                         return (
                           <li

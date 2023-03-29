@@ -40,10 +40,13 @@ function ManageAccount() {
           `${item?.studentCode ? item?.studentCode : item?.teacherCode}`
         )
           .toLowerCase()
-          .includes(searchKey.trim().toLowerCase()) ||
-        JSON.stringify(item?.class)
-          .toLowerCase()
           .includes(searchKey.trim().toLowerCase())
+
+          // if student
+        //    ||
+        // JSON.stringify(item?.class)
+        //   .toLowerCase()
+        //   .includes(searchKey.trim().toLowerCase())
       );
     });
     setFilterResultList(filterResult.length === 0 ? accounts : filterResult);

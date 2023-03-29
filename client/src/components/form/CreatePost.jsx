@@ -100,16 +100,12 @@ function CreatePost(props) {
               onChange={handleChange}
               onBlur={handleBlur}
             >
-              {/* <option value="1">CT242</option>
-              <option value="2">CT495</option>
-              <option value="3">CT131</option> */}
               {
                 followingCourses && followingCourses.length > 0 &&
                 followingCourses.map((course)=>{
-                  return (<option value="course._id">{`${course.courseID}-${course.groupNumber.length<2 ? `0${course.groupNumber}` : course.groupNumber}-HK${course.semester} ${course.schoolyear}`}</option>)
+                  return (<option value="course._id">{`${course.courseID}-${course.name}-${course.groupNumber.length<2 ? `0${course.groupNumber}` : course.groupNumber}-HK${course.semester} ${course.schoolyear}`}</option>)
                 })
               }
-              
             </Select>
             {errors.courseId && touched.courseId && (
               <FormErrorMessage>{errors.courseId}</FormErrorMessage>
