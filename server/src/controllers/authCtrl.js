@@ -187,11 +187,9 @@ class AuthControlller {
             // Check teacherCode and email
             const account = await UserModel.findById({_id: req.body._id})
             if(account){
-                console.log(req.body.password, account.password);
                 if(req.body.password !== account.password){
                     const salt = await bcrypt.genSalt(10);
                     req.body.password = await bcrypt.hash(req.body.password, salt);
-                    console.log(req.body.password);
                 }
                 //replace all info updated
                 const updatedAccount = await UserModel.findOneAndUpdate({_id: account._id}, {$set: req.body})

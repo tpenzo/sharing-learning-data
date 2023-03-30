@@ -1,4 +1,5 @@
 import UserModel from "../models/userModel.js";
+import bcrypt from "bcryptjs";
 
 class UserController {
   //@description     Get user
@@ -30,7 +31,40 @@ class UserController {
       if (!user) {
         return res.status(400).json({ message: "This user does not exist" });
       }
-      return res.status(200).json({ message: "successful"});
+      return res.status(200).json({ message: "successful" });
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  }
+
+  //@description     change password user
+  //@route           [POST] /user/:userId/update/password
+  //@body            {...}
+  //@access          verifyToken
+  async changePassword(req, res) {
+    try {
+      const { userId } = req.params;
+      const user = await UserModel.findById({ _id: userId });
+      if (user) {
+        const salt = await bcrypt.genSalt(10);
+        const match = await bcrypt.compare(req.body.password, user.password);
+        console.log(req.body, match);
+        if (match) {
+          const hashedNewPassword = await bcrypt.hash(
+            req.body.newPassword,
+            salt
+          );
+          await UserModel.findByIdAndUpdate(
+            { _id: userId },
+            { password: hashedNewPassword }
+          );
+        } else {
+          return res.status(400).json({ message: "Wrong password" });
+        }
+      } else {
+        return res.status(404).json({ message: "This user does not exist" });
+      }
+      return res.status(200).json({ message: "successful" });
     } catch (error) {
       return res.status(500).json({ message: error.message });
     }

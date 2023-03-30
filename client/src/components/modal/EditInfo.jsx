@@ -12,15 +12,18 @@ import {
 	Button,
 	Stack,
 	Spinner,
+	useDisclosure
 } from "@chakra-ui/react";
 import AvatarUpdate from "../profile/AvatarUpdate";
 import { uploadImg } from "../../utils/uploadDocs";
 import { updateUserAPI } from "../../Api/userAPI";
+import ChangePassword from "./ChangePassword";
 
 function EditInfo(props) {
 	const dispatch = useDispatch()
 
 	const user = useSelector(state => state.auth.user)
+	const changePassModal = useDisclosure()
 
 	const [fullName, setFullName] = useState(user?.fullName);
 	const [phoneNumber, setPhoneNumber] = useState(user?.phoneNumber)
@@ -149,7 +152,7 @@ function EditInfo(props) {
 											name="gender"
 											checked={gender === 'male'}
 											onChange={() => setGender("male")}
-											className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+											className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 "
 										/>
 										<label
 											htmlFor="male"
@@ -166,7 +169,7 @@ function EditInfo(props) {
 											name="gender"
 											checked={gender === 'female'}
 											onChange={() => setGender("female")}
-											className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+											className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 "
 										/>
 										<label
 											htmlFor="female"
@@ -177,16 +180,16 @@ function EditInfo(props) {
 									</div>
 									<div className="flex items-center mb-4">
 										<input
-											id="female"
+											id="other"
 											type="radio"
 											value="other"
 											name="gender"
 											onChange={() => setGender("other")}
 											checked={gender === 'other'}
-											className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+											className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 "
 										/>
 										<label
-											htmlFor="female"
+											htmlFor="other"
 											className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
 										>
 											Khác
@@ -205,9 +208,18 @@ function EditInfo(props) {
 						>
 							{isLoading ? 'Đang xử lý...' : 'Cập nhật'}
 						</Button>
+						<Button
+							type="submit"
+							colorScheme="red" mr={3}
+							onClick={changePassModal.onOpen}
+						>
+							Đổi mật khẩu
+						</Button>
 						<Button onClick={onClose}>Huỷ</Button>
 					</ModalFooter>
 				</ModalContent>
+
+				<ChangePassword isOpen={changePassModal.isOpen} onClose={changePassModal.onClose} />
 			</Modal>
 		</>
 	);
