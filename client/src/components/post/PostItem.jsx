@@ -34,7 +34,7 @@ function PostItem({ dataItem, funcLikePost, funcUnLikePost }) {
 
   return (
     <div className="w-full bg-white pb-4 pt-1 px-6 rounded-lg mb-5 shadow-sm">
-      <div className="flex items-center gap-4 justify-between mt-5 flex-wrap-reverse">
+      <div className="flex items-center gap-4 justify-between mt-5 flex-wrap-reverse"> 
         <div className="flex items-center gap-4">
           <Link to={`/profile/${dataItem?.author._id}`}>
             <Wrap>

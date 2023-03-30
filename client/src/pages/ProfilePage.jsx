@@ -79,10 +79,7 @@ export default function ProfilePage() {
                 Đã Lưu
               </span>
             </div>
-
-            <div className="mt-5 h-[60%] bg-gray-200/20 pr-1 grid grid-cols-2 gap-2 overflow-y-auto">
               <PostListProfile/>
-            </div>
           </div>
         </div>
       </div>

@@ -69,3 +69,19 @@ export const updateUserAPI = async (userId, data, dispatch) => {
     // showToast(error, "error");
   }
 };
+
+
+export const changePasswordAPI = async (userId, data) => {
+  try {
+    console.log(data);
+    const response = await axiosClient.post(`/api/user/${userId}/update/password`, data);
+    showToast("Thay đổi mật khẩu thành công", "success");
+    return response
+  } catch (error) {
+    if(error.status === 400){
+      showToast("Mật khẩu hiện tại không đúng!Vui lòng thử lại", "error")
+    } else if(error.status === 404){
+      showToast("Không tìm thấy người dùng!", "error")
+    }
+  }
+};

@@ -18,6 +18,7 @@ router.post("/unfollow", verifyToken, userCtrl.UnFollowUser);
 router.post("/bookmark", verifyToken, userCtrl.bookmarkPost);
 router.post("/unbookmark", verifyToken, userCtrl.unBookmarkPost);
 router.post("/:userId/update", verifyToken, userCtrl.updateUser)
+router.post("/:userId/update/password", verifyToken, userCtrl.changePassword)
 
 
 export default router;

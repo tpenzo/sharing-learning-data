@@ -104,16 +104,12 @@ function CreatePost(props) {
               onChange={handleChange}
               onBlur={handleBlur}
             >
-              {/* <option value="1">CT242</option>
-              <option value="2">CT495</option>
-              <option value="3">CT131</option> */}
               {
                 followingCourses && followingCourses.length > 0 &&
                 followingCourses.map((course)=>{
                   return (<option key={course._id} value="course._id">{`${course.courseID}-${course.groupNumber.length<2 ? `0${course.groupNumber}` : course.groupNumber}-HK${course.semester} ${course.schoolyear}`}</option>)
                 })
               }
-              
             </Select>
             {errors.courseId && touched.courseId && scope && (
               <FormErrorMessage>{errors.courseId}</FormErrorMessage>

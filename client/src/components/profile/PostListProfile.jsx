@@ -27,8 +27,10 @@ export default function PostListProfile() {
 
     
     return (
-        <>
+        <div className={"mt-5 h-[60%] bg-gray-200/20 pr-1 grid grid-cols-2 gap-2 overflow-y-auto py-2 px-1" + `${posts.length/2 > 1 ? "" : " grid-rows-[repeat(2,minmax(200px,500px))] h-[63%] overflow-y-hidden"} `}>
+
             {
+                posts && posts.length > 0 &&
                 posts.map(post => <PostItem
                     key={post._id}
                     dataItem={post}
@@ -36,6 +38,7 @@ export default function PostListProfile() {
                     funcUnLikePost={unLikePostProfile}
                 />)
             }
-        </>
+        </div>
+        
     )
 }

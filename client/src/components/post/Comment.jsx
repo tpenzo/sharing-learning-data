@@ -90,11 +90,11 @@ function Comment({ comment, authorId, reply, cmtDadId }) {
                                     <div className="flex">
                                         <div className="cursor-pointer"
                                             onClick={() => setIsEdit(!isEdit)} >
-                                            <box-icon name='user-x'></box-icon>
+                                            <box-icon color="red" name='x'></box-icon>
                                         </div>
                                         <div className="cursor-pointer ml-2"
                                             onClick={handleEditCmt}>
-                                            <box-icon name='user-check'></box-icon>
+                                            <box-icon color="green" name='check'></box-icon>
                                         </div>
                                     </div>
                                 </div>
