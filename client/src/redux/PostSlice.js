@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     postList: [],
+    postCourseList: [],
     postItem: {},
     commentsPostItem: [],
   }
@@ -16,6 +17,10 @@ const PostSlice = createSlice({
     resetPostSlice: () => initialState,
     getPosts: (state, actions) => {
       state.postList = actions.payload.data;
+    },
+
+    getCoursePosts: (state, actions) => {
+      state.postCourseList = actions.payload.data;
     },
 
     getPost: (state, actions) => {
@@ -199,6 +204,7 @@ export const {
   createNewPost,
   getPosts,
   getPost,
+  getCoursePosts,
   addFavoriteList,
   removeFavoriteList,
 

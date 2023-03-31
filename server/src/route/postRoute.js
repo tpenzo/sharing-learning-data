@@ -10,5 +10,7 @@ router.post("/:postId/unlike", verifyToken, postController.unLikePost);
 router.get("/:userId/user", verifyToken, postController.getUserPost);
 router.get("/:id", verifyToken, postController.getPost);
 router.get("/", verifyToken, postController.getAllPost);
+router.get("/course/:courseId", verifyToken, postController.getCoursePost);
+
 
 export default router;

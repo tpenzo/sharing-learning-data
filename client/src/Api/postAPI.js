@@ -5,6 +5,7 @@ import {
   getPost,
   addFavoriteList,
   removeFavoriteList,
+  getCoursePosts
 } from "../redux/PostSlice";
 import showToast from "./showToast";
 import { fetchCmtsAPI } from "./commentAPI";
@@ -31,6 +32,17 @@ export const getAllPost = async (params, dispatch) => {
     showToast(error.data.message, "error");
   }
 };
+
+export const getCoursePostAPI = async (courseId, dispatch) => {
+  try {
+    const res = await axiosClient.get(`/api/post/course/${courseId}`);
+    await dispatch(getCoursePosts(res));
+  } catch (error) {
+    // showToast(error.data.message, "error");
+    console.log(error);
+  }
+};
+
 export const getPostById = async (id, dispatch) => {
   try {
     // get post

@@ -24,7 +24,6 @@ class postController {
           });
 
           await newDocument.save();
-
           refDocs.push(newDocument);
         }
       }
@@ -63,9 +62,34 @@ class postController {
         .skip(pageOptions.page * pageOptions.limit)
         .limit(pageOptions.limit)
         .populate("author", "fullName urlAvatar teacherCode studentCode")
-        .sort({createdAt: -1})
+        .sort({ createdAt: -1 })
         .populate("docs");
 
+      res.status(200).json({ message: "successful!", data: postList });
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  }
+
+  //@description     get post for course
+  //@route           [GET] /api/post/course/:courseId
+  //@query           {page,limit}
+  //@access          verifyToken
+  async getCoursePost(req, res) {
+    const pageOptions = {
+      page: +req.query.page || 0,
+      limit: +req.query.limit || 8,
+    };
+    const { courseId } = req.params;
+    const _id = req.body.courseId
+    console.log(courseId, _id);
+    try {
+      const postList = await postModel.find({ course: courseId }).skip(pageOptions.page * pageOptions.limit)
+      .limit(pageOptions.limit)
+      .populate("author", "fullName urlAvatar teacherCode studentCode")
+      .sort({ createdAt: -1 })
+      .populate("docs");
+      console.log(postList);
       res.status(200).json({ message: "successful!", data: postList });
     } catch (error) {
       return res.status(500).json({ message: error.message });
@@ -93,10 +117,11 @@ class postController {
   async getUserPost(req, res) {
     const author = req.params.userId;
     try {
-      const postList = await postModel.find({ author })
-      .populate("author", "fullName urlAvatar teacherCode studentCode")
-      .populate("docs")
-      .sort({createdAt: -1})
+      const postList = await postModel
+        .find({ author })
+        .populate("author", "fullName urlAvatar teacherCode studentCode")
+        .populate("docs")
+        .sort({ createdAt: -1 });
       res.status(200).json({ message: "successful!", data: postList });
     } catch (error) {
       return res.status(500).json({ message: error.message });
