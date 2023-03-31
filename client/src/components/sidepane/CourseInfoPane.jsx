@@ -26,7 +26,7 @@ function InfoPane(props) {
         </div>
 
         <div className=" mt-8">
-          <TeacherInfo teacherInfo={course.teacher} />
+          <TeacherInfo teacherInfo={course?.teacher} />
         </div>
         <div className="my-4 overflow-hidden">
           <ListOfUser title={"Danh sách sinh viên"} userList={course.studentList} />

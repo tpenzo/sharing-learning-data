@@ -17,7 +17,6 @@ export const getCoursesList = async (dispatch) => {
 export const getCourseAPI = async (courseId, dispatch) => {
     try {
         const response = await axiosClient.get(`/api/courses/${courseId}`);
-        console.log(response.data);
         return response.data;
     } catch (error) {
         console.log(error);

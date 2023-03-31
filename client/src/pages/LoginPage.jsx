@@ -45,7 +45,7 @@ function LoginPage() {
           case"admin":
             navigate("/admin/manage")
           break;
-          default:
+          case"student":
              navigate("/")
           break;
         }

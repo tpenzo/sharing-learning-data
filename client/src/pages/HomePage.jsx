@@ -38,12 +38,14 @@ export default function HomePage() {
         <div className="basis-3/5 max-w-[56%] px-3 overflow-y-auto">
           {postList && postList.length > 0 ? (
             postList.map((postItem) => {
-              return <PostItem 
+              if(postItem.course === null){
+                return <PostItem 
                         key={postItem._id} 
                         dataItem={postItem} 
                         funcLikePost={likePostHome} 
                         funcUnLikePost={unLikePostHome} 
                       />;
+              }
             })
           ) : (
             <div>

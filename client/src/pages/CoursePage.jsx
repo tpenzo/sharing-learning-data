@@ -5,6 +5,8 @@ import PostItem from "../components/post/PostItem";
 import Header from "../components/header/Header";
 import { getCourseAPI } from "../Api/coursesAPI";
 import { useParams } from "react-router-dom";
+import { getCoursePostAPI, likePost, unLikePost } from "../Api/postAPI";
+import { useDispatch, useSelector } from "react-redux";
 export default function CoursePage() {
   const [course, setCourse] = useState({})
   const [tab, setTab] = useState(false);
@@ -16,11 +18,33 @@ export default function CoursePage() {
       setTab(true);
     }
   };
+  const {postCourseList} = useSelector((state) => state.post);
+  const dispatch = useDispatch();
+
+  //get course info
   useEffect(()=>{
-      getCourseAPI(idCourse).then((course)=>{
-        setCourse(course)
-      })
-  }, [idCourse])
+    getCourseAPI(idCourse).then((course)=>{
+      setCourse(course)
+    })
+}, [idCourse]);
+
+  //get post list
+  useEffect(() => {
+    const fetchPostList = async () => {
+      await getCoursePostAPI(idCourse, dispatch);
+    };
+    fetchPostList();
+  }, [idCourse]);
+
+    // Call API and update store HomePage
+    const likePostHome = async (postId, userId) => {
+      await likePost(postId, userId, dispatch)
+    }
+  
+    const unLikePostHome = async  (postId, userId) => {
+      await unLikePost(postId, userId, dispatch)
+    }
+
   return (
     <div className="container mx-auto h-screen items-center self-center flex flex-col">
       <header className="header sticky top-0 w-full h-[10%] rounded-t-lg z-50">
@@ -59,32 +83,20 @@ export default function CoursePage() {
             </span>
           </div>
           <div className="post-list px-3 max-h-[92%] overflow-y-auto">
-            <PostItem />
-            <PostItem />
-            <PostItem />
-            <PostItem />
-            <PostItem />
-            <PostItem />
-            <PostItem />
-            <PostItem />
-            <PostItem />
-            <PostItem />
-            <PostItem />
-            <PostItem />
-            <PostItem />
-            <PostItem />
-            <PostItem />
-            <PostItem />
-            <PostItem />
-            <PostItem />
-            <PostItem />
-            <PostItem />
-            <PostItem />
-            <PostItem />
-            <PostItem />
-            <PostItem />
-            <PostItem />
-            <PostItem />
+          {postCourseList && postCourseList.length > 0 ? (
+            postCourseList.map((postItem) => {
+              return <PostItem 
+                        key={postItem._id} 
+                        dataItem={postItem} 
+                        funcLikePost={likePostHome} 
+                        funcUnLikePost={unLikePostHome} 
+                      />;
+            })
+          ) : (
+            <div className="flex justify-center">
+              <span className="font-semibold text-lg mt-16 text-blue-800">{`${tab ? "Chưa có tài liệu nào" : "Chưa có bài viết nào"}`}</span>
+            </div>
+          )}
           </div>
         </div>
         <div className="basis-1/5 w-1/5 h-full max-h-full sticky top-28 bg-white rounded-lg z-1">

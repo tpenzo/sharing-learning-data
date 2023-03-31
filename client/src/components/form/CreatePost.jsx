@@ -62,6 +62,7 @@ function CreatePost(props) {
         values.docs = arr;
         values.content = content;
         const { message } = await createPost(values, dispatch);
+        console.log(values);
         if (message === "successful!") {
           setLoading(false);
           onClose();
@@ -107,7 +108,7 @@ function CreatePost(props) {
               {
                 followingCourses && followingCourses.length > 0 &&
                 followingCourses.map((course)=>{
-                  return (<option key={course._id} value="course._id">{`${course.courseID}-${course.groupNumber.length<2 ? `0${course.groupNumber}` : course.groupNumber}-HK${course.semester} ${course.schoolyear}`}</option>)
+                  return (<option key={course._id} value={course._id}>{`${course.courseID}-${course.groupNumber.length<2 ? `0${course.groupNumber}` : course.groupNumber}-HK${course.semester} ${course.schoolyear}`}</option>)
                 })
               }
             </Select>
