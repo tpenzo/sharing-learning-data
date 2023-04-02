@@ -54,7 +54,7 @@ function ManageCourses() {
   
   return (
     <div className="container mx-auto h-screen items-center self-center flex flex-col">
-      <header className="header sticky top-0 w-full h-[10%] rounded-t-lg z-50">
+      <header className="header sticky top-0 w-full h-[10%] rounded-t-lg border-b-[1px] border-gray-300 z-10">
         <Header />
       </header>
       <div className="main-content w-full h-[88%] pt-4 bg-white rounded-b-lg z-0">

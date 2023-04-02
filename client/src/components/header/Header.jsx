@@ -68,7 +68,9 @@ function Header() {
           </span>
         </div>
       </div>
-      <div className="xl:w-[50%] flex relative">
+      {
+        (auth?.user.role==="student" || auth?.user.role==="teacher") &&
+        <div className="xl:w-[50%] flex relative">
         <span className="cursor-pointer pl-1 absolute top-2 xl:top-3 left-2">
           <box-icon name="search-alt-2" color="gray"></box-icon>
         </span>
@@ -96,7 +98,7 @@ function Header() {
         >
           {keyword && <SearchResult searchResult={searchResult} />}
         </div>
-      </div>
+      </div>}
       {/* user */}
       <div className="flex items-center gap-2 relative pr-5">
         <div className="text-right">

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import CourseItem from "./CourseItem";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import _ from "lodash";
 import {
   Accordion,
@@ -10,9 +10,11 @@ import {
   AccordionIcon,
   Box,
 } from "@chakra-ui/react";
+import { selectCourse } from "../../redux/AllCoursesSlice";
 function CourseList() {
   const auth = useSelector((state) => state.auth);
   const [courseList, setCourseList] = useState([]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const formatSemester = async (arr) => {
@@ -45,7 +47,7 @@ function CourseList() {
       return mergedArr;
     };
 
-    formatSemester(auth.user.followingCourses).then((response) => {
+    formatSemester(auth.user.role==="student" ? auth.user.followingCourses : auth.user.managedCourses).then((response) => {
       setCourseList(response);
     });
   }, []);

@@ -21,7 +21,7 @@ function CreatePost(props) {
   const [scope, setScope] = useState(false);
   const [docs, setDocs] = useState([]);
   const [loading, setLoading] = useState(false);
-  const followingCourses = useSelector((state) => state.auth.user.followingCourses)
+  const {followingCourses, managedCourses, role} = useSelector((state) => state.auth.user)
 
 
 
@@ -106,10 +106,15 @@ function CreatePost(props) {
               onBlur={handleBlur}
             >
               {
-                followingCourses && followingCourses.length > 0 &&
+                role === "student" ?
+                (followingCourses && followingCourses.length > 0 &&
                 followingCourses.map((course)=>{
                   return (<option key={course._id} value={course._id}>{`${course.courseID}-${course.groupNumber.length<2 ? `0${course.groupNumber}` : course.groupNumber}-HK${course.semester} ${course.schoolyear}`}</option>)
-                })
+                })) :
+                 (managedCourses && managedCourses.length > 0 &&
+                  managedCourses.map((course)=>{
+                    return (<option key={course._id} value={course._id}>{`${course.courseID}-${course.groupNumber.length<2 ? `0${course.groupNumber}` : course.groupNumber}-HK${course.semester} ${course.schoolyear}`}</option>)
+                  }))
               }
             </Select>
             {errors.courseId && touched.courseId && scope && (
