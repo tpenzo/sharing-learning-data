@@ -48,6 +48,9 @@ function LoginPage() {
           case"student":
              navigate("/")
           break;
+          case"teacher":
+             navigate("/")
+          break;
         }
       }
     );

@@ -44,7 +44,7 @@ function PostItem({ dataItem, funcLikePost, funcUnLikePost }) {
           <div>
             <Link to={`/profile/${dataItem?.author._id}`}>
               <p className="font-semibold">
-                {dataItem?.author.fullName + " " + dataItem?.author.studentCode || dataItem?.author.studentCode}
+                {dataItem?.author.fullName + " " + `${dataItem.author.studentCode ? dataItem?.author.studentCode : dataItem?.author.teacherCode}`}
               </p>
             </Link>
             <span className="font-light text-gray-500 text-xs">

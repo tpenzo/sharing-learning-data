@@ -139,7 +139,14 @@ class coursesController {
           },
           { $pull: { followingCourses: _id } }
         );
-        const updatedCourse = await courseModel.findOneAndUpdate(
+        
+        //update chat group participant ##need update
+        const modifiedGroup = await chatModel.findByIdAndUpdate(
+          course.chatGroup,
+          {$set:{participant: [teacher, ...studentList]}}
+        )
+        console.log(modifiedGroup, studentList, course.chatGroup);
+        const updatedCourse = await courseModel.findOneAndUpdate( 
           { _id: course._id },
           { $set: req.body.course } //overide all data
         );

@@ -13,6 +13,7 @@ function ReceivedMessage({ message }) {
           </Wrap>
           </div>
           <div className="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl w-full">
+          <div className="text-left text-[10px] text-gray-600">{message?.sender.fullName}</div>
             <div className="break-words max-w-full">
               {message?.content}
             </div>
