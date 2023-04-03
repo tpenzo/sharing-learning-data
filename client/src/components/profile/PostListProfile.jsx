@@ -8,9 +8,7 @@ export default function PostListProfile() {
     const dispatch = useDispatch()
     const { userId } = useParams()
 
-    const user = useSelector(state => state.auth.user)
     const posts = useSelector(state => state.profile.posts)
-
 
     // Call API and update store HomePage
     const likePostProfile = async (postId, userId) => {
@@ -23,7 +21,7 @@ export default function PostListProfile() {
 
     useEffect(() => {
         getUserPost(userId, dispatch)
-    }, [])
+    }, [userId])
 
     
     return (

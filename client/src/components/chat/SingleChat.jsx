@@ -40,7 +40,6 @@ export default function SingleChat() {
 		fetchMessage()
 	}, [selectedChat])
 
-	console.log(messages)
 
 	useEffect(() => {
 		socket?.on('receiveMessage', newMessage => {

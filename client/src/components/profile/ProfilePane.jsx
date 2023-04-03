@@ -17,6 +17,7 @@ function ProfilePane() {
     const navigate = useNavigate()
 
     const { auth, profile } = useSelector(state => state)
+    const posts = useSelector(state => state.profile.posts)
     const { userId } = useParams()
 
     // state
@@ -58,7 +59,7 @@ function ProfilePane() {
                 <div className="">
                     <h4 className="text-3xl font-bold">{info?.fullName}</h4>
                     <div className="mt-3 text-gray-500 font-semibold text-ms">
-                        <span className="mr-3">0 Bài viết</span>
+                        <span className="mr-3">{posts.length} Bài viết</span>
                         <span className="mr-3">{info?.follower.length} Người theo dõi</span>
                         <span className="mr-3">{info?.following.length} Người đang theo dõi</span>
                     </div>

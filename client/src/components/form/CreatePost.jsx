@@ -69,6 +69,8 @@ function CreatePost(props) {
         }
       },
     });
+
+    console.log(docs)
   
   return (
     <>
@@ -161,10 +163,19 @@ function CreatePost(props) {
         </FormControl>
         <FormControl className="mt-4">
           <FormLabel htmlFor="doc" className="cursor-pointer">
-            <p className="flex items-center">
+            {/* <p className="flex items-center">
               <box-icon name="file"></box-icon>
               <span className="text-sm">Đính kèm tệp</span>
-            </p>
+            </p> */}
+            <div class="w-[101.5%] border-dashed border-2 border-gray-400 py-12 flex flex-col justify-center items-center">
+              <p class="mb-3 font-semibold text-gray-900 flex flex-wrap justify-center">
+                <span>Drag and drop your</span>&nbsp;<span>files anywhere or</span>
+              </p>
+              <input id="hidden-input" type="file" multiple class="hidden" />
+              <span class="mt-2 rounded-sm px-3 py-1 bg-gray-200 hover:bg-gray-300 focus:shadow-outline focus:outline-none">
+                Upload a file
+              </span>
+            </div>
           </FormLabel>
 
           {docs.length > 0 ? (
