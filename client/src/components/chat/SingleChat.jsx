@@ -52,22 +52,24 @@ export default function SingleChat() {
 
 
 	const sendMessage = async () => {
-		const newMessage = await sendMessageAPI({
-			sender: auth.user._id,
-			content: message,
-			chatId: selectedChat._id
-		})
-		if (newMessage) {
-			// Get list _id of recipient
-			const receiverIds = selectedChat.participant
-				.filter(user => user._id !== auth.user._id)
-				.map(user => user._id);
-			// Socket
-			socket?.emit('sendMessage', { message: newMessage, receiverIds })
-			
-			setMessages([...messages, newMessage])
+		if(message){
+			const newMessage = await sendMessageAPI({
+				sender: auth.user._id,
+				content: message,
+				chatId: selectedChat._id
+			})
+			if (newMessage) {
+				// Get list _id of recipient
+				const receiverIds = selectedChat.participant
+					.filter(user => user._id !== auth.user._id)
+					.map(user => user._id);
+				// Socket
+				socket?.emit('sendMessage', { message: newMessage, receiverIds })
+
+				setMessages([...messages, newMessage])
+			}
+			setMessage('')
 		}
-		setMessage('')
 	}
 
 	const handleEnterSendMessage = (e)=>{
