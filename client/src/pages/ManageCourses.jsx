@@ -57,7 +57,7 @@ function ManageCourses() {
       <header className="header sticky top-0 w-full h-[10%] rounded-t-lg border-b-[1px] border-gray-300 z-10">
         <Header />
       </header>
-      <div className="main-content w-full h-[88%] pt-4 bg-white rounded-b-lg z-0">
+      <div className="main-content w-full h-[88%] pt-4 bg-white rounded-b-lg z-0 pb-1">
         <div className="w-[95%] mx-auto h-full overflow-y-hidden">
             {/* <h3 className="text-lg font-bold">Danh sách Học phần</h3> */}
           <div className="flex justify-between items-center mt-3">
@@ -87,7 +87,7 @@ function ManageCourses() {
               )}
             </div>
             <Link to={"/ministry/create"}>
-            <span className="px-4 py-3 font-bold bg-gray-300 cursor-pointer text-sm rounded-lg text-gray-600 hover:bg-gray-400/60">
+            <span className="px-4 py-3 font-bold bg-green-700 cursor-pointer text-sm rounded-lg text-gray-50 hover:bg-green-800">
               Tạo nhóm học
             </span>
             </Link>

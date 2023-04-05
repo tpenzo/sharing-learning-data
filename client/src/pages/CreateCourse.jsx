@@ -58,6 +58,7 @@ export default function CreateCourse() {
   const teacherListData = useSelector(
     (state) => state.allCoursesList.teacherList
   );
+  const {user} = useSelector(state=> state.auth)
 
   //get teacher data to display suggestion auto fill
   useEffect(() => {
@@ -104,6 +105,8 @@ export default function CreateCourse() {
             });
           });
           setFieldValue("studentListLength", rows.length);
+          //reset input file 
+          e.target.value = null;
         } else {
           showToast(
             "Vui lòng chọn lại tập tin đúng định dạng để nhập",
@@ -187,13 +190,13 @@ export default function CreateCourse() {
   }, [courseID]);
 
   return (
-    <div className="container mx-auto h-screen items-center self-center flex flex-col overflow-hidden">
-      <header className="header sticky top-0 w-full h-[12%] max-h-full rounded-t-lg z-50">
+    <div className="container mx-auto h-screen items-center self-center flex flex-col">
+      <header className="header w-full h-[10%] max-h-full rounded-t-lg z-50">
         <Header />
       </header>
-      <div className="main-content w-full h-[88%] pt-4 flex flex-row justify-around gap-5 bg-white/60 rounded-b-lg">
+      <div className="main-content w-full h-[88%] pt-4 flex flex-row justify-around gap-5 bg-white/60 rounded-b-lg pb-1.5">
         <div className="form-create-course basis-2/5 bg-white shadow ml-4 mb-1 rounded-lg overflow-y-auto">
-          <div className="title sticky bg-inherit top-0 text-lg font-semibold p-3 mt-4 text-center">
+          <div className="title sticky bg-inherit top-0 text-lg font-semibold p-2 mt-4 text-center">
             QUẢN LÝ NHÓM HỌC PHẦN
           </div>
           <form onSubmit={handleSubmit} className="ml-6">
@@ -304,12 +307,14 @@ export default function CreateCourse() {
               <input
                 value={teacherName}
                 onChange={formik.handleChange}
-                className="bg-gray-50 w-[71%] block mt-1 border outline-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                className={`bg-gray-50 w-[71%] block mt-1 border outline-none border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5
+                ${user?.role==="teacher" ? "cursor-not-allowed text-gray-400 font-thin" : "text-gray-900"}`}
                 id="teacherName"
                 name="teacherName"
                 type="text"
                 list="teacherList"
                 autoComplete="off"
+                disabled={user?.role==="teacher"}
               />
               <div className="h-1">
                 {formik.errors.teacherName && formik.touched.teacherName && (
@@ -435,7 +440,7 @@ export default function CreateCourse() {
 
             {/* button field */}
             <div className=" flex justify-end items-center mr-12 mt-6">
-              <Link to={"/ministry/manage"}>
+              <Link to={user?.role==="teacher" ? `/courses/${courseId}`: "/ministry/manage"}>
                 <Button
                   fontWeight="light"
                   colorScheme="#94a3b8"

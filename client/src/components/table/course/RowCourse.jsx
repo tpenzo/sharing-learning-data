@@ -11,14 +11,14 @@ function RowCourse(props) {
   const showDialogDelete = useDisclosure();
 
   return (
-    <Tr className="text-[13px] hover:bg-gray-200">
+    <Tr className="text-[13px] hover:bg-blue-50">
       <Td>{stt + 1}</Td>
       <Td>{course?.courseID}</Td>
-      <Td>{course?.groupNumber}</Td>
+      <Td textAlign={"center"}>{course?.groupNumber?.length<2 ? `0${course?.groupNumber}` :course?.groupNumber}</Td>
       <Td>{course?.semester + "/" + course?.schoolyear}</Td>
       <Td>{course?.name}</Td>
       <Td>{course?.teacher?.fullName}</Td>
-      <Td>{course?.studentList.length}</Td>
+      <Td textAlign={"center"}>{course?.studentList?.length}</Td>
       <Td>
         <ul className="flex items-center gap-2">
           <li className="cursor-pointer">

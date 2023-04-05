@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import headerLogo from "/assets/header-logo.png";
 import { logoutAPI } from "../../Api/authAPI.js";
@@ -11,6 +11,7 @@ import { Avatar, Wrap } from "@chakra-ui/react";
 function Header() {
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+  const {idCourse} = useParams()
 
   const [keyword, setKeyword] = useState("");
   const [closeX, setCloseX] = useState(false);
@@ -120,18 +121,31 @@ function Header() {
         </figure>
         {dropdown && (
           <ul className="absolute z-[9999] bg-white w-44 top-14 left-0 rounded-xl shadow-xl border overflow-hidden">
-            <Link to={`/profile/${auth.user._id}`}>
-              <li className="p-2 font-semibold hover:bg-bold-gray flex items-center justify-start cursor-pointer">
-                <box-icon name="user"></box-icon>
-                <span className="ml-2">Trang cá nhân</span>
-              </li>
-            </Link>
-            <Link to={"/chat"}>
-              <li className="p-2 font-semibold hover:bg-bold-gray flex items-center justify-start cursor-pointer">
-                <box-icon name="message-square-dots"></box-icon>
-                <span className="ml-2">Nhắn tin</span>
-              </li>
-            </Link>
+            {
+              (auth?.user.role==="student" || auth?.user.role==="teacher") && 
+              <>
+              <Link to={`/profile/${auth.user._id}`}>
+                <li className="p-2 font-semibold hover:bg-bold-gray flex items-center justify-start cursor-pointer">
+                  <box-icon name="user"></box-icon>
+                  <span className="ml-2">Trang cá nhân</span>
+                </li>
+              </Link>
+              <Link to={"/chat"}>
+                <li className="p-2 font-semibold hover:bg-bold-gray flex items-center justify-start cursor-pointer">
+                  <box-icon name="message-square-dots"></box-icon>
+                  <span className="ml-2">Nhắn tin</span>
+                </li>
+              </Link></>
+            }
+            {
+              (idCourse && auth?.user.role==="teacher") &&
+              <Link to={`/courses/${idCourse}/manage`}>
+                <li className="p-2 font-semibold hover:bg-bold-gray flex items-center justify-start cursor-pointer">
+                  <box-icon name="message-square-dots"></box-icon>
+                  <span className="ml-2">Quản lý nhóm học</span>
+                </li>
+              </Link>
+            }
             <li
               className="p-2 font-semibold hover:bg-bold-gray flex items-center justify-start cursor-pointer"
               onClick={handleLogout}

@@ -6,9 +6,6 @@ import { selectCourse } from "../../redux/AllCoursesSlice";
 function CourseItem(props) {
   const { selectedCourse } = useSelector((state) => state.allCoursesList);
   const dispatch = useDispatch();
-  useEffect(() => {
-    console.log(selectedCourse, props.courseInfo._id);
-  }, []);
   return (
     <Link to={"/courses/" + props.courseInfo._id}>
       <li
