@@ -31,7 +31,7 @@ function RowAccount(props) {
     }
   };
   return (
-    <Tr className="text-sm hover:bg-gray-200">
+    <Tr className="text-sm hover:bg-blue-50">
       <Td>{stt + 1}</Td>
       {account?.role === "student" ? (
         <Td>{account?.studentCode}</Td>
@@ -39,7 +39,7 @@ function RowAccount(props) {
         <Td>{account?.teacherCode}</Td>
       )}
       <Td>{account?.fullName}</Td>
-      <Td>
+      <Td paddingLeft={"32px"}>
         {account?.role === "student"? "Sinh viên" : account?.role === "teacher" ? "Giảng viên" : account?.role === "ministry"? "Giáo vụ" : "Không có"}
 
         {/* modal accept remove account */}
@@ -87,12 +87,12 @@ function RowAccount(props) {
               className="cursor-pointer"
             >
               <span>
-                <box-icon name="trash"></box-icon>
+                <box-icon color="gray" name="trash"></box-icon>
               </span>
             </li>
             <li onClick={modifyAccountForm.onOpen} className="cursor-pointer">
               <span>
-                <box-icon name="pencil"></box-icon>
+                <box-icon color="gray" name="pencil"></box-icon>
               </span>
             </li>
           </ul> )

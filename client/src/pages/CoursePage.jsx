@@ -7,10 +7,14 @@ import { getCourseAPI } from "../Api/coursesAPI";
 import { useParams } from "react-router-dom";
 import { getCoursePostAPI, likePost, unLikePost } from "../Api/postAPI";
 import { useDispatch, useSelector } from "react-redux";
+import { resetSelectCourse, selectCourse } from "../redux/AllCoursesSlice";
 export default function CoursePage() {
   const [course, setCourse] = useState({})
+  const { selectedCourse } = useSelector((state) => state.allCoursesList);
   const [tab, setTab] = useState(false);
   const { idCourse } = useParams();
+  const {postCourseList} = useSelector((state) => state.post);
+  const dispatch = useDispatch();
   const handleChangeTab = (e) => {
     if (e.target.id === "post") {
       setTab(false);
@@ -18,15 +22,21 @@ export default function CoursePage() {
       setTab(true);
     }
   };
-  const {postCourseList} = useSelector((state) => state.post);
-  const dispatch = useDispatch();
 
   //get course info
   useEffect(()=>{
     getCourseAPI(idCourse).then((course)=>{
       setCourse(course)
+      dispatch(selectCourse(idCourse))
+      console.log(selectedCourse);
     })
+
 }, [idCourse]);
+
+//clear select course when leavecd serv
+  useEffect(()=>{
+    return ()=> dispatch(resetSelectCourse())
+  },[])
 
   //get post list
   useEffect(() => {

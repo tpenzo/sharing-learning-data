@@ -80,7 +80,7 @@ export default function HomePage() {
                 <SkeletonCircle size="10" />
                 <SkeletonText
                   mt="4"
-                  noOfLines={4}
+                  noOfLines={3}
                   spacing="4"
                   skeletonHeight="2"
                 />

@@ -48,7 +48,7 @@ function App() {
                     </Route>
 
                     <Route element={<RequirePermission roles={['teacher']} />}>
-                        <Route path="/courses/:idCourse/manage" element={<ManageCourse />} />
+                        <Route path="/courses/:courseId/manage" element={<CreateCourse />} />
                     </Route>
 
                     <Route element={<RequirePermission roles={['admin']} />}>

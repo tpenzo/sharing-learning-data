@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-
+  important: true,
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -10,8 +10,6 @@ module.exports = {
     container: {
       // you can configure the container to be centered
       center: true,
-
-      // or have default horizontal padding
       padding: '1rem',
 
       // default breakpoints but with 40px removed
@@ -40,28 +38,4 @@ module.exports = {
   },
   plugins: [
   ],
-  // corePlugins: {
-  //   container: false
-  // },
-  // plugins: [
-  //   function ({ addComponents }) {
-  //     addComponents({
-  //       '.container': {
-  //         maxWidth: '100%',
-  //         '@screen sm': {
-  //           maxWidth: '640px',
-  //         },
-  //         '@screen md': {
-  //           maxWidth: '768px',
-  //         },
-  //         '@screen lg': {
-  //           maxWidth: '768px',
-  //         },
-  //         '@screen xl': {
-  //           maxWidth: '1400px',
-  //         },
-  //       }
-  //     })
-  //   }
-  // ]
 }

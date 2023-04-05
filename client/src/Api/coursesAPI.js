@@ -1,16 +1,30 @@
-import { setAllCoursesData, setTeacherList } from "../redux/AllCoursesSlice";
+import { appendCoursesData, setAllCoursesData, setTeacherList } from "../redux/AllCoursesSlice";
 import axiosClient from "./axiosClient.js";
 import showToast from "./showToast";
 
 export const getCoursesList = async (dispatch) => {
     try {
-        const response = await axiosClient.get('/api/courses/all');
+        let page = 1;
+        const response = await axiosClient.get(`/api/courses/all/${page}`);
         if(response.data){
             await dispatch(setAllCoursesData(response.data))
         }
     } catch (error) {
         console.log(error);
         await dispatch(setAllCoursesData([]))
+    }
+}
+
+export const appendCourseList = async (dispatch, page) => {
+    try {
+        const response = await axiosClient.get(`/api/courses/all/${page}`);
+        if(response.data?.length>0){
+            await dispatch(appendCoursesData(response.data))
+        } else {
+            showToast("Không còn khoá học nào nữa", "warning")
+        }
+    } catch (error) {
+        console.log(error);
     }
 }
 

@@ -12,7 +12,7 @@ const router = express.Router();
 // router.delete('/removeStudent', verifyToken, coursesCtrl.removeStudentFromCourse)
 // router.post('/updateTeacher', verifyToken, coursesCtrl.updateTeacherCourse)
 
-router.get('/all',verifyToken, coursesCtrl.getAllCourses)
+router.get('/all/:page',verifyToken, coursesCtrl.getAllCourses)
 router.get('/:_courseId',verifyToken, coursesCtrl.getCourse)
 router.post('/create',verifyToken, coursesCtrl.createCourse)
 router.post('/delete',verifyToken, coursesCtrl.removeCourse)
