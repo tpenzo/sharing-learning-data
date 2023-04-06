@@ -8,12 +8,13 @@ import CreatePost from "../components/form/CreatePost";
 import { Spinner, useDisclosure } from "@chakra-ui/react";
 import PostListProfile from "../components/profile/PostListProfile";
 import { getUserPost } from "../Api/postAPI";
-import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 export default function ProfilePage() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-
+  const { auth } = useSelector(state => state)
+  const { userId } = useParams()
   const [tab, setTab] = useState(false);
   const handleChangeTab = (e) => {
     if (e.target.id === "post") {
@@ -36,13 +37,17 @@ export default function ProfilePage() {
           <div className="w-[80%] p-4 bg-white rounded-xl">
             <div className="flex items-start">
               <ProfilePane />
-              <div
+              {
+                //appear creat post when in your profile
+                auth?.user._id === userId &&
+                <div
                 onClick={onOpen}
                 className="mt-6 mr-3 ml-auto w-[20%] px-3 py-2 rounded text-white bg-second-blue flex gap-1 justify-center items-center cursor-pointer duration-300 hover:bg-primary-blue"
               >
                 <box-icon name="plus-circle" color="white"></box-icon>
                 <span>Đăng bài</span>
               </div>
+              }
               <div>
                 <ModalInstance
                   isOpen={isOpen}
