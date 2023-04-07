@@ -13,7 +13,7 @@ import {
   Button,
 } from "@chakra-ui/react";
 
-import { createAccountAPI } from "../../Api/manageAPI";
+import { createAccountAPI, createAccountListAPI } from "../../Api/manageAPI";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getStudentListAccountAPI,
@@ -76,11 +76,15 @@ function ModalAddAccountByFile(props) {
   const handleAddAccount = async (accountList) => {
     if (accountList.length > 0) {
       setIsLoading(true)
-      for await (const account of accountList) {
-        let accountInfo = standardizedData(account);
-        await createAccountAPI(account.role, accountInfo);
-        //loading
-      }
+      // for await (const account of accountList) {
+      //   let accountInfo = standardizedData(account);
+      //   await createAccountAPI(account.role, accountInfo);
+      //   //loading
+      // }
+      const accountListStandarlize = accountList.map((account)=>{
+        return standardizedData(account)
+      })
+      await createAccountListAPI(accountListStandarlize)
       setIsLoading(false)
       reloadAccountList()
     } else {

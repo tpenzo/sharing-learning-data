@@ -64,7 +64,7 @@ function ProfilePane() {
                         <span className="mr-3">{info?.following.length} Người đang theo dõi</span>
                     </div>
                     <p className="mt-3 text-gray-400 font-semibold text-sm">
-                        {info?.role === 'teacher' ? `Giảng viên chính: ${info?.teacherCode}` : `Sinh viên: ${info?.studentCode}`}
+                        {info?.role === 'teacher' ? `Giảng viên: ${info?.teacherCode}` : `Sinh viên: ${info?.studentCode}`}
                     </p>
                     <div className="mt-6 flex gap-3 font-semibold ">
                         {

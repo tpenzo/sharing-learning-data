@@ -50,7 +50,10 @@ function TableAccount(props) {
                 />
               );
             })}
-          <Td colSpan={"9"} textAlign={"center"}>
+          {
+            accounts && accounts.length > 15 &&
+            <Tr>
+              <Td colSpan={"9"} textAlign={"center"}>
             <Button
               onClick={showMore}
               isLoading={isLoading}
@@ -60,6 +63,8 @@ function TableAccount(props) {
               Xem thêm
             </Button>
           </Td>
+            </Tr>
+          }
         </Tbody>
       </Table>
     </TableContainer>

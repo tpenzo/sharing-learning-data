@@ -120,7 +120,7 @@ function Header() {
           </p>
         </figure>
         {dropdown && (
-          <ul className="absolute z-[9999] bg-white w-44 top-14 left-0 rounded-xl shadow-xl border overflow-hidden">
+          <ul className="absolute z-[9999] bg-white w-44 top-14 -right-5 rounded-xl shadow-xl border overflow-hidden">
             {
               (auth?.user.role==="student" || auth?.user.role==="teacher") && 
               <>
