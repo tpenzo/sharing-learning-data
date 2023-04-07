@@ -6,5 +6,6 @@ const router = express.Router();
 
 router.get("/:userId", verifyToken, documentController.getUserDoc);
 router.get("/", verifyToken, documentController.getAllDocument);
+router.delete("/:docId", verifyToken, documentController.deleteDoc);
 
 export default router;

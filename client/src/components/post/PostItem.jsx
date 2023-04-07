@@ -2,26 +2,33 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
-import { countDocs } from "../../utils/handleDoc";
-import { Avatar, Wrap } from "@chakra-ui/react";
-
+import { Avatar, Wrap, useDisclosure } from "@chakra-ui/react";
+import ModalInstance from "../modal/ModalInstance";
+import VerifyModal from "../modal/VerifyModal";
+import FormPost from "../form/FormPost";
+import { removeDocs } from "../../utils/uploadDocs";
+import { deletePost } from "../../Api/postAPI";
 function PostItem({ dataItem, funcLikePost, funcUnLikePost }) {
-
-  const { auth, document } = useSelector((state) => state);
+  const { auth } = useSelector((state) => state);
   const { user } = auth;
 
   const [loved, setLoved] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [options, setOptions] = useState(false);
 
+  const {
+    isOpen: isOpenVerify,
+    onClose: onCloseVerify,
+    onOpen: onOpenVerify,
+  } = useDisclosure();
+  const { isOpen, onClose, onOpen } = useDisclosure();
+  const dispatch = useDispatch();
   useEffect(() => {
     if (dataItem?.likes) {
       let isLove = [...dataItem?.likes].some((id) => id === user._id);
-      console.log(isLove)
-      setLoved(isLove)
+      setLoved(isLove);
     }
-  }, [dataItem])
-
-
-  const [saved, setSaved] = useState(false);
+  }, [dataItem]);
 
   const handleLovedPost = async () => {
     if (!loved) {
@@ -32,19 +39,34 @@ function PostItem({ dataItem, funcLikePost, funcUnLikePost }) {
     setLoved(!loved);
   };
 
+  const handleRemovePost = async (check, postId, docs) => {
+    console.log(check, postId, docs);
+    if (check) {
+      if (docs && docs.length > 0) {
+        await removeDocs(docs);
+      }
+      await deletePost(dispatch, postId);
+    }
+  };
   return (
     <div className="w-full bg-white pb-4 pt-1 px-6 rounded-lg mb-5 shadow-sm">
-      <div className="flex items-center gap-4 justify-between mt-5 flex-wrap-reverse"> 
+      <div className="flex items-center gap-4 justify-between mt-5 flex-wrap-reverse">
         <div className="flex items-center gap-4">
           <Link to={`/profile/${dataItem?.author._id}`}>
             <Wrap>
-              <Avatar size='md' src={dataItem?.author.urlAvatar}></Avatar>
+              <Avatar size="md" src={dataItem?.author.urlAvatar}></Avatar>
             </Wrap>
           </Link>
           <div>
             <Link to={`/profile/${dataItem?.author._id}`}>
               <p className="font-semibold">
-                {dataItem?.author.fullName + " " + `${dataItem.author.studentCode ? dataItem?.author.studentCode : dataItem?.author.teacherCode}`}
+                {dataItem?.author.fullName +
+                  " " +
+                  `${
+                    dataItem.author.studentCode
+                      ? dataItem?.author.studentCode
+                      : dataItem?.author.teacherCode
+                  }`}
               </p>
             </Link>
             <span className="font-light text-gray-500 text-xs">
@@ -52,9 +74,59 @@ function PostItem({ dataItem, funcLikePost, funcUnLikePost }) {
             </span>
           </div>
         </div>
-        <p className="px-2 py-1 text-sm rounded-lg bg-primary-blue text-white font-medium">
-          CT244
-        </p>
+        <div className="flex relative">
+          {dataItem?.author._id === user._id && (
+            <span
+              className="cursor-pointer"
+              onClick={() => {
+                setOptions(!options);
+              }}
+            >
+              <box-icon name="dots-vertical-rounded"></box-icon>
+            </span>
+          )}
+          {options && (
+            <ul className="absolute top-12 right-0 bg-white shadow-xl flex rounded overflow-hidden">
+              <li
+                className="px-2 py-1 font-semibold cursor-pointer"
+                onClick={onOpen}
+              >
+                <box-icon name="edit-alt"></box-icon>
+              </li>
+              <ModalInstance
+                isOpen={isOpen}
+                onClose={onClose}
+                modalName="Chỉnh sửa bài viết"
+                modalBody={
+                  <FormPost onClose={onClose} isEdit={true} post={dataItem} />
+                }
+              />
+              <li
+                className="px-2 py-1 font-semibold cursor-pointer"
+                onClick={onOpenVerify}
+              >
+                <box-icon name="trash-alt"></box-icon>
+              </li>
+              <ModalInstance
+                isOpen={isOpenVerify}
+                onClose={onCloseVerify}
+                modalName="Xác nhận"
+                modalBody={
+                  <VerifyModal
+                    title="Xóa bài viết này?"
+                    hide={onCloseVerify}
+                    handleVerify={handleRemovePost}
+                    selectedId={dataItem._id}
+                    docs={dataItem.docs}
+                  />
+                }
+              />
+            </ul>
+          )}
+          <p className="px-2 py-1 text-sm rounded-lg bg-primary-blue text-white font-medium">
+            {dataItem.course ? dataItem.course : "Công khai"}
+          </p>
+        </div>
       </div>
       <Link to={`/post/${dataItem?._id}`}>
         <p className="mt-5 text-sm cursor-pointer hover:font-semibold">
@@ -85,7 +157,7 @@ function PostItem({ dataItem, funcLikePost, funcUnLikePost }) {
             <box-icon
               name="bookmark"
               type={saved ? "solid" : "regular"}
-            // color={saved ? "yellow" : "black"}
+              // color={saved ? "yellow" : "black"}
             ></box-icon>
           </span>
           <span className="bg-gray-500/5 cursor-pointer py-1 px-1 rounded-lg flex items-center gap-2">

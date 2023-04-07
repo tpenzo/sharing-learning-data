@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    postList: [],
-    postCourseList: [],
-    postItem: {},
-    commentsPostItem: [],
-  }
+  postList: [],
+  postCourseList: [],
+  postItem: {},
+  commentsPostItem: [],
+};
 
 const PostSlice = createSlice({
   name: "post",
@@ -27,7 +27,19 @@ const PostSlice = createSlice({
       state.postItem = actions.payload.post;
       state.commentsPostItem = actions.payload.comments;
     },
-
+    removePost: (state, actions) => {
+      state.postList = state.postList.filter(
+        (post) => post._id !== actions.payload
+      );
+    },
+    saveEditPost: (state, actions) => {
+      state.postList = state.postList.map((post) => {
+        if (post._id === actions.payload.postId) {
+          return actions.payload.post;
+        }
+        return post;
+      });
+    },
     addFavoriteList: (state, actions) => {
       const { postId, userId, res } = actions.payload;
       state.postList = state.postList.map((post) => {
@@ -207,6 +219,8 @@ export const {
   getCoursePosts,
   addFavoriteList,
   removeFavoriteList,
+  removePost,
+  saveEditPost,
 
   // Comment
   likeComment,
@@ -219,6 +233,6 @@ export const {
   createReplyComment,
   deleteReplyComment,
   updateReplyComment,
-  resetPostSlice
+  resetPostSlice,
 } = PostSlice.actions;
 export default PostSlice.reducer;

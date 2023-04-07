@@ -5,19 +5,46 @@ import {
   getPost,
   addFavoriteList,
   removeFavoriteList,
-  getCoursePosts
+  getCoursePosts,
+  removePost,
+  saveEditPost,
 } from "../redux/PostSlice";
 import showToast from "./showToast";
 import { fetchCmtsAPI } from "./commentAPI";
-import { getPostsUser, likePostProfile, unLikePostProfile } from "../redux/ProfileSlice";
+import {
+  getPostsUser,
+  likePostProfile,
+  unLikePostProfile,
+} from "../redux/ProfileSlice";
 
 export const createPost = async (payload, dispatch) => {
   try {
     const res = await axiosClient.post("/api/post/newpost", payload);
 
+    await dispatch(createNewPost(res));
+    showToast(res.message, "success");
+    return res;
+  } catch (error) {
+    showToast(error.data.message, "error");
+  }
+};
+export const deletePost = async (dispatch, postId) => {
+  try {
+    const res = await axiosClient.delete(`/api/post/${postId}`);
+
     console.log(res);
 
-    await dispatch(createNewPost(res));
+    dispatch(removePost(postId));
+    showToast(res.message, "success");
+  } catch (error) {
+    showToast(error.data.message, "error");
+  }
+};
+export const editPost = async (payload, dispatch, postId) => {
+  try {
+    const res = await axiosClient.put(`/api/post/${postId}`, payload);
+
+    await dispatch(saveEditPost({ postId, post: res.data }));
     showToast(res.message, "success");
     return res;
   } catch (error) {
@@ -60,7 +87,7 @@ export const getUserPost = async (userId, dispatch) => {
     //get post of user
     const res = await axiosClient.get(`/api/post/${userId}/user`);
     // Update post in profile
-    await dispatch(getPostsUser(res.data))
+    await dispatch(getPostsUser(res.data));
     return res.data;
   } catch (error) {
     showToast(error.data.message, "error");
@@ -99,7 +126,7 @@ export const likePostInProfile = async (postId, userId, dispatch) => {
   }
 };
 
-export const unLikePostInProfile  = async (postId, userId, dispatch) => {
+export const unLikePostInProfile = async (postId, userId, dispatch) => {
   try {
     const res = await axiosClient.post(`/api/post/${postId}/unlike`);
 

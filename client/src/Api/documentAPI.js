@@ -25,3 +25,11 @@ export const getUserDocument = async (userId) => {
     showToast(error.data.message, "error");
   }
 };
+// remove doc when edit
+export const deleteDoc = async (docId) => {
+  try {
+    await axiosClient.delete(`/api/document/${docId}`);
+  } catch (error) {
+    showToast(error.data.message, "error");
+  }
+};

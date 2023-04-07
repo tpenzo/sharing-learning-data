@@ -31,6 +31,19 @@ class documentController {
       return res.status(500).json({ message: error.message });
     }
   }
+  //@description     delete doc
+  //@route           [DELETE] /api/document/:docId
+  //@access          verifyToken
+  async deleteDoc(req, res) {
+    const docId = req.params.docId;
+
+    try {
+      await documentModel.deleteOne({ _id: docId });
+      res.status(200).json({ message: "successful!" });
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  }
 }
 
 export default new documentController();

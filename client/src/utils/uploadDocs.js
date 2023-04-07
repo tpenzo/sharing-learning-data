@@ -1,6 +1,11 @@
 import showToast from "../Api/showToast";
 import { storage } from "../firebase";
-import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import {
+  ref,
+  getDownloadURL,
+  uploadBytesResumable,
+  deleteObject,
+} from "firebase/storage";
 
 export const uploadImg = async (image) => {
   try {
@@ -21,21 +26,31 @@ export const uploadDocs = async (files) => {
   try {
     let urls = [];
     for (let file of [...files]) {
-      const storageRef = ref(
-        storage,
-        `document/${file?.name + Math.floor(Math.random() * 10000)}`
-      );
+      const numberRandom = Math.floor(Math.random() * 10000);
+      const storageRef = ref(storage, `document/${file?.name + numberRandom}`);
       const uploadStask = await uploadBytesResumable(storageRef, file);
       const url = await getDownloadURL(uploadStask.ref);
 
       urls.push({
         url,
         type: file?.type,
-        name: file?.name,
+        name: file?.name + numberRandom,
       });
     }
     return urls;
   } catch (error) {
     showToast("Quá trình tải lên xảy ra lỗi", "error");
+  }
+};
+export const removeDocs = async (docs) => {
+  try {
+    for (const doc of docs) {
+      const desertRef = ref(storage, `document/${doc?.name}`);
+      const ok = await deleteObject(desertRef);
+
+      console.log(ok);
+    }
+  } catch (error) {
+    showToast("Quá trình xóa tài liệu xảy ra lỗi", "error");
   }
 };

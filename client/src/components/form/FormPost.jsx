@@ -11,19 +11,21 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 
 import QuillEditor from "./QuillEditor";
-import { createPost } from "../../Api/postAPI";
+import { createPost, editPost } from "../../Api/postAPI";
 import { useDispatch, useSelector } from "react-redux";
-import { uploadDocs } from "../../utils/uploadDocs";
+import { uploadDocs, removeDocs } from "../../utils/uploadDocs";
+import { deleteDoc } from "../../Api/documentAPI";
 
-function CreatePost(props) {
-  const { onClose } = props;
+function FormPost(props) {
+  const { onClose, isEdit, post } = props;
   const [content, setContent] = useState("");
+  const [oldDocs, setOldDocs] = useState([]);
   const [scope, setScope] = useState(false);
   const [docs, setDocs] = useState([]);
   const [loading, setLoading] = useState(false);
-  const {followingCourses, managedCourses, role} = useSelector((state) => state.auth.user)
-
-
+  const { followingCourses, managedCourses, role } = useSelector(
+    (state) => state.auth.user
+  );
 
   const dispatch = useDispatch();
   const handleSelectedFile = (e) => {
@@ -36,42 +38,75 @@ function CreatePost(props) {
   const handleRemoveFile = (index) => {
     setDocs([...docs.filter((doc, i) => i !== index)]);
   };
-  const { values, errors, handleChange, handleBlur, handleSubmit, touched } =
-    useFormik({
-      initialValues: {
-        title: "",
-        description: "",
-        courseId: "",
-      },
-      validationSchema: Yup.object().shape({
-        title: Yup.string()
-          .min(10, "Ít nhất có 10 kí tự")
-          .max(155, "Tối đa 155 kí tự")
-          .required("Vui lòng nhập tiêu đề!"),
-        courseId: scope
-          ? Yup.string().required("Vui lòng chọn lớp học phần!")
-          : Yup.string(),
-        description: Yup.string().max(255, "Tối đa 255 kí tự"),
-      }),
-      onSubmit: async (values) => {
-        setLoading(true);
-        let arr = [];
-        if (docs.length > 0) {
-          arr = await uploadDocs(docs);
-        }
-        values.docs = arr;
-        values.content = content;
-        const { message } = await createPost(values, dispatch);
-        console.log(values);
+  const handleRemoveOldDoc = async (doc, index) => {
+    await removeDocs([doc]);
+    await deleteDoc(doc._id);
+    setOldDocs(oldDocs.filter((doc, i) => i !== index));
+  };
+  const {
+    values,
+    errors,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+    touched,
+    setValues,
+  } = useFormik({
+    initialValues: {
+      title: "",
+      description: "",
+      courseId: "",
+    },
+    validationSchema: Yup.object().shape({
+      title: Yup.string()
+        .min(10, "Ít nhất có 10 kí tự")
+        .max(155, "Tối đa 155 kí tự")
+        .required("Vui lòng nhập tiêu đề!"),
+      courseId: scope
+        ? Yup.string().required("Vui lòng chọn lớp học phần!")
+        : Yup.string(),
+      description: Yup.string().max(255, "Tối đa 255 kí tự"),
+    }),
+    onSubmit: async (values) => {
+      setLoading(true);
+      let arr = [];
+      if (docs.length > 0) {
+        arr = await uploadDocs(docs);
+      }
+      values.docs = arr;
+      values.content = content;
+
+      if (isEdit) {
+        const { message } = await editPost(values, dispatch, post._id);
         if (message === "successful!") {
           setLoading(false);
           onClose();
         }
-      },
-    });
+      } else {
+        const { message } = await createPost(values, dispatch);
+        if (message === "successful!") {
+          setLoading(false);
+          onClose();
+        }
+      }
+    },
+  });
+  useEffect(() => {
+    if (isEdit) {
+      console.log(post);
+      setValues({
+        courseId: post?.course?._id,
+        title: post?.title,
+        description: post?.description,
+      });
+      setScope(post?.course?._id ? true : false);
+      setContent(post?.content);
 
-    console.log(docs)
-  
+      if (post?.docs && post?.docs.length > 0) {
+        setOldDocs(post?.docs);
+      }
+    }
+  }, [post]);
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -83,8 +118,8 @@ function CreatePost(props) {
               size={"md"}
               value={Boolean(scope)}
               onChange={(e) => {
-                if(scope){
-                  values.courseId = ""
+                if (scope) {
+                  values.courseId = "";
                 }
                 setScope(!scope);
               }}
@@ -103,21 +138,37 @@ function CreatePost(props) {
               placeholder="Chọn Lớp học phần"
               size={"md"}
               isDisabled={!scope}
-              value={values.courseId}
+              value={values.courseId || " "}
               onChange={handleChange}
               onBlur={handleBlur}
             >
-              {
-                role === "student" ?
-                (followingCourses && followingCourses.length > 0 &&
-                followingCourses.map((course)=>{
-                  return (<option key={course._id} value={course._id}>{`${course.courseID}-${course.groupNumber.length<2 ? `0${course.groupNumber}` : course.groupNumber}-HK${course.semester} ${course.schoolyear}`}</option>)
-                })) :
-                 (managedCourses && managedCourses.length > 0 &&
-                  managedCourses.map((course)=>{
-                    return (<option key={course._id} value={course._id}>{`${course.courseID}-${course.groupNumber.length<2 ? `0${course.groupNumber}` : course.groupNumber}-HK${course.semester} ${course.schoolyear}`}</option>)
-                  }))
-              }
+              {role === "student"
+                ? followingCourses &&
+                  followingCourses.length > 0 &&
+                  followingCourses.map((course) => {
+                    return (
+                      <option key={course._id} value={course._id}>{`${
+                        course.courseID
+                      }-${
+                        course.groupNumber.length < 2
+                          ? `0${course.groupNumber}`
+                          : course.groupNumber
+                      }-HK${course.semester} ${course.schoolyear}`}</option>
+                    );
+                  })
+                : managedCourses &&
+                  managedCourses.length > 0 &&
+                  managedCourses.map((course) => {
+                    return (
+                      <option key={course._id} value={course._id}>{`${
+                        course.courseID
+                      }-${
+                        course.groupNumber.length < 2
+                          ? `0${course.groupNumber}`
+                          : course.groupNumber
+                      }-HK${course.semester} ${course.schoolyear}`}</option>
+                    );
+                  })}
             </Select>
             {errors.courseId && touched.courseId && scope && (
               <FormErrorMessage>{errors.courseId}</FormErrorMessage>
@@ -128,7 +179,7 @@ function CreatePost(props) {
           <FormLabel>Tiêu đề:</FormLabel>
           <Input
             type="text"
-            value={values.title}
+            value={values.title || ""}
             onChange={handleChange}
             onBlur={handleBlur}
             name="title"
@@ -144,7 +195,7 @@ function CreatePost(props) {
           <FormLabel>Mô tả:</FormLabel>
           <Input
             type="text"
-            value={values.description}
+            value={values.description || ""}
             onChange={handleChange}
             onBlur={handleBlur}
             name="description"
@@ -157,7 +208,7 @@ function CreatePost(props) {
           <FormLabel>Nội dung:</FormLabel>
 
           <QuillEditor
-            content={content}
+            content={content || ""}
             handleChangeQuill={handleChangeQuill}
           />
         </FormControl>
@@ -167,12 +218,18 @@ function CreatePost(props) {
               <box-icon name="file"></box-icon>
               <span className="text-sm">Đính kèm tệp</span>
             </p> */}
-            <div class="w-[101.5%] border-dashed border-2 border-gray-400 py-12 flex flex-col justify-center items-center">
-              <p class="mb-3 font-semibold text-gray-900 flex flex-wrap justify-center">
-                <span>Drag and drop your</span>&nbsp;<span>files anywhere or</span>
+            <div className="w-[101.5%] border-dashed border-2 border-gray-400 py-12 flex flex-col justify-center items-center">
+              <p className="mb-3 font-semibold text-gray-900 flex flex-wrap justify-center">
+                <span>Drag and drop your</span>&nbsp;
+                <span>files anywhere or</span>
               </p>
-              <input id="hidden-input" type="file" multiple class="hidden" />
-              <span class="mt-2 rounded-sm px-3 py-1 bg-gray-200 hover:bg-gray-300 focus:shadow-outline focus:outline-none">
+              <input
+                id="hidden-input"
+                type="file"
+                multiple
+                className="hidden"
+              />
+              <span className="mt-2 rounded-sm px-3 py-1 bg-gray-200 hover:bg-gray-300 focus:shadow-outline focus:outline-none">
                 Upload a file
               </span>
             </div>
@@ -184,7 +241,7 @@ function CreatePost(props) {
               <ul className="flex gap-2">
                 {docs.map((doc, index) => {
                   return (
-                    <li className="relative">
+                    <li className="relative" key={`n${index}`}>
                       <box-icon name="file" size={"48px"}></box-icon>
                       <p
                         onClick={() => {
@@ -212,6 +269,32 @@ function CreatePost(props) {
             multiple
           />
         </FormControl>
+        {oldDocs && oldDocs.length > 0 ? (
+          <div>
+            <span className="text-sm font-bold">
+              {oldDocs.length} Tài liệu hiện tại
+            </span>
+            <ul className="flex gap-2">
+              {oldDocs.map((doc, index) => {
+                console.log(doc);
+                return (
+                  <li className="relative" key={`o${index}`}>
+                    <box-icon name="file" size={"48px"}></box-icon>
+                    <p
+                      onClick={() => {
+                        handleRemoveOldDoc(doc, index);
+                      }}
+                      title={doc.name}
+                      className="absolute top-0 right-0 cursor-pointer bg-gray-500 w-5 h-5 rounded-full flex items-center justify-center"
+                    >
+                      <box-icon name="x" color={"white"}></box-icon>
+                    </p>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        ) : null}
         <Button
           colorScheme="blue"
           className="mt-4 mr-3"
@@ -228,4 +311,4 @@ function CreatePost(props) {
   );
 }
 
-export default CreatePost;
+export default FormPost;

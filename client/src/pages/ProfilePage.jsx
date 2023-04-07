@@ -4,7 +4,7 @@ import ProfilePane from "../components/profile/ProfilePane";
 import PostItem from "../components/post/PostItem";
 import SideNav from "../components/navigation/SideNav";
 import ModalInstance from "../components/modal/ModalInstance";
-import CreatePost from "../components/form/CreatePost";
+import FormPost from "../components/form/FormPost";
 import { Spinner, useDisclosure } from "@chakra-ui/react";
 import PostListProfile from "../components/profile/PostListProfile";
 import { getUserPost } from "../Api/postAPI";
@@ -47,7 +47,7 @@ export default function ProfilePage() {
                 <ModalInstance
                   isOpen={isOpen}
                   onClose={onClose}
-                  modalBody={<CreatePost onClose={onClose} />}
+                  modalBody={<FormPost onClose={onClose} />}
                   modalName={"Tạo bài viết"}
                 />
               </div>
@@ -79,7 +79,7 @@ export default function ProfilePage() {
                 Đã Lưu
               </span>
             </div>
-              <PostListProfile/>
+            <PostListProfile />
           </div>
         </div>
       </div>

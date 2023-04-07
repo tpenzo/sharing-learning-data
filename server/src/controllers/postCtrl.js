@@ -81,14 +81,16 @@ class postController {
       limit: +req.query.limit || 8,
     };
     const { courseId } = req.params;
-    const _id = req.body.courseId
+    const _id = req.body.courseId;
     console.log(courseId, _id);
     try {
-      const postList = await postModel.find({ course: courseId }).skip(pageOptions.page * pageOptions.limit)
-      .limit(pageOptions.limit)
-      .populate("author", "fullName urlAvatar teacherCode studentCode")
-      .sort({ createdAt: -1 })
-      .populate("docs");
+      const postList = await postModel
+        .find({ course: courseId })
+        .skip(pageOptions.page * pageOptions.limit)
+        .limit(pageOptions.limit)
+        .populate("author", "fullName urlAvatar teacherCode studentCode")
+        .sort({ createdAt: -1 })
+        .populate("docs");
       console.log(postList);
       res.status(200).json({ message: "successful!", data: postList });
     } catch (error) {
@@ -166,6 +168,83 @@ class postController {
         { new: true }
       );
       return res.status(200).json({ message: "successful", data: post });
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  }
+  //@description     delete post
+  //@route           [DELETE] /api/post:postId
+  //@params           {postId}
+  //@access          verifyToken
+  async deletePost(req, res) {
+    const postId = req.params.postId;
+    const user = req.userLogin;
+
+    try {
+      if (!postId) return res.status(404).json({ message: "post not found" });
+
+      const post = await postModel
+        .findOne({ _id: postId, author: user._id })
+        .populate("author")
+        .populate("docs");
+
+      // xóa docs
+      if (post.docs && post.docs.length > 0) {
+        for (const doc of post.docs) {
+          await documentModel.deleteOne({ _id: doc._id, user: user._id });
+        }
+      }
+      // xóa post
+      await postModel.deleteOne({
+        _id: postId,
+        author: user._id,
+      });
+      res.status(200).json({ message: "Đã xóa bài viết" });
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  }
+
+  async editPost(req, res) {
+    const postId = req.params.postId;
+    const { title, content, description, courseId, docs } = req.body;
+    const { _id, role } = req.userLogin;
+    try {
+      const refDocs = [];
+      if (docs.length > 0) {
+        for (let file of [...docs]) {
+          const newDocument = new documentModel({
+            title,
+            course: courseId || null,
+            description,
+            name: file.name,
+            urlDoc: file?.url,
+            type: file?.type || null,
+            user: _id,
+          });
+
+          await newDocument.save();
+          refDocs.push(newDocument);
+        }
+      }
+
+      const updatedPost = {
+        author: _id,
+        title,
+        content,
+        course: courseId || null,
+        status: courseId ? "deny" : "posted",
+        docs: refDocs,
+      };
+      await postModel.findOneAndUpdate({ _id: postId }, updatedPost, {
+        new: true,
+      });
+      // get post
+      const post = await postModel
+        .findOne({ _id: postId })
+        .populate("author", "fullName urlAvatar teacherCode studentCode")
+        .populate("docs");
+      res.status(200).json({ message: "successful!", data: post });
     } catch (error) {
       return res.status(500).json({ message: error.message });
     }
