@@ -40,6 +40,22 @@ export const createAccountAPI = async (role, user)=>{
     }
 }
 
+export const createAccountListAPI = async (accounts)=>{
+    try {
+        const response = await axiosClient.post("/api/auth/register/accounts", {accounts});
+        if(response.data?.newAccountList.length > 0){
+            showToast(`Thêm mới thành công ${response.data?.newAccountList.length} tài khoản`, 'success');
+        }
+        if(response.data.rejectAccounts.length > 0){
+            showToast(`Thêm mới thất bại ${response.data.rejectAccounts.length} tài khoản`, 'error');
+        }
+    } catch (error) {
+        // showToast(error.data.message, 'error');
+        // showToast(error, 'error');
+        console.log(error);
+    }
+}
+
 export const removeAccountAPI = async (accountId) =>{
     try {
         const response = await axiosClient.post('/api/auth/account/remove', {accountId})
