@@ -156,7 +156,11 @@ class UserController {
   //@access          verifyToken
   async getAllTeacher(req, res) {
     try {
-      const teacherList = await UserModel.find({ role: "teacher" });
+      let perPage = 40; //courses displayed for each time call API
+      let { page } = req.params || 1;
+      const teacherList = await UserModel.find({ role: "teacher" })
+        .skip(perPage * page - perPage)
+        .limit(perPage);
       return res.status(200).json({ message: "successful", data: teacherList });
     } catch (error) {
       return res.status(500).json({ message: error.message });
@@ -169,7 +173,11 @@ class UserController {
   //@access          verifyToken
   async getAllStudent(req, res) {
     try {
-      const studentList = await UserModel.find({ role: "student" });
+      let perPage = 40; //courses displayed for each time call API
+      let { page } = req.params || 1;
+      const studentList = await UserModel.find({ role: "student" })
+        .skip(perPage * page - perPage)
+        .limit(perPage);
       return res.status(200).json({ message: "successful", data: studentList });
     } catch (error) {
       return res.status(500).json({ message: error.message });
@@ -182,7 +190,11 @@ class UserController {
   //@access          verifyToken
   async getAllMinistry(req, res) {
     try {
-      const ministryList = await UserModel.find({ role: "ministry" });
+      let perPage = 40; //courses displayed for each time call API
+      let { page } = req.params || 1;
+      const ministryList = await UserModel.find({ role: "ministry" })
+        .skip(perPage * page - perPage)
+        .limit(perPage);
       return res
         .status(200)
         .json({ message: "successful", data: ministryList });

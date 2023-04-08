@@ -4,9 +4,9 @@ import { verifyToken } from "../middlewares/auth.js";
 
 const router = express.Router();
 
-router.get("/teacher/all", verifyToken, userCtrl.getAllTeacher);
-router.get("/student/all", verifyToken, userCtrl.getAllStudent);
-router.get("/ministry/all", verifyToken, userCtrl.getAllMinistry);
+router.get("/teacher/all/:page", verifyToken, userCtrl.getAllTeacher);
+router.get("/student/all/:page", verifyToken, userCtrl.getAllStudent);
+router.get("/ministry/all/:page", verifyToken, userCtrl.getAllMinistry);
 router.get("/search", verifyToken, userCtrl.search);
 router.get("/:userId", verifyToken, userCtrl.getUser);
 router.get("/student/:studentCode", verifyToken, userCtrl.getStudentByCode);

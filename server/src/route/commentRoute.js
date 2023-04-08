@@ -13,4 +13,4 @@ router.delete('/:id', verifyToken, commentCtrl.deleteComment)
 router.post('/reply', verifyToken, commentCtrl.replyComment)
 
 
-export default router
+export default router 

@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useRef, useState} from "react";
 import {
   Table,
   Thead,
@@ -11,18 +11,57 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 import RowAccount from "./RowAccount";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { appendMinistryListAccountAPI, appendStudentListAccountAPI, appendTeacherListAccountAPI } from "../../../Api/manageAPI";
+import { current } from "@reduxjs/toolkit";
+import showToast from "../../../Api/showToast";
 function TableAccount(props) {
-  const { accounts, roles, setAccounts, action } = props;
+  const { accounts, roles, setAccounts, action, setFilterResultList } = props;
   const dispatch = useDispatch();
-  let [page, setPage] = useState(2);
+  let [ studentPage, setStudentPage] = useState(2);
+  let [ teacherPage, setTeacherPage] = useState(2);
+  let [ ministryPage, setMinistryPage] = useState(2);
+  const maxPerPage = useRef(40);
   const [isLoading, setIsLoading] = useState(false);
+  const studentAccounts = useSelector((state) => state.manage.studentList);
+  const teacherAccounts = useSelector((state) => state.manage.teacherList);
+  const ministryAccounts = useSelector((state) => state.manage.ministryList);
 
   const showMore = async () => {
-    setIsLoading(true);
+    switch(roles){
+      case "student":
+        setIsLoading(true);
+        await appendStudentListAccountAPI(dispatch, studentPage)
+        setStudentPage(++studentPage);
+        if(studentPage - 1 > accounts.length/maxPerPage.current){
+          setStudentPage(Math.floor(accounts.length/maxPerPage.current) + 1)
+        }
+        setAccounts(studentAccounts);
+        setIsLoading(false);
+      break;
 
-    setPage(++page);
-    setIsLoading(false);
+      case "teacher":
+        setIsLoading(true);
+        await appendTeacherListAccountAPI(dispatch, teacherPage)
+        setTeacherPage(++teacherPage);
+        if(teacherPage - 1 > accounts.length/maxPerPage.current){
+          setTeacherPage(Math.floor(accounts.length/maxPerPage.current) + 1)
+        }
+        setAccounts(teacherAccounts);
+        setIsLoading(false);
+      break;
+
+      case "ministry":
+        setIsLoading(true);
+        await appendMinistryListAccountAPI(dispatch, ministryPage)
+        setMinistryPage(++ministryPage);
+        if(ministryPage - 1 > accounts.length/maxPerPage.current){
+          setMinistryPage(Math.floor(accounts.length/maxPerPage.current) + 1)
+        }
+        setAccounts(ministryAccounts);
+        setIsLoading(false);
+      break;
+    }
   };
   return (
     <TableContainer className="w-full" overflowX="unset" overflowY="auto">
@@ -30,7 +69,7 @@ function TableAccount(props) {
         <Thead position={"sticky"} top={0} zIndex="docked">
           <Tr className="bg-blue-400">
             <Th color={"white"}>STT</Th>
-            <Th color={"white"}>{roles === "student" ? "MSSV" : "MSCB"}</Th>
+            <Th color={"white"}>{roles === "teacher" ? "MSCB" : roles === "student" ? "MSSV" : "Mã số"}</Th>
             <Th color={"white"}>Họ và tên</Th>
             <Th color={"white"}>Loại tài khoản</Th>
             <Th color={"white"}>Tùy chọn</Th>
@@ -51,7 +90,7 @@ function TableAccount(props) {
               );
             })}
           {
-            accounts && accounts.length > 15 &&
+           action === "modify" && accounts && accounts.length > 15 &&
             <Tr>
               <Td colSpan={"9"} textAlign={"center"}>
             <Button
