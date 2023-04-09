@@ -182,7 +182,7 @@ class AuthControlller {
           }
         };
     };
-    console.log(approveAccounts.length, rejectAccounts.length);
+
        try {
         if (approveAccounts) {
           const newAccountList = await UserModel.create(approveAccounts);

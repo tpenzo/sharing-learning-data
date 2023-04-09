@@ -56,6 +56,7 @@ function ManageAccount() {
     handleSearch();
   }, [searchKey]);
 
+  //get first data
   useEffect(() => {
     getStudentListAccountAPI(dispatch).then((response)=>{
       setAccounts(response);
@@ -75,24 +76,27 @@ function ManageAccount() {
   };
 
   //fetch data when change tab
-  useEffect(() => {
+  useEffect( () => {
     switch (tab) {
       case "student":
         getStudentListAccountAPI(dispatch);
         setAccounts(studentAccounts);
-        break;
+        setFilterResultList(studentAccounts);
+      break;
 
       case "teacher":
         getTeacherListAccountAPI(dispatch);
         setAccounts(teacherAccounts);
-        break;
+        setFilterResultList(teacherAccounts)
+      break;
 
       case "ministry":
         getMinistryListAccountAPI(dispatch);
         setAccounts(ministryAccounts);
-        break;
+        setFilterResultList(ministryAccounts);
+      break;
     }
-  }, [tab, accounts]);
+  }, [accounts, tab]);
 
   return (
     <div className="container mx-auto h-screen items-center self-center flex flex-col">
@@ -151,8 +155,8 @@ function ManageAccount() {
                 onChange={(e) => {
                   setSearchKey(e.target.value);
                 }}
-                className="w-full py-2 px-10 border-gray-200 border outline-none rounded-lg bg-gray-100 focus:outline-fourth-blue peer"
-                type="text"
+                className="w-full py-2 pl-10 pr-3 border-gray-200 border outline-none rounded-lg bg-gray-100 focus:outline-fourth-blue peer"
+                type="search"
                 placeholder="Tìm kiếm"
               />
               {closeX && (
