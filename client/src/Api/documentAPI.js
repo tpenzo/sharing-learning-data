@@ -30,6 +30,15 @@ export const deleteDoc = async (docId) => {
   try {
     await axiosClient.delete(`/api/document/${docId}`);
   } catch (error) {
-    showToast(error.data.message, "error");
+    showToast(error.message, "error");
+  }
+};
+export const getCourseDocList = async (courseId, dispatch) => {
+  try {
+    const res = await axiosClient.get(`/api/document/${courseId}/course`);
+    console.log(res);
+    dispatch(setAllDocument(res));
+  } catch (error) {
+    showToast(error.message, "error");
   }
 };

@@ -1,69 +1,88 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-   token: null,
-   user: null,
+  token: null,
+  user: null,
 };
 
 export const authSlice = createSlice({
-    name: 'authSlice',
-    initialState,
-    reducers: {
-        authSaveData: (state, actions) => {
-            state.user = actions.payload.user
-            state.token = actions.payload.accessToken
-        },
-        updateNewToken: (state, actions) => {
-            state.token= actions.payload
-        },
-        // User takes action
-        followUser(state, action){
-            state.user = {
-                ...state.user, 
-                following: [...state.user.following, action.payload]
-            }
-        },
-        unfollowUser(state, action){
-            state.user = {
-                ...state.user, 
-                following: state.user.following.filter(item => item !== action.payload)
-            }
-        },
+  name: "authSlice",
+  initialState,
+  reducers: {
+    authSaveData: (state, actions) => {
+      state.user = actions.payload.user;
+      state.token = actions.payload.accessToken;
+    },
+    updateNewToken: (state, actions) => {
+      state.token = actions.payload;
+    },
+    // User takes action
+    followUser(state, action) {
+      state.user = {
+        ...state.user,
+        following: [...state.user.following, action.payload],
+      };
+    },
+    unfollowUser(state, action) {
+      state.user = {
+        ...state.user,
+        following: state.user.following.filter(
+          (item) => item !== action.payload
+        ),
+      };
+    },
 
-        // socket perform action
-        updateFollowerUser(state, action){
-            state.user = {
-                ...state.user, 
-                follower: [...state.user.follower, action.payload]
-            }
-        },
-        updateUnfollowUser(state, action){
-            state.user = {
-                ...state.user, 
-                follower: state.user.follower.filter(item => item !== action.payload)
-            }
-        },
+    // socket perform action
+    updateFollowerUser(state, action) {
+      state.user = {
+        ...state.user,
+        follower: [...state.user.follower, action.payload],
+      };
+    },
+    updateUnfollowUser(state, action) {
+      state.user = {
+        ...state.user,
+        follower: state.user.follower.filter((item) => item !== action.payload),
+      };
+    },
 
-        updateUser(state, action){
-            state.user = {
-                ...state.user, 
-                ...action.payload
-            }
-        },
+    updateUser(state, action) {
+      state.user = {
+        ...state.user,
+        ...action.payload,
+      };
+    },
 
-        resetAuthSlice: () => initialState
-    }
-})
+    addBookmarkUser: (state, actions) => {
+      state.user = {
+        ...state.user,
+        bookmarkPost: [...state.user.bookmarkPost, actions.payload],
+      };
+    },
 
-export const { 
-    authSaveData, 
-    updateNewToken, 
-    resetAuthSlice, 
-    followUser, 
-    unfollowUser, 
-    updateFollowerUser,
-    updateUnfollowUser,
-    updateUser
-} = authSlice.actions
+    unBookmarkUser: (state, actions) => {
+      state.user = {
+        ...state.user,
+        bookmarkPost: state.user.bookmarkPost.filter(
+          (id) => id !== actions.payload
+        ),
+      };
+    },
+    resetAuthSlice: () => initialState,
+  },
+});
+
+export const {
+  authSaveData,
+  updateNewToken,
+  resetAuthSlice,
+  followUser,
+  unfollowUser,
+  updateFollowerUser,
+  updateUnfollowUser,
+  updateUser,
+  addBookmarkUser,
+  unBookmarkUser,
+} = authSlice.actions;
 
 export default authSlice.reducer;

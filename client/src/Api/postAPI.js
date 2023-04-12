@@ -8,6 +8,7 @@ import {
   getCoursePosts,
   removePost,
   saveEditPost,
+  saveUpdateStatusPost,
 } from "../redux/PostSlice";
 import showToast from "./showToast";
 import { fetchCmtsAPI } from "./commentAPI";
@@ -51,18 +52,31 @@ export const editPost = async (payload, dispatch, postId) => {
     showToast(error.data.message, "error");
   }
 };
+export const updateStatusPost = async (dispatch, postId, payload) => {
+  try {
+    const res = await axiosClient.put(`/api/post/${postId}/status`, payload);
+
+    await dispatch(saveUpdateStatusPost({ postId, post: res.data }));
+    showToast(res.message, "success");
+    return res;
+  } catch (error) {
+    showToast(error.data.message, "error");
+  }
+};
 export const getAllPost = async (params, dispatch) => {
   try {
-    const res = await axiosClient.get("/api/post", params);
+    const res = await axiosClient.get("/api/post", { params });
     await dispatch(getPosts(res));
   } catch (error) {
     showToast(error.data.message, "error");
   }
 };
 
-export const getCoursePostAPI = async (courseId, dispatch) => {
+export const getCoursePostAPI = async (courseId, params, dispatch) => {
   try {
-    const res = await axiosClient.get(`/api/post/course/${courseId}`);
+    const res = await axiosClient.get(`/api/post/course/${courseId}`, {
+      params,
+    });
     await dispatch(getCoursePosts(res));
   } catch (error) {
     // showToast(error.data.message, "error");

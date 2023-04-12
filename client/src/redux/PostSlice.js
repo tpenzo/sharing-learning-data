@@ -5,6 +5,7 @@ const initialState = {
   postCourseList: [],
   postItem: {},
   commentsPostItem: [],
+  totalPost: null,
 };
 
 const PostSlice = createSlice({
@@ -16,7 +17,8 @@ const PostSlice = createSlice({
     },
     resetPostSlice: () => initialState,
     getPosts: (state, actions) => {
-      state.postList = actions.payload.data;
+      state.postList = actions.payload.data.postList;
+      state.totalPost = actions.payload.data.countPost;
     },
 
     getCoursePosts: (state, actions) => {
@@ -34,6 +36,14 @@ const PostSlice = createSlice({
     },
     saveEditPost: (state, actions) => {
       state.postList = state.postList.map((post) => {
+        if (post._id === actions.payload.postId) {
+          return actions.payload.post;
+        }
+        return post;
+      });
+    },
+    saveUpdateStatusPost: (state, actions) => {
+      state.postCourseList = state.postCourseList.map((post) => {
         if (post._id === actions.payload.postId) {
           return actions.payload.post;
         }
@@ -221,6 +231,7 @@ export const {
   removeFavoriteList,
   removePost,
   saveEditPost,
+  saveUpdateStatusPost,
 
   // Comment
   likeComment,

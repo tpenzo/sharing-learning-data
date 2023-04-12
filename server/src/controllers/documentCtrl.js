@@ -44,6 +44,19 @@ class documentController {
       return res.status(500).json({ message: error.message });
     }
   }
+  //@description     get doc by course
+  //@route           [GET] /api/document/:courseId/course
+  //@access          verifyToken
+  async getCourseDoc(req, res) {
+    const courseId = req.params.courseId;
+    const condition = { course: courseId };
+    try {
+      const postList = await documentModel.find(condition);
+      res.status(200).json({ message: "successful!", data: postList });
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  }
 }
 
 export default new documentController();
