@@ -151,7 +151,7 @@ class UserController {
   }
 
   //@description     get All teacher Info
-  //@route           [GET] /api/teacher/all
+  //@route           [GET] /api/teacher/all/page
   //@body            {}
   //@access          verifyToken
   async getAllTeacher(req, res) {
@@ -167,8 +167,21 @@ class UserController {
     }
   }
 
+    //@description    get All teacher Info
+  //@route           [GET] /api/teacher/all
+  //@body            {}
+  //@access          verifyToken
+  async getAllTeacherList(req, res) {
+    try {
+      const teacherList = await UserModel.find({ role: "teacher" })
+      return res.status(200).json({ message: "successful", data: teacherList });
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  }
+
   //@description     get All student Info
-  //@route           [GET] /api/student/all
+  //@route           [GET] /api/student/all/page
   //@body            {}
   //@access          verifyToken
   async getAllStudent(req, res) {

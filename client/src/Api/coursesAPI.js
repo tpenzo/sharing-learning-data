@@ -72,6 +72,7 @@ export const getTeacherListAPI = async (dispatch) => {
         // Call API
        const response = await axiosClient.get(`/api/user/teacher/all`);
        dispatch(setTeacherList(response.data))
+       return response.data;
     } catch (error) {
        showToast(error.data.message, 'error')
     }

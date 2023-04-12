@@ -5,6 +5,7 @@ import { verifyToken } from "../middlewares/auth.js";
 const router = express.Router();
 
 router.get("/teacher/all/:page", verifyToken, userCtrl.getAllTeacher);
+router.get("/teacher/all/", verifyToken, userCtrl.getAllTeacherList);
 router.get("/student/all/:page", verifyToken, userCtrl.getAllStudent);
 router.get("/ministry/all/:page", verifyToken, userCtrl.getAllMinistry);
 router.get("/search", verifyToken, userCtrl.search);
