@@ -1,6 +1,6 @@
 import React from "react";
 import { useDisclosure } from "@chakra-ui/react";
-import CreatePost from "../form/CreatePost";
+import FormPost from "../form/FormPost";
 import ModalInstance from "../modal/ModalInstance";
 import ListOfUser from "./ListOfUser";
 import PopularCoursesList from "./PopularCoursesList";
@@ -16,12 +16,12 @@ function InfoPane() {
             onClick={onOpen}
             className="flex flex-row items-center justify-center mx-auto bg-third-blue w-[80%] mt-10 2xl:mt-14 p-2 2xl:p-3 text-center text-white rounded-xl hover:bg-fourth-blue cursor-pointer"
           >
-              <span className=" translate-y-1">
+            <span className=" translate-y-1">
               <box-icon size="sm" color="white" name="plus"></box-icon>
-              </span>
+            </span>
             <span className="block font-semibold text-base pb-1 pr-2 ml-1 mt-2">
               Đăng bài
-        </span>
+            </span>
           </div>
         </div>
 
@@ -35,7 +35,7 @@ function InfoPane() {
       <ModalInstance
         isOpen={isOpen}
         onClose={onClose}
-        modalBody={<CreatePost onClose={onClose} />}
+        modalBody={<FormPost onClose={onClose} />}
         modalName={"Tạo bài viết"}
       />
     </>

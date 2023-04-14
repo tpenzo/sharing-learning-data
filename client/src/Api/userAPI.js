@@ -1,4 +1,10 @@
-import { followUser, unfollowUser, updateUser } from "../redux/AuthSlice.js";
+import {
+  followUser,
+  unfollowUser,
+  updateUser,
+  addBookmarkUser,
+  unBookmarkUser,
+} from "../redux/AuthSlice.js";
 import {
   profileGetUser,
   profileUpdateFollower,
@@ -46,7 +52,26 @@ export const unFollowUserAPI = async (userId, dispatch, socket) => {
     showToast(error.data.message, "error");
   }
 };
-
+export const addBookmarkAPI = async (postId, dispatch) => {
+  try {
+    // Call API
+    const res = await axiosClient.post("/api/user/bookmark");
+    await dispatch(addBookmarkUser(postId));
+    showToast("Đã lưu bài viết", "success");
+  } catch (error) {
+    showToast(error.message, "error");
+  }
+};
+export const unBookmarkAPI = async (postId, dispatch) => {
+  try {
+    // Call API
+    const res = await axiosClient.post("/api/user/unbookmark");
+    await dispatch(unBookmarkUser(postId));
+    showToast("Bỏ lưu bài viết", "error");
+  } catch (error) {
+    showToast(error.message, "error");
+  }
+};
 export const searchAPI = async (value) => {
   try {
     const res = await axiosClient.get(`/api/user/search?info=${value}`);
@@ -58,30 +83,31 @@ export const searchAPI = async (value) => {
 
 export const updateUserAPI = async (userId, data, dispatch) => {
   try {
-    
     const res = await axiosClient.post(`/api/user/${userId}/update`, data);
-    // update 
-    await dispatch(updateUser(data))
+    // update
+    await dispatch(updateUser(data));
 
-    showToast("Chỉnh sửa thành công", 'success')
+    showToast("Chỉnh sửa thành công", "success");
   } catch (error) {
-    console.log(error)
+    console.log(error);
     // showToast(error, "error");
   }
 };
 
-
 export const changePasswordAPI = async (userId, data) => {
   try {
     console.log(data);
-    const response = await axiosClient.post(`/api/user/${userId}/update/password`, data);
+    const response = await axiosClient.post(
+      `/api/user/${userId}/update/password`,
+      data
+    );
     showToast("Thay đổi mật khẩu thành công", "success");
-    return response
+    return response;
   } catch (error) {
-    if(error.status === 400){
-      showToast("Mật khẩu hiện tại không đúng!Vui lòng thử lại", "error")
-    } else if(error.status === 404){
-      showToast("Không tìm thấy người dùng!", "error")
+    if (error.status === 400) {
+      showToast("Mật khẩu hiện tại không đúng!Vui lòng thử lại", "error");
+    } else if (error.status === 404) {
+      showToast("Không tìm thấy người dùng!", "error");
     }
   }
 };

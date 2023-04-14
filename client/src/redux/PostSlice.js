@@ -1,11 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    postList: [],
-    postCourseList: [],
-    postItem: {},
-    commentsPostItem: [],
-  }
+  postList: [],
+  postCourseList: [],
+  postItem: {},
+  commentsPostItem: [],
+  totalPost: null,
+};
 
 const PostSlice = createSlice({
   name: "post",
@@ -16,7 +17,8 @@ const PostSlice = createSlice({
     },
     resetPostSlice: () => initialState,
     getPosts: (state, actions) => {
-      state.postList = actions.payload.data;
+      state.postList = actions.payload.data.postList;
+      state.totalPost = actions.payload.data.countPost;
     },
 
     getCoursePosts: (state, actions) => {
@@ -27,7 +29,27 @@ const PostSlice = createSlice({
       state.postItem = actions.payload.post;
       state.commentsPostItem = actions.payload.comments;
     },
-
+    removePost: (state, actions) => {
+      state.postList = state.postList.filter(
+        (post) => post._id !== actions.payload
+      );
+    },
+    saveEditPost: (state, actions) => {
+      state.postList = state.postList.map((post) => {
+        if (post._id === actions.payload.postId) {
+          return actions.payload.post;
+        }
+        return post;
+      });
+    },
+    saveUpdateStatusPost: (state, actions) => {
+      state.postCourseList = state.postCourseList.map((post) => {
+        if (post._id === actions.payload.postId) {
+          return actions.payload.post;
+        }
+        return post;
+      });
+    },
     addFavoriteList: (state, actions) => {
       const { postId, userId, res } = actions.payload;
       state.postList = state.postList.map((post) => {
@@ -207,6 +229,9 @@ export const {
   getCoursePosts,
   addFavoriteList,
   removeFavoriteList,
+  removePost,
+  saveEditPost,
+  saveUpdateStatusPost,
 
   // Comment
   likeComment,
@@ -219,6 +244,6 @@ export const {
   createReplyComment,
   deleteReplyComment,
   updateReplyComment,
-  resetPostSlice
+  resetPostSlice,
 } = PostSlice.actions;
 export default PostSlice.reducer;

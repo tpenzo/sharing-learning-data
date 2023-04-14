@@ -27,13 +27,14 @@ class postController {
           refDocs.push(newDocument);
         }
       }
-
+      let status = "posted";
+      status = role === "student" && courseId ? "pending" : "posted";
       const newPost = new postModel({
         author: _id,
         title,
         content,
         course: courseId || null,
-        status: courseId ? "deny" : "posted",
+        status,
         docs: refDocs,
       });
       await newPost.save();
@@ -54,18 +55,21 @@ class postController {
   async getAllPost(req, res) {
     const pageOptions = {
       page: +req.query.page || 0,
-      limit: +req.query.limit || 8,
+      limit: +req.query.limit || 6,
     };
+    const showMore = (pageOptions.page + 1) * pageOptions.limit;
     try {
+      const countPost = await postModel.countDocuments({ course: null });
       const postList = await postModel
-        .find()
-        .skip(pageOptions.page * pageOptions.limit)
-        .limit(pageOptions.limit)
+        .find({ course: null })
+        .skip(0)
+        .limit(showMore)
         .populate("author", "fullName urlAvatar teacherCode studentCode")
         .sort({ createdAt: -1 })
         .populate("docs");
-
-      res.status(200).json({ message: "successful!", data: postList });
+      res
+        .status(200)
+        .json({ message: "successful!", data: { postList, countPost } });
     } catch (error) {
       return res.status(500).json({ message: error.message });
     }
@@ -76,19 +80,23 @@ class postController {
   //@query           {page,limit}
   //@access          verifyToken
   async getCoursePost(req, res) {
+    const status = req.query.status;
     const pageOptions = {
       page: +req.query.page || 0,
       limit: +req.query.limit || 8,
     };
     const { courseId } = req.params;
-    const _id = req.body.courseId
+    const _id = req.body.courseId;
     console.log(courseId, _id);
     try {
-      const postList = await postModel.find({ course: courseId }).skip(pageOptions.page * pageOptions.limit)
-      .limit(pageOptions.limit)
-      .populate("author", "fullName urlAvatar teacherCode studentCode")
-      .sort({ createdAt: -1 })
-      .populate("docs");
+      const postList = await postModel
+        .find({ course: courseId, status })
+        .skip(pageOptions.page * pageOptions.limit)
+        .limit(pageOptions.limit)
+        .populate("author", "fullName urlAvatar teacherCode studentCode")
+        .sort({ createdAt: -1 })
+        .populate("docs")
+        .populate("course");
       console.log(postList);
       res.status(200).json({ message: "successful!", data: postList });
     } catch (error) {
@@ -166,6 +174,97 @@ class postController {
         { new: true }
       );
       return res.status(200).json({ message: "successful", data: post });
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  }
+  //@description     delete post
+  //@route           [DELETE] /api/post:postId
+  //@params           {postId}
+  //@access          verifyToken
+  async deletePost(req, res) {
+    const postId = req.params.postId;
+    const user = req.userLogin;
+
+    try {
+      if (!postId) return res.status(404).json({ message: "post not found" });
+
+      const post = await postModel
+        .findOne({ _id: postId, author: user._id })
+        .populate("author")
+        .populate("docs");
+
+      // xóa docs
+      if (post.docs && post.docs.length > 0) {
+        for (const doc of post.docs) {
+          await documentModel.deleteOne({ _id: doc._id, user: user._id });
+        }
+      }
+      // xóa post
+      await postModel.deleteOne({
+        _id: postId,
+        author: user._id,
+      });
+      res.status(200).json({ message: "Đã xóa bài viết" });
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  }
+
+  async editPost(req, res) {
+    const postId = req.params.postId;
+    const { title, content, description, courseId, docs } = req.body;
+    const { _id, role } = req.userLogin;
+    try {
+      const refDocs = [];
+      if (docs.length > 0) {
+        for (let file of [...docs]) {
+          const newDocument = new documentModel({
+            title,
+            course: courseId || null,
+            description,
+            name: file.name,
+            urlDoc: file?.url,
+            type: file?.type || null,
+            user: _id,
+          });
+
+          await newDocument.save();
+          refDocs.push(newDocument);
+        }
+      }
+
+      const updatedPost = {
+        author: _id,
+        title,
+        content,
+        course: courseId || null,
+        status: courseId ? "deny" : "posted",
+        docs: refDocs,
+      };
+      await postModel.findOneAndUpdate({ _id: postId }, updatedPost, {
+        new: true,
+      });
+      // get post
+      const post = await postModel
+        .findOne({ _id: postId })
+        .populate("author", "fullName urlAvatar teacherCode studentCode")
+        .populate("docs");
+      res.status(200).json({ message: "successful!", data: post });
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  }
+  async updateStatusPost(req, res) {
+    const postId = req.params.postId;
+    const { status } = req.body;
+    try {
+      const updatedPost = await postModel.findByIdAndUpdate(
+        { _id: postId },
+        { status },
+        { new: true }
+      );
+      res.status(200).json({ message: "successful!", data: updatedPost });
     } catch (error) {
       return res.status(500).json({ message: error.message });
     }
