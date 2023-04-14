@@ -4,7 +4,8 @@ const initialState = {
   courseList: [],
   teacherList: [],
   currentCourse: {},
-  selectedCourse: null
+  selectedCourse: null,
+  coursesCount: 0,
 };
 
 export const allCoursesSlice = createSlice({
@@ -23,6 +24,9 @@ export const allCoursesSlice = createSlice({
     setCurrentCourse: (state, action) => {
       state.currentCourse = action.payload;
     },
+    setCoursesCount: (state, action) => {
+      state.coursesCount = action.payload
+    },
     selectCourse: (state, action) =>{
       state.selectedCourse = action.payload
     },
@@ -40,7 +44,8 @@ export const {
   resetAllCoursesSlice,
   selectCourse,
   resetSelectCourse,
-  appendCoursesData
+  appendCoursesData,
+  setCoursesCount
 } = allCoursesSlice.actions;
 
 export default allCoursesSlice.reducer;

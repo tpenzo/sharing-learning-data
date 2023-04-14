@@ -1,23 +1,29 @@
 import React, { useRef, useState } from "react";
 import { Table, Thead, Tbody, Tr, Th, Td, TableContainer, Button } from "@chakra-ui/react";
 
-
 import RowCourse from "./RowCourse";
 import { appendCourseList } from "../../../Api/coursesAPI";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import showToast from "../../../Api/showToast";
 function TableCourse(props) {
   const { courses } = props;
   const dispatch = useDispatch();
+  const {coursesCount} = useSelector(state => state.allCoursesList)
   let [page, setPage] = useState(2);
   //max element show per loading time
   const maxPerPage = useRef(15);
   const [isLoading, setIsLoading] = useState(false)
 
   const showMore = async ()=>{
-    setIsLoading(true);
+    console.log(courses.length, coursesCount);
+    if(courses.length < coursesCount){
+      setIsLoading(true);
     await appendCourseList(dispatch, page);
     setPage(++page);
     setIsLoading(false)
+    } else {
+      showToast("Không còn khoá học nào nữa", "warning")
+    }
   }
 
   return (

@@ -9,16 +9,16 @@ class coursesController {
   //@access          verifyToken
   async getAllCourses(req, res) {
     try {
+      const coursesCount = await courseModel.countDocuments();
       let perPage = 15; //courses displayed for each time call API
       let {page} = req.params || 1;
-
       const coursesList = await courseModel
         .find()
         .skip(perPage * page - perPage)
         .limit(perPage)
-        .populate("teacher", "fullName");
-
-      return res.status(200).json({ message: "successful", data: coursesList });
+        .populate("teacher", "fullName")
+        .sort({ createdAt: -1 });
+      return res.status(200).json({ message: "successful", data: coursesList, coursesCount });
     } catch (error) {
       return res.status(500).json({ message: error.message });
     }

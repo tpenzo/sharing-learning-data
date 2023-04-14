@@ -33,7 +33,6 @@ const reducer = combineReducers({
   post: PostSlice,
   document: DocumentSlice,
   socketInstance: SocketSlice,
-  allCoursesList: AllCoursesSlice,
   chat: ChatSlice,
 });
 
