@@ -27,7 +27,7 @@ function ModalAddAccountByFile(props) {
   const studentAccounts = useSelector((state) => state.manage.studentList);
   const teacherAccounts = useSelector((state) => state.manage.teacherList);
   const ministryAccounts = useSelector((state) => state.manage.ministryList);
-  const { onClose, isOpen, setAccounts, tab } = props;
+  const { onClose, isOpen, setAccounts, tab, setVersion, version } = props;
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
 
@@ -42,6 +42,8 @@ function ModalAddAccountByFile(props) {
             console.log(account.role);
           });
           setAccountListImported(rows);
+          //reset input file
+          e.target.value = null;
         } else {
           showToast(
             "Vui lòng chọn lại tập tin đúng định dạng để nhập",
@@ -87,6 +89,8 @@ function ModalAddAccountByFile(props) {
       await createAccountListAPI(accountListStandarlize)
       setIsLoading(false)
       reloadAccountList()
+      //change version key of account table to reset component
+      setVersion(version + 1)
     } else {
       showToast("Vui lòng chọn tập tin dữ liệu", "warning");
     }
@@ -163,7 +167,7 @@ function ModalAddAccountByFile(props) {
             </div>
             <div className=" mt-4 max-h-96 overflow-y-auto w-full rounded-lg flex justify-center flex-col">
               <span className="text-sm font-medium mb-3">
-                Danh sách tài khoản
+                {`Danh sách tài khoản (${accountListImported.length || 0})`}
               </span>
               {accountListImported.length === 0 ? (
                 <div className="text-lg text-gray-400 text-center py-4 ">

@@ -4,6 +4,9 @@ const initialState = {
     studentList: [],
     teacherList: [],
     ministryList: [],
+    studentListTotal: 0,
+    teacherListTotal: 0,
+    ministryListTotal: 0,
 };
 
 export const manageSlice = createSlice({
@@ -28,6 +31,15 @@ export const manageSlice = createSlice({
         appendMinistryList: (state, action) =>{
             state.ministryList = [...state.ministryList, ...action.payload]
         },
+        setStudentListTotal: (state, action) =>{
+            state.studentListTotal = action.payload
+        },
+        setTeacherListTotal: (state, action) =>{
+            state.teacherListTotal = action.payload
+        },
+        setMinistryListTotal: (state, action) =>{
+            state.ministryListTotal = action.payload
+        },
         resetManageSlice: () => initialState
     }
 });
@@ -41,6 +53,9 @@ export const {
   appendMinistryList,
   appendStudentList,
   appendTeacherList,
+  setMinistryListTotal,
+  setStudentListTotal,
+  setTeacherListTotal
 } = manageSlice.actions;
 
 export default manageSlice.reducer

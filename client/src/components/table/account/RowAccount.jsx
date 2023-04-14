@@ -5,7 +5,7 @@ import { useDisclosure } from "@chakra-ui/react";
 import { Tr, Td, Select, Button, SkeletonText } from "@chakra-ui/react";
 import ModalAddAccountForm from "../../modal/AddAccountForm";
 function RowAccount(props) {
-  const { account, stt, setAccounts, action } = props;
+  const { account, stt, setAccounts, action,version , setVersion } = props;
   const [isOption, setIsOption] = useState(true);
   const [types, setTypes] = useState(["student", "ministry", "teacher"]);
   const showAcceptDeleteAccount = useDisclosure();
@@ -40,10 +40,18 @@ function RowAccount(props) {
       )}
       <Td>{account?.fullName}</Td>
       <Td paddingLeft={"32px"}>
-        {account?.role === "student"? "Sinh viên" : account?.role === "teacher" ? "Giảng viên" : account?.role === "ministry"? "Giáo vụ" : "Không có"}
+        {account?.role === "student"
+          ? "Sinh viên"
+          : account?.role === "teacher"
+          ? "Giảng viên"
+          : account?.role === "ministry"
+          ? "Giáo vụ"
+          : "Không có"}
 
         {/* modal accept remove account */}
         <ShowDialog
+          version={version}
+          setVersion={setVersion}
           setAccounts={setAccounts}
           account={account}
           action={"removeAccount"}
@@ -72,30 +80,34 @@ function RowAccount(props) {
       </Td>
       <Td>
         {isOption ? (
-          action ==="view" ?
-          (<ul className="flex items-center justify-center gap-2">
-          <li onClick={modifyAccountForm.onOpen}>
-            <span title="Xem thông tin chi tiết" className="-ml-7 cursor-pointer">
-              <box-icon name="show-alt"></box-icon>
-            </span>
-          </li>
-        </ul>)
-          : 
-          (<ul className="flex items-center gap-2">
-            <li
-              onClick={showAcceptDeleteAccount.onOpen}
-              className="cursor-pointer"
-            >
-              <span>
-                <box-icon color="gray" name="trash"></box-icon>
-              </span>
-            </li>
-            <li onClick={modifyAccountForm.onOpen} className="cursor-pointer">
-              <span>
-                <box-icon color="gray" name="pencil"></box-icon>
-              </span>
-            </li>
-          </ul> )
+          action === "view" ? (
+            <ul className="flex items-center justify-center gap-2">
+              <li onClick={modifyAccountForm.onOpen}>
+                <span
+                  title="Xem thông tin chi tiết"
+                  className="-ml-7 cursor-pointer"
+                >
+                  <box-icon name="show-alt"></box-icon>
+                </span>
+              </li>
+            </ul>
+          ) : (
+            <ul className="flex items-center gap-2">
+              <li
+                onClick={showAcceptDeleteAccount.onOpen}
+                className="cursor-pointer"
+              >
+                <span>
+                  <box-icon color="gray" name="trash"></box-icon>
+                </span>
+              </li>
+              <li onClick={modifyAccountForm.onOpen} className="cursor-pointer">
+                <span>
+                  <box-icon color="gray" name="pencil"></box-icon>
+                </span>
+              </li>
+            </ul>
+          )
         ) : (
           <div className="flex items-center gap-2">
             <Button

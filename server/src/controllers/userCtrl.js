@@ -156,12 +156,14 @@ class UserController {
   //@access          verifyToken
   async getAllTeacher(req, res) {
     try {
+     const teacherListCount = await UserModel.countDocuments({ role: "teacher" });
       let perPage = 40; //courses displayed for each time call API
       let { page } = req.params || 1;
       const teacherList = await UserModel.find({ role: "teacher" })
         .skip(perPage * page - perPage)
-        .limit(perPage);
-      return res.status(200).json({ message: "successful", data: teacherList });
+        .limit(perPage)
+        .sort({ createdAt: -1 });
+      return res.status(200).json({ message: "successful", data: {teacherList, teacherListCount} });
     } catch (error) {
       return res.status(500).json({ message: error.message });
     }
@@ -186,12 +188,14 @@ class UserController {
   //@access          verifyToken
   async getAllStudent(req, res) {
     try {
+      const studentListCount = await UserModel.countDocuments({ role: "student" });
       let perPage = 40; //courses displayed for each time call API
       let { page } = req.params || 1;
       const studentList = await UserModel.find({ role: "student" })
         .skip(perPage * page - perPage)
-        .limit(perPage);
-      return res.status(200).json({ message: "successful", data: studentList });
+        .limit(perPage)
+        .sort({ createdAt: -1 });
+      return res.status(200).json({ message: "successful", data: {studentList, studentListCount} });
     } catch (error) {
       return res.status(500).json({ message: error.message });
     }
@@ -203,14 +207,16 @@ class UserController {
   //@access          verifyToken
   async getAllMinistry(req, res) {
     try {
+      const ministryListCount = await UserModel.countDocuments({ role: "ministry" });
       let perPage = 40; //courses displayed for each time call API
       let { page } = req.params || 1;
       const ministryList = await UserModel.find({ role: "ministry" })
         .skip(perPage * page - perPage)
-        .limit(perPage);
+        .limit(perPage)
+        .sort({ createdAt: -1 });
       return res
         .status(200)
-        .json({ message: "successful", data: ministryList });
+        .json({ message: "successful", data: {ministryList, ministryListCount} });
     } catch (error) {
       return res.status(500).json({ message: error.message });
     }

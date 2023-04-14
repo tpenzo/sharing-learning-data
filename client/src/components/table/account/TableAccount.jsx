@@ -16,50 +16,58 @@ import { appendMinistryListAccountAPI, appendStudentListAccountAPI, appendTeache
 import { current } from "@reduxjs/toolkit";
 import showToast from "../../../Api/showToast";
 function TableAccount(props) {
-  const { accounts, roles, setAccounts, action, setFilterResultList } = props;
+  const { accounts, roles, setAccounts, action, setFilterResultList, version , setVersion } = props;
   const dispatch = useDispatch();
-  let [ studentPage, setStudentPage] = useState(2);
-  let [ teacherPage, setTeacherPage] = useState(2);
-  let [ ministryPage, setMinistryPage] = useState(2);
+  var [ studentPage, setStudentPage] = useState(1);
+  var [ teacherPage, setTeacherPage] = useState(1);
+  var [ ministryPage, setMinistryPage] = useState(1);
   const maxPerPage = useRef(40);
   const [isLoading, setIsLoading] = useState(false);
   const studentAccounts = useSelector((state) => state.manage.studentList);
   const teacherAccounts = useSelector((state) => state.manage.teacherList);
   const ministryAccounts = useSelector((state) => state.manage.ministryList);
+  const {studentListTotal, teacherListTotal, ministryListTotal} = useSelector((state) => state.manage)
 
   const showMore = async () => {
     switch(roles){
       case "student":
-        setIsLoading(true);
-        await appendStudentListAccountAPI(dispatch, studentPage)
-        setStudentPage(++studentPage);
-        if(studentPage - 1 > accounts.length/maxPerPage.current){
-          setStudentPage(Math.floor(accounts.length/maxPerPage.current) + 1)
+        if(accounts.length < studentListTotal){
+          setIsLoading(true);
+          setStudentPage(++studentPage);
+          await appendStudentListAccountAPI(dispatch, studentPage)
+          setAccounts(studentAccounts);
+          setIsLoading(false);
+          console.log(studentPage);
+        } else{
+          showToast("Không còn tài khoản sinh viên nào nữa", "warning");
         }
-        setAccounts(studentAccounts);
-        setIsLoading(false);
       break;
 
       case "teacher":
         setIsLoading(true);
-        await appendTeacherListAccountAPI(dispatch, teacherPage)
-        setTeacherPage(++teacherPage);
-        if(teacherPage - 1 > accounts.length/maxPerPage.current){
-          setTeacherPage(Math.floor(accounts.length/maxPerPage.current) + 1)
+        if(accounts.length < teacherListTotal ){
+          setTeacherPage(++teacherPage);
+          await appendTeacherListAccountAPI(dispatch, teacherPage)
+          setAccounts(teacherAccounts);
+          setIsLoading(false);
+          console.log(accounts.length);
+        } else{
+          setIsLoading(false);
+          showToast("Không còn tài khoản giảng viên nào nữa", "warning");
         }
-        setAccounts(teacherAccounts);
-        setIsLoading(false);
       break;
 
       case "ministry":
         setIsLoading(true);
-        await appendMinistryListAccountAPI(dispatch, ministryPage)
-        setMinistryPage(++ministryPage);
-        if(ministryPage - 1 > accounts.length/maxPerPage.current){
-          setMinistryPage(Math.floor(accounts.length/maxPerPage.current) + 1)
+        if(accounts.length < ministryListTotal){
+          setMinistryPage(++ministryPage);
+          await appendMinistryListAccountAPI(dispatch, ministryPage)
+          setAccounts(ministryAccounts);
+          setIsLoading(false);
+        } else{
+          setIsLoading(false);
+          showToast("Không còn tài khoản giáo vụ nào nữa", "warning");
         }
-        setAccounts(ministryAccounts);
-        setIsLoading(false);
       break;
     }
   };
@@ -81,6 +89,8 @@ function TableAccount(props) {
             accounts.map((account, index) => {
               return (
                 <RowAccount
+                setVersion={setVersion}
+                  version={version}
                   action={action}
                   setAccounts={setAccounts}
                   key={account._id || index}

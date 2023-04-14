@@ -67,7 +67,7 @@ function ModalAddAccountForm(props) {
     classId,
     major,
   } = values;
-  const { isOpen, onClose, setAccounts, account, action, title } = props;
+  const { isOpen, onClose, setAccounts, account, action, title, setVersion, version } = props;
 
   //handle add or modify account to db
   const handleSubmitAccount = async () => {
@@ -125,6 +125,7 @@ function ModalAddAccountForm(props) {
           setAccounts(ministryAccounts);
         }
       }
+      setVersion(Math.random() + 1);
       formik.resetForm();
       onClose();
     }
