@@ -1,4 +1,4 @@
-import { appendCoursesData, setAllCoursesData, setTeacherList } from "../redux/AllCoursesSlice";
+import { appendCoursesData, setAllCoursesData, setCoursesCount, setTeacherList } from "../redux/AllCoursesSlice";
 import axiosClient from "./axiosClient.js";
 import showToast from "./showToast";
 
@@ -8,6 +8,8 @@ export const getCoursesList = async (dispatch) => {
         const response = await axiosClient.get(`/api/courses/all/${page}`);
         if(response.data){
             await dispatch(setAllCoursesData(response.data))
+            await dispatch(setCoursesCount(response.coursesCount || 0))
+            console.log(response.coursesCount);
         }
     } catch (error) {
         console.log(error);
@@ -72,6 +74,7 @@ export const getTeacherListAPI = async (dispatch) => {
         // Call API
        const response = await axiosClient.get(`/api/user/teacher/all`);
        dispatch(setTeacherList(response.data))
+       return response.data;
     } catch (error) {
        showToast(error.data.message, 'error')
     }

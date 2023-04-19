@@ -55,25 +55,23 @@ export default function CreateCourse() {
   const [teacherList, setTeacherList] = useState([]);
   const { courseId } = useParams();
   const dispatch = useDispatch();
-  const teacherListData = useSelector(
-    (state) => state.allCoursesList.teacherList
-  );
-  const {user} = useSelector(state=> state.auth)
+  const { user } = useSelector((state) => state.auth);
 
   //get teacher data to display suggestion auto fill
   useEffect(() => {
-    getTeacherListAPI(dispatch);
-    setTeacherList(teacherListData);
+    getTeacherListAPI(dispatch).then((response) => {
+      setTeacherList(response);
+    });
   }, []);
 
-  const resetData = ()=>{
-      setSemester("1")
-      setSchoolYear("2022-2023")
-      setdescription("")
-      setStudentList([])
-      setFileName("")
-      formik.resetForm();
-  }
+  const resetData = () => {
+    setSemester("1");
+    setSchoolYear("2022-2023");
+    setdescription("");
+    setStudentList([]);
+    setFileName("");
+    formik.resetForm();
+  };
 
   //fetch data for manage func
   useEffect(() => {
@@ -86,8 +84,8 @@ export default function CreateCourse() {
     }
   }, []);
 
-   //watch studentList to update the number of students
-   useEffect(() => {
+  //watch studentList to update the number of students
+  useEffect(() => {
     setFieldValue("studentListLength", studentList.length);
   }, [studentList]);
 
@@ -105,7 +103,7 @@ export default function CreateCourse() {
             });
           });
           setFieldValue("studentListLength", rows.length);
-          //reset input file 
+          //reset input file
           e.target.value = null;
         } else {
           showToast(
@@ -123,7 +121,10 @@ export default function CreateCourse() {
     setFieldValue("courseName", course.name);
     setFieldValue(
       "teacherName",
-      `${course?.teacher?.teacherCode +"-"+course?.teacher.fullName || "Chưa Phân Công"}`
+      `${
+        course?.teacher?.teacherCode + "-" + course?.teacher.fullName ||
+        "Chưa Phân Công"
+      }`
     );
     setdescription(course.description);
     setFieldValue("groupNumber", course.groupNumber);
@@ -165,7 +166,7 @@ export default function CreateCourse() {
       setIsLoading(false);
 
       //reset data after create course
-      resetData()
+      resetData();
     }
 
     //update courses data
@@ -308,13 +309,17 @@ export default function CreateCourse() {
                 value={teacherName}
                 onChange={formik.handleChange}
                 className={`bg-gray-50 w-[71%] block mt-1 border outline-none border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5
-                ${user?.role==="teacher" ? "cursor-not-allowed text-gray-400 font-thin" : "text-gray-900"}`}
+                ${
+                  user?.role === "teacher"
+                    ? "cursor-not-allowed text-gray-400 font-thin"
+                    : "text-gray-900"
+                }`}
                 id="teacherName"
                 name="teacherName"
                 type="text"
                 list="teacherList"
                 autoComplete="off"
-                disabled={user?.role==="teacher"}
+                disabled={user?.role === "teacher"}
               />
               <div className="h-1">
                 {formik.errors.teacherName && formik.touched.teacherName && (
@@ -325,7 +330,7 @@ export default function CreateCourse() {
               </div>
 
               {/* suggestion for teachername */}
-              {teacherName && (
+              { teacherName &&
                 <datalist id="teacherList">
                   {teacherList &&
                     teacherList.map((teacher) => {
@@ -337,7 +342,7 @@ export default function CreateCourse() {
                       );
                     })}
                 </datalist>
-              )}
+              }
             </div>
 
             {/* semester-schoolYear */}
@@ -391,7 +396,10 @@ export default function CreateCourse() {
               <div className="text-sm font-medium" htmlFor="studentList">
                 Danh sách sinh viên
               </div>
-              <label className="flex-row flex items-center text-lg font-medium mr-5" htmlFor="studentList">
+              <label
+                className="flex-row flex items-center text-lg font-medium mr-5"
+                htmlFor="studentList"
+              >
                 <div
                   className={`px-2.5 py-2 flex justify-center items-center bg-gray-100 w-full ml-2 rounded-lg  
                  ${
@@ -408,7 +416,7 @@ export default function CreateCourse() {
                     color={courseId ? "gray" : "black"}
                   ></box-icon>
                 </div>
-                  {/* <span className="text-sm ml-1">
+                {/* <span className="text-sm ml-1">
                   ({studentListLength && studentListLength} sinh vien)
                   </span> */}
               </label>
@@ -440,7 +448,13 @@ export default function CreateCourse() {
 
             {/* button field */}
             <div className=" flex justify-end items-center mr-12 mt-6">
-              <Link to={user?.role==="teacher" ? `/courses/${courseId}`: "/ministry/manage"}>
+              <Link
+                to={
+                  user?.role === "teacher"
+                    ? `/courses/${courseId}`
+                    : "/ministry/manage"
+                }
+              >
                 <Button
                   fontWeight="light"
                   colorScheme="#94a3b8"

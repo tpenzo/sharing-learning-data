@@ -21,6 +21,7 @@ function ManageAccount() {
 
   const [accounts, setAccounts] = useState([]);
   const [filterResultList, setFilterResultList] = useState([]);
+  const [version, setVersion] = useState(0);
   const studentAccounts = useSelector((state) => state.manage.studentList);
   const teacherAccounts = useSelector((state) => state.manage.teacherList);
   const ministryAccounts = useSelector((state) => state.manage.ministryList);
@@ -56,6 +57,9 @@ function ManageAccount() {
     handleSearch();
   }, [searchKey]);
 
+  useEffect(() => {
+    setVersion(version);
+  }, [version]);
   //get first data
   useEffect(() => {
     getStudentListAccountAPI(dispatch).then((response)=>{
@@ -187,6 +191,9 @@ function ManageAccount() {
           </div>
           <div className="mt-4 h-[79%] overflow-y-auto w-full rounded-lg flex justify-center border border-gray-200">
             <TableAccount
+              key={version}
+              version={version}
+              setVersion={setVersion}
               action={"modify"}
               setAccounts={setAccounts}
               accounts={filterResultList}
@@ -197,6 +204,8 @@ function ManageAccount() {
 
         <div className="">
           <ModalAddAccountForm
+          version={version}
+          setVersion={setVersion}
             action="create"
             title={"Tạo tài khoản"}
             setAccounts={setAccounts}
@@ -205,6 +214,7 @@ function ManageAccount() {
           />
 
           <ModalAddAccountByFile
+          setVersion={setVersion}
             tab={tab}
             setAccounts={setAccounts}
             isOpen={addAccountFile.isOpen}

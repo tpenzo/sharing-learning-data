@@ -28,7 +28,9 @@ function ShowDialog(props) {
     requiredRemove,
     course,
     account,
-    setAccounts
+    setAccounts,
+    version,
+    setVersion
   } = props;
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false)
@@ -59,16 +61,19 @@ function ShowDialog(props) {
         case "student":
           await getStudentListAccountAPI(dispatch);
           await setAccounts(studentAccounts);
+          setVersion(version + 1)
           setIsLoading(false)
         break;
         case "teacher":
           await getTeacherListAccountAPI(dispatch);
           await setAccounts(teacherAccounts);
+          setVersion(version + 1)
           setIsLoading(false)
         break;
         case "ministry":
           await getMinistryListAccountAPI(dispatch);
           await setAccounts(ministryAccounts);
+          setVersion(version + 1)
           setIsLoading(false)
         break;
       }

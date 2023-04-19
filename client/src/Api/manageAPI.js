@@ -1,22 +1,23 @@
 import axiosClient from "./axiosClient.js";
-import { setStudentList, setTeacherList, setMinistryList, appendStudentList, appendTeacherList, appendMinistryList } from "../redux/ManageSlice.js";
+import { setStudentList, setTeacherList, setMinistryList, appendStudentList, appendTeacherList, appendMinistryList, setStudentListTotal, setTeacherListTotal, setMinistryListTotal } from "../redux/ManageSlice.js";
 import showToast from "./showToast.js";
 
 export const getStudentListAccountAPI = async (dispatch) => {
     try {
         const response = await axiosClient.get('/api/user/student/all/1');
-        dispatch(setStudentList(response.data));
-        return response.data
+        dispatch(setStudentList(response.data.studentList));
+        dispatch(setStudentListTotal(response.data?.studentListCount))
+        return response.data.studentList
     } catch (error) {
-        showToast(error.data.message, 'warning');
+        console.log(error);
     }
 }
 
 export const appendStudentListAccountAPI = async (dispatch, page) => {
     try {
         const response = await axiosClient.get(`/api/user/student/all/${page}`);
-        if(response.data.length>0){
-            await dispatch(appendStudentList(response.data))
+        if(response.data.studentList.length>0){
+            await dispatch(appendStudentList(response.data.studentList))
         } else {
             showToast("Không còn sinh viên nào nữa ok", "warning")
         }
@@ -28,7 +29,8 @@ export const appendStudentListAccountAPI = async (dispatch, page) => {
 export const getTeacherListAccountAPI = async (dispatch) => {
     try {
         const response = await axiosClient.get('/api/user/teacher/all/1');
-        dispatch(setTeacherList(response.data));
+        dispatch(setTeacherList(response.data.teacherList));
+        dispatch(setTeacherListTotal(response.data?.teacherListCount))
     } catch (error) {
         showToast(error.data.message, 'warning');
     }
@@ -37,8 +39,8 @@ export const getTeacherListAccountAPI = async (dispatch) => {
 export const appendTeacherListAccountAPI = async (dispatch, page) => {
     try {
         const response = await axiosClient.get(`/api/user/teacher/all/${page}`);
-        if(response.data?.length>0){
-            await dispatch(appendTeacherList(response.data))
+        if(response.data.teacherList?.length>0){
+            await dispatch(appendTeacherList(response.data.teacherList))
         } else {
             showToast("Không còn giảng viên nào nữa", "warning")
         }
@@ -50,7 +52,8 @@ export const appendTeacherListAccountAPI = async (dispatch, page) => {
 export const getMinistryListAccountAPI = async (dispatch) => {
     try {
         const response = await axiosClient.get('/api/user/ministry/all/1');
-        dispatch(setMinistryList(response.data));
+        dispatch(setMinistryList(response.data.ministryList));
+        dispatch(setMinistryListTotal(response.data?.ministryListCount))
     } catch (error) {
         showToast(error.data.message, 'warning');
     }
@@ -59,8 +62,8 @@ export const getMinistryListAccountAPI = async (dispatch) => {
 export const appendMinistryListAccountAPI = async (dispatch, page) => {
     try {
         const response = await axiosClient.get(`/api/user/ministry/all/${page}`);
-        if(response.data?.length>0){
-            await dispatch(appendMinistryList(response.data))
+        if(response.data.ministryList?.length>0){
+            await dispatch(appendMinistryList(response.data.ministryList))
         } else {
             showToast("Không còn giáo vụ nào nữa", "warning")
         }

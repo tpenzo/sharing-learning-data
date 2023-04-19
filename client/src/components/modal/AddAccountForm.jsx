@@ -42,7 +42,7 @@ function ModalAddAccountForm(props) {
       email: Yup.string()
         .email("Định dạng Email không đúng")
         .required("Vui lòng nhập Email"),
-      code: Yup.string().required("Không được để trống"),
+      code: Yup.string().required("Không được để trống").min(8, "Ít nhất 8 kí tự"),
       gender: Yup.string().required("Vui lòng chọn giới tính"),
       fullName: Yup.string().required("Vui lòng điền tên người dùng"),
       password: Yup.string()
@@ -67,7 +67,7 @@ function ModalAddAccountForm(props) {
     classId,
     major,
   } = values;
-  const { isOpen, onClose, setAccounts, account, action, title } = props;
+  const { isOpen, onClose, setAccounts, account, action, title, setVersion, version } = props;
 
   //handle add or modify account to db
   const handleSubmitAccount = async () => {
@@ -125,6 +125,7 @@ function ModalAddAccountForm(props) {
           setAccounts(ministryAccounts);
         }
       }
+      setVersion(Math.random() + 1);
       formik.resetForm();
       onClose();
     }
