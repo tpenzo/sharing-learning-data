@@ -76,20 +76,20 @@ function PostItem({
     <div className="w-full bg-white pb-4 pt-1 px-6 rounded-lg mb-5 shadow-sm">
       <div className="flex items-center gap-4 justify-between mt-5 flex-wrap-reverse">
         <div className="flex items-center gap-4">
-          <Link to={`/profile/${dataItem?.author._id}`}>
+          <Link to={`/profile/${dataItem?.author?._id}`}>
             <Wrap>
-              <Avatar size="md" src={dataItem?.author.urlAvatar}></Avatar>
+              <Avatar size="md" src={dataItem?.author?.urlAvatar}></Avatar>
             </Wrap>
           </Link>
           <div>
-            <Link to={`/profile/${dataItem?.author._id}`}>
+            <Link to={`/profile/${dataItem?.author?._id}`}>
               <p className="font-semibold">
-                {dataItem?.author.fullName +
+                {dataItem?.author?.fullName +
                   " " +
                   `${
-                    dataItem.author.studentCode
-                      ? dataItem?.author.studentCode
-                      : dataItem?.author.teacherCode
+                    dataItem.author?.studentCode
+                      ? dataItem?.author?.studentCode
+                      : dataItem?.author?.teacherCode
                   }`}
               </p>
             </Link>
@@ -98,23 +98,17 @@ function PostItem({
             </span>
           </div>
         </div>
-        <div className="flex relative">
-          {dataItem?.author._id === user._id && (
-            <span
-              className="cursor-pointer"
-              onClick={() => {
-                setOptions(!options);
-              }}
-            >
-              <box-icon name="dots-vertical-rounded"></box-icon>
-            </span>
-          )}
+        <div className="flex relative items-center">
+        <p className="px-2 py-1 text-sm rounded-lg bg-primary-blue text-white font-medium mr-1">
+            {dataItem.course ? dataItem.course?.courseID : "Công khai"}
+          </p>
           {options && (
-            <ul className="absolute top-12 right-0 bg-white shadow-xl flex rounded overflow-hidden">
+            <ul className="absolute top-12 right-0 w-36 bg-white shadow-xl rounded-xl flex flex-col items-start justify-start overflow-hidden">
               <li
-                className="px-2 py-1 font-semibold cursor-pointer"
+                className="w-full px-3 py-2 font-semibold cursor-pointer flex items-center justify-between hover:bg-gray-200"
                 onClick={onOpen}
               >
+                <span className="mr-2">Chỉnh sửa</span>
                 <box-icon name="edit-alt"></box-icon>
               </li>
               <ModalInstance
@@ -126,9 +120,10 @@ function PostItem({
                 }
               />
               <li
-                className="px-2 py-1 font-semibold cursor-pointer"
+                className="w-full px-3 py-2 font-semibold cursor-pointer flex items-center justify-between hover:bg-gray-200"
                 onClick={onOpenVerify}
               >
+                <span className="mr-2">Xoá</span>
                 <box-icon name="trash-alt"></box-icon>
               </li>
               <ModalInstance
@@ -147,9 +142,17 @@ function PostItem({
               />
             </ul>
           )}
-          <p className="px-2 py-1 text-sm rounded-lg bg-primary-blue text-white font-medium">
-            {dataItem.course ? dataItem.course?.courseID : "Công khai"}
-          </p>
+          {dataItem?.author?._id === user._id && (
+            <span
+              className={`cursor-pointer flex items-center rounded-lg p-1 ${options ? "bg-gray-200" :"bg-inherit"}`}
+              onClick={() => {
+                setOptions(!options);
+              }}
+            >
+              <box-icon name="dots-vertical-rounded"></box-icon>
+            </span>
+          )}
+
         </div>
       </div>
       <Link to={`/post/${dataItem?._id}`}>

@@ -38,19 +38,21 @@ function LoginPage() {
     // [POST] api/auth/login
     loginAPI(formik.values.email, formik.values.password, dispatch).then(
       (response)=>{
-        switch(response?.role){
-          case"ministry":
-           navigate("/ministry/manage")
-          break;
-          case"admin":
-            navigate("/admin/manage")
-          break;
-          case"student":
-             navigate("/")
-          break;
-          case"teacher":
-             navigate("/")
-          break;
+        if(response){
+          switch(response?.role){
+            case"ministry":
+             navigate("/ministry/manage")
+            break;
+            case"admin":
+              navigate("/admin/manage")
+            break;
+            case"student":
+               navigate("/")
+            break;
+            case"teacher":
+               navigate("/")
+            break;
+          }
         }
       }
     );
