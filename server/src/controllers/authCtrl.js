@@ -13,6 +13,8 @@ class AuthControlller {
   async login(req, res) {
     // Check input data
     const errors = validationResult(req);
+
+
     if (!errors.isEmpty()) {
       const errMessage = {};
       errors.array().forEach((err) => {

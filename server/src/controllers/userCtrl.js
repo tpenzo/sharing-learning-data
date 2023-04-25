@@ -266,10 +266,11 @@ class UserController {
   async unBookmarkPost(req, res) {
     try {
       const { postId } = req.body;
+      console.log(postId);
       // update model
       await UserModel.findByIdAndUpdate(
-        { _id: req.userLogin._id },
-        { $pull: { following: postId } }
+         { _id: req.userLogin._id },
+         { $pull: { bookmarkPost: postId } }
       );
       return res.status(200).json({ message: "successful" });
     } catch (error) {

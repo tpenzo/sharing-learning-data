@@ -55,7 +55,7 @@ export const unFollowUserAPI = async (userId, dispatch, socket) => {
 export const addBookmarkAPI = async (postId, dispatch) => {
   try {
     // Call API
-    const res = await axiosClient.post("/api/user/bookmark");
+    const res = await axiosClient.post('/api/user/bookmark', { postId });
     await dispatch(addBookmarkUser(postId));
     showToast("Đã lưu bài viết", "success");
   } catch (error) {
@@ -65,11 +65,12 @@ export const addBookmarkAPI = async (postId, dispatch) => {
 export const unBookmarkAPI = async (postId, dispatch) => {
   try {
     // Call API
-    const res = await axiosClient.post("/api/user/unbookmark");
+    console.log(postId);
+    const res = await axiosClient.post('/api/user/unbookmark', { postId });
     await dispatch(unBookmarkUser(postId));
-    showToast("Bỏ lưu bài viết", "error");
+    showToast('Bỏ lưu bài viết', 'success');
   } catch (error) {
-    showToast(error.message, "error");
+    showToast(error.message, 'error');
   }
 };
 export const searchAPI = async (value) => {

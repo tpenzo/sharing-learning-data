@@ -28,6 +28,7 @@ function ManageAccount() {
 
   const handleSearch = () => {
     var filterResult = [...accounts];
+    console.log(searchKey)
     filterResult = filterResult.filter((item) => {
       //filter base on name and studentCode
       return (

@@ -29,6 +29,7 @@ function PostItem({
   } = useDisclosure();
   const { isOpen, onClose, onOpen } = useDisclosure();
   const dispatch = useDispatch();
+  
   useEffect(() => {
     if (dataItem?.likes) {
       let isLove = [...dataItem?.likes].some((id) => id === user._id);
@@ -60,6 +61,7 @@ function PostItem({
     }
     setSaved(!saved);
   };
+
   const handleRemovePost = async (check, postId, docs) => {
     console.log(check, postId, docs);
     if (check) {
@@ -72,6 +74,7 @@ function PostItem({
   const handleUpdateStatus = async (postId, status) => {
     await updateStatusPost(dispatch, postId, { status });
   };
+
   return (
     <div className="w-full bg-white pb-4 pt-1 px-6 rounded-lg mb-5 shadow-sm">
       <div className="flex items-center gap-4 justify-between mt-5 flex-wrap-reverse">
