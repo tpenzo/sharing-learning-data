@@ -14,6 +14,7 @@ const postSchema = new Schema(
       default: "posted",
     },
     course: { type: Schema.Types.ObjectId, ref: "course" },
+    tag: { type: String },
     docs: [
       {
         type: Schema.Types.ObjectId,

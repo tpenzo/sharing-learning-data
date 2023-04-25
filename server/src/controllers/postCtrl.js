@@ -7,7 +7,7 @@ class postController {
   //@access          verifyToken
   // files {type ,name , title, desc, url}
   async createPost(req, res) {
-    const { title, content, description, courseId, docs } = req.body;
+    const { title, content, description, courseId, docs, tag } = req.body;
     const { _id, role } = req.userLogin;
     try {
       const refDocs = [];
@@ -21,6 +21,7 @@ class postController {
             urlDoc: file?.url,
             type: file?.type || null,
             user: _id,
+            tag: tag || null,
           });
 
           await newDocument.save();
@@ -36,6 +37,7 @@ class postController {
         course: courseId || null,
         status,
         docs: refDocs,
+        tag: tag || null,
       });
       await newPost.save();
       // get post
@@ -129,6 +131,7 @@ class postController {
         .find({ author })
         .populate("author", "fullName urlAvatar teacherCode studentCode")
         .populate("docs")
+        .populate("course")
         .sort({ createdAt: -1 });
       res.status(200).json({ message: "successful!", data: postList });
     } catch (error) {
@@ -213,7 +216,7 @@ class postController {
 
   async editPost(req, res) {
     const postId = req.params.postId;
-    const { title, content, description, courseId, docs } = req.body;
+    const { title, content, description, courseId, docs, tag } = req.body;
     const { _id, role } = req.userLogin;
     try {
       const refDocs = [];
@@ -227,6 +230,7 @@ class postController {
             urlDoc: file?.url,
             type: file?.type || null,
             user: _id,
+            tag: tag || null,
           });
 
           await newDocument.save();
@@ -241,6 +245,7 @@ class postController {
         course: courseId || null,
         status: courseId ? "deny" : "posted",
         docs: refDocs,
+        tag: tag || null,
       };
       await postModel.findOneAndUpdate({ _id: postId }, updatedPost, {
         new: true,
