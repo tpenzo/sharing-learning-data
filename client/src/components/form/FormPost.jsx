@@ -7,6 +7,7 @@ import {
   Select,
   FormErrorMessage,
 } from "@chakra-ui/react";
+import courses from "../../data/CoursesData";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
@@ -56,6 +57,7 @@ function FormPost(props) {
       title: "",
       description: "",
       courseId: "",
+      tag: "",
     },
     validationSchema: Yup.object().shape({
       title: Yup.string()
@@ -66,6 +68,7 @@ function FormPost(props) {
         ? Yup.string().required("Vui lòng chọn lớp học phần!")
         : Yup.string(),
       description: Yup.string().max(255, "Tối đa 255 kí tự"),
+      tag: Yup.string().min(5, "Tối thiểu 5 kí tự"),
     }),
     onSubmit: async (values) => {
       setLoading(true);
@@ -98,6 +101,7 @@ function FormPost(props) {
         courseId: post?.course?._id,
         title: post?.title,
         description: post?.description,
+        tag: post?.tag
       });
       setScope(post?.course?._id ? true : false);
       setContent(post?.content);
@@ -128,6 +132,9 @@ function FormPost(props) {
               <option value={true}>Riêng tư</option>
             </Select>
           </FormControl>
+          {
+          //public
+          scope &&  
           <FormControl
             className="mt-4"
             isInvalid={errors.courseId && touched.courseId && scope}
@@ -153,7 +160,7 @@ function FormPost(props) {
                         course.groupNumber.length < 2
                           ? `0${course.groupNumber}`
                           : course.groupNumber
-                      }-HK${course.semester} ${course.schoolyear}`}</option>
+                      }-HK${course.semester} ${course.schoolyear} ${course.name}`}</option>
                     );
                   })
                 : managedCourses &&
@@ -173,7 +180,38 @@ function FormPost(props) {
             {errors.courseId && touched.courseId && scope && (
               <FormErrorMessage>{errors.courseId}</FormErrorMessage>
             )}
+          </FormControl>}
+
+          {
+            //private
+            !scope && 
+            <FormControl className="mt-4" isInvalid={errors.tag && touched.tag && !scope}>
+            <FormLabel>Môn học liên quan:</FormLabel>
+            <Input
+              type="text"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              name="tag"
+              value={values.tag}
+              list="courseIDList"
+              autoComplete="off"
+              placeholder="Mã môn"
+            />
+            {/* suggestion for courseID */}
+            <datalist id="courseIDList">
+              {values?.tag && values?.tag.length > 1 && courses.map((course) => {
+                return (
+                  <option key={course.courseId} value={`${course.courseId} - ${course.courseName}`}>
+                    {course.courseId + " - " + course.courseName}
+                  </option>
+                );
+              })}
+            </datalist>
+            {errors.tag && touched.tag && !scope && (
+              <FormErrorMessage>{errors.tag}</FormErrorMessage>
+            )}
           </FormControl>
+          }
         </div>
         <FormControl className="mt-4" isInvalid={errors.title && touched.title}>
           <FormLabel>Tiêu đề:</FormLabel>
@@ -214,10 +252,6 @@ function FormPost(props) {
         </FormControl>
         <FormControl className="mt-4">
           <FormLabel htmlFor="doc" className="cursor-pointer">
-            {/* <p className="flex items-center">
-              <box-icon name="file"></box-icon>
-              <span className="text-sm">Đính kèm tệp</span>
-            </p> */}
             <div className="w-[101.5%] border-dashed border-2 border-gray-400 py-12 flex flex-col justify-center items-center">
               <p className="mb-3 font-semibold text-gray-900 flex flex-wrap justify-center">
                 <span>Kéo và thả tập tin </span>&nbsp;

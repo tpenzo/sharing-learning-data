@@ -21,6 +21,7 @@ export default function PostListProfile() {
 
     useEffect(() => {
         getUserPost(userId, dispatch)
+        console.log(posts);
     }, [userId])
 
     

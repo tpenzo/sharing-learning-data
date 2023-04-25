@@ -23,7 +23,7 @@ export const createPost = async (payload, dispatch) => {
     const res = await axiosClient.post("/api/post/newpost", payload);
 
     await dispatch(createNewPost(res));
-    showToast(res.message, "success");
+    showToast("Thêm bài viết thành công!", "success");
     return res;
   } catch (error) {
     showToast(error.data.message, "error");

@@ -68,7 +68,7 @@ function Comment({ comment, authorId, reply, cmtDadId }) {
                             (authorId === user._id || comment?.user._id === user._id) &&
                             <div
                                 onClick={() => setMoreClicked(!moreClicked)}
-                                className="more p-1 flex items-center ml-auto hover:bg-gray-300 rounded-lg cursor-pointer"
+                                className={`more p-1 flex items-center ml-auto hover:bg-gray-300 rounded-lg cursor-pointer ${moreClicked ? "bg-gray-300" : "bg-inherit"}`}
                             >
                                 <box-icon name="dots-horizontal-rounded"></box-icon>
                             </div>
@@ -106,13 +106,15 @@ function Comment({ comment, authorId, reply, cmtDadId }) {
                     {
                         moreClicked &&
                         <div className="more-menu w-1/4 absolute  top-10 -right-10 shadow-xl rounded-xl bg-white">
-                            <div className="px-1 py-2 hover:bg-gray-200 rounded-t-xl cursor-pointer pl-3"
+                            <div className="px-1 py-2 hover:bg-gray-200 rounded-t-xl cursor-pointer pl-3 flex items-center justify-between"
                                 onClick={handleDeleteCmt}>
                                 <span className="ml-2">Xóa</span>
+                                <i className="mr-4"><box-icon name='trash-alt'></box-icon></i>
                             </div>
-                            <div className="px-1 py-2 hover:bg-gray-200 rounded-b-xl cursor-pointer pl-3"
+                            <div className="px-1 py-2 hover:bg-gray-200 rounded-b-xl cursor-pointer pl-3 flex items-center justify-between"
                                 onClick={() => { setIsEdit(!isEdit), setMoreClicked(!moreClicked) }}>
                                 <span className="ml-2">Chỉnh sửa</span>
+                                <i className="mr-4"><box-icon name="edit-alt"></box-icon></i>
                             </div>
                         </div>
                     }
