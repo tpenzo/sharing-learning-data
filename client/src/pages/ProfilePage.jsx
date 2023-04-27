@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Header from "../components/header/Header";
 import ProfilePane from "../components/profile/ProfilePane";
-import PostItem from "../components/post/PostItem";
 import SideNav from "../components/navigation/SideNav";
 import ModalInstance from "../components/modal/ModalInstance";
 import FormPost from "../components/form/FormPost";
-import { Spinner, useDisclosure } from "@chakra-ui/react";
+import { useDisclosure } from "@chakra-ui/react";
 import PostListProfile from "../components/profile/PostListProfile";
-import { getUserPost } from "../Api/postAPI";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
@@ -16,6 +14,7 @@ export default function ProfilePage() {
   const { auth } = useSelector(state => state)
   const { userId } = useParams()
   const [tab, setTab] = useState(false);
+  
   const handleChangeTab = (e) => {
     if (e.target.id === "post") {
       setTab(false);
@@ -84,7 +83,7 @@ export default function ProfilePage() {
                 Đã Lưu
               </span>
             </div>
-            <PostListProfile />
+            <PostListProfile tab={tab}/>
           </div>
         </div>
       </div>

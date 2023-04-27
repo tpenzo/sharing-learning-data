@@ -39,13 +39,14 @@ export default function HomePage() {
   };
 
   // Call API and update store HomePage
-  const bookmarkPostHome = async (postId) => {
-    await addBookmarkAPI(postId, dispatch);
+  const bookmarkPostHome = async (post) => {
+    await addBookmarkAPI(post, dispatch);
   };
 
-  const unBookmarkPostHome = async (postId) => {
-    await unBookmarkAPI(postId, dispatch);
+  const unBookmarkPostHome = async (post) => {
+    await unBookmarkAPI(post, dispatch);
   };
+  
   return (
     <div className="container mx-auto h-screen items-center self-center flex flex-col">
       <header className="header sticky top-0 w-full h-[10%] rounded-t-lg z-50">

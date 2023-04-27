@@ -55,9 +55,9 @@ function PostItem({
 
   const handleSavedPost = async () => {
     if (!saved) {
-      await funcBookmarkPost(dataItem._id, user._id);
+      await funcBookmarkPost(dataItem, user._id);
     } else {
-      await funcUnBookmarkPost(dataItem._id, user._id);
+      await funcUnBookmarkPost(dataItem, user._id);
     }
     setSaved(!saved);
   };
