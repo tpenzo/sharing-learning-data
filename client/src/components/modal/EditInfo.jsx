@@ -15,7 +15,7 @@ import {
 	useDisclosure
 } from "@chakra-ui/react";
 import AvatarUpdate from "../profile/AvatarUpdate";
-import { uploadImg } from "../../utils/uploadDocs";
+import { removeImage, uploadImg } from "../../utils/uploadDocs";
 import { updateUserAPI } from "../../Api/userAPI";
 import ChangePassword from "./ChangePassword";
 
@@ -38,7 +38,8 @@ function EditInfo(props) {
 		setIsLoading(!isLoading)
 		let url = null
 		if (fileAvatar) {
-			url = await uploadImg(fileAvatar)
+			url = await uploadImg(fileAvatar) // upload new image
+			await removeImage(user.urlAvatar) // remove old image
 		}
 		const newInfo = {
 			fullName,

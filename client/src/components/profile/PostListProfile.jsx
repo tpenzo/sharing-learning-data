@@ -15,6 +15,7 @@ export default function PostListProfile({ tab }) {
   const { userId } = useParams();
 
   const posts = useSelector((state) => state.profile.posts);
+  const user = useSelector((state) => state.auth.user);
   const bookmarks = useSelector((state) => state.profile.bookmarks);
 
   // Call API and update store HomePage
@@ -48,7 +49,7 @@ export default function PostListProfile({ tab }) {
     }else{
       getUserPost(userId, dispatch);
     }
-  }, [userId, tab]);
+  }, [userId, tab, user]);
 
   return (
     <div
