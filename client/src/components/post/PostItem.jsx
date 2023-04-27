@@ -76,7 +76,7 @@ function PostItem({
   };
 
   return (
-    <div className="w-full bg-white pb-4 pt-1 px-6 rounded-lg mb-5 shadow-sm">
+    <div className="w-full flex flex-col bg-white pb-4 pt-1 px-5 rounded-lg mb-5 shadow-sm h-auto">
       <div className="flex items-center gap-4 justify-between mt-5 flex-wrap-reverse">
         <div className="flex items-center gap-4">
           <Link to={`/profile/${dataItem?.author?._id}`}>
@@ -105,10 +105,53 @@ function PostItem({
         <p className="px-2 py-1 text-sm rounded-lg bg-primary-blue text-white font-medium mr-1">
             {dataItem.course ? dataItem.course?.courseID : "Công khai"}
           </p>
-          {options && (
+        </div>
+      </div>
+      <div className="">
+      <Link to={`/post/${dataItem?._id}`}>
+        <p className="mt-5 text-sm cursor-pointer hover:font-semibold">
+          {dataItem?.title}
+        </p>
+      </Link>
+      </div>
+      <div className="flex items-end">
+        {dataItem?.status === "posted" ? (
+          <div className="w-full mt-5 flex items-center gap-5 md:gap-2">
+            <p
+              className="bg-gray-500/5 cursor-pointer pt-1 px-1 rounded-lg flex items-center"
+              onClick={handleLovedPost}
+            >
+              <box-icon
+                name="heart"
+                type={loved ? "solid" : "regular"}
+                color={loved ? "red" : "black"}
+              ></box-icon>
+              <span className="text-sm leading-4 ml-1">
+                {dataItem?.likes.length > 0 ? dataItem?.likes.length : null}
+              </span>
+            </p>
+            <span className="bg-gray-500/5 cursor-pointer py-1 px-1 rounded-lg flex items-center gap-2">
+              <box-icon name="message-square-dots"></box-icon>
+              <Link to={`/post/${dataItem?._id}`}>
+                <span className="text-sm leading-4">Bình luận</span>
+              </Link>
+            </span>
+            <span
+              className="bg-gray-500/5 cursor-pointer pt-1 px-1 rounded-lg flex items-center"
+              onClick={handleSavedPost}
+            >
+              <box-icon
+                name="bookmark"
+                type={saved ? "solid" : "regular"}
+                // color={saved ? "yellow" : "black"}
+              ></box-icon>
+            </span>
+            
+            <div className="relative">
+            {options && (
             <ul className="absolute top-12 right-0 w-36 bg-white shadow-xl rounded-xl flex flex-col items-start justify-start overflow-hidden">
               <li
-                className="w-full px-3 py-2 font-semibold cursor-pointer flex items-center justify-between hover:bg-gray-200"
+                className="w-full px-3 py-2 font-semibold cursor-pointer flex items-center justify-start hover:bg-gray-200"
                 onClick={onOpen}
               >
                 <span className="mr-2">Chỉnh sửa</span>
@@ -155,46 +198,7 @@ function PostItem({
               <box-icon name="dots-vertical-rounded"></box-icon>
             </span>
           )}
-
-        </div>
-      </div>
-      <Link to={`/post/${dataItem?._id}`}>
-        <p className="mt-5 text-sm cursor-pointer hover:font-semibold">
-          {dataItem?.title}
-        </p>
-      </Link>
-      <div className="flex items-end">
-        {dataItem?.status === "posted" ? (
-          <div className="w-full mt-5 flex items-center gap-5 md:gap-2">
-            <p
-              className="bg-gray-500/5 cursor-pointer pt-1 px-1 rounded-lg flex items-center"
-              onClick={handleLovedPost}
-            >
-              <box-icon
-                name="heart"
-                type={loved ? "solid" : "regular"}
-                color={loved ? "red" : "black"}
-              ></box-icon>
-              <span className="text-sm leading-4 ml-1">
-                {dataItem?.likes.length > 0 ? dataItem?.likes.length : null}
-              </span>
-            </p>
-            <span
-              className="bg-gray-500/5 cursor-pointer pt-1 px-1 rounded-lg flex items-center"
-              onClick={handleSavedPost}
-            >
-              <box-icon
-                name="bookmark"
-                type={saved ? "solid" : "regular"}
-                // color={saved ? "yellow" : "black"}
-              ></box-icon>
-            </span>
-            <span className="bg-gray-500/5 cursor-pointer py-1 px-1 rounded-lg flex items-center gap-2">
-              <box-icon name="message-square-dots"></box-icon>
-              <Link to={`/post/${dataItem?._id}`}>
-                <span className="text-sm leading-4">Bình luận</span>
-              </Link>
-            </span>
+            </div>
           </div>
         ) : user?.role !== "student" && dataItem.course ? (
           <div className="flex gap-2 mt-4">

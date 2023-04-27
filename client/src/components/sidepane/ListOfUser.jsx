@@ -8,11 +8,10 @@ import {
   AccordionIcon,
   Box,
 } from "@chakra-ui/react";
+import { useParams } from "react-router-dom";
 function ListOfUser(props) {
-  const {userList, title} = props
-  useEffect(()=>{
-    
-  }, [])
+  const { idCourse } = useParams();
+  const {userList, title} = props;
   return (
     <div className="mt-4 h-[75%] w-full">
       <Accordion  defaultIndex={[0]} allowToggle>
@@ -32,9 +31,9 @@ function ListOfUser(props) {
               return (
                 <PopularUserInfo 
                   key = {user._id} 
-                  user = {user.author} 
-                  numPosts = {user.numPosts} 
-                  numLikes = {user.numLikes} 
+                  user = {idCourse ? user: user.author} 
+                  numPosts = {idCourse ? undefined : user.numPosts} 
+                  numLikes = {idCourse ? undefined : user.numLikes} 
                 />)
             }))}
           </AccordionPanel>
