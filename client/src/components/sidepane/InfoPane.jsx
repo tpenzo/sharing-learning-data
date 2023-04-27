@@ -1,11 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDisclosure } from "@chakra-ui/react";
 import FormPost from "../form/FormPost";
 import ModalInstance from "../modal/ModalInstance";
 import ListOfUser from "./ListOfUser";
 import PopularCoursesList from "./PopularCoursesList";
+import axiosClient from "../../Api/axiosClient";
 function InfoPane() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [topAuthors, setTopAuthors] = useState([])
+
+
+  const fetchTopAuthors = async () => {
+    try {
+      const res = await axiosClient.get("/api/user/topauthors")
+      setTopAuthors(res.data)
+    } catch (error) {
+      console.log("error")
+    }
+  }
+
+  useEffect(() => {
+    fetchTopAuthors()
+  }, [])
 
   return (
     <>
@@ -26,7 +42,7 @@ function InfoPane() {
         </div>
 
         <div className="mt-4">
-          <ListOfUser userList={[]} title={"Người dùng nổi bật"} />
+          <ListOfUser userList={topAuthors} title={"Người dùng nổi bật"} />
         </div>
         <div className="mt-5 w-full mb-1 mx-auto px-2">
           <PopularCoursesList />

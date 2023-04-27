@@ -29,7 +29,13 @@ function ListOfUser(props) {
             {
             userList && userList.length>0 &&
             userList.map((user=>{
-              return (<PopularUserInfo key={user._id} user={user} />)
+              return (
+                <PopularUserInfo 
+                  key = {user._id} 
+                  user = {user.author} 
+                  numPosts = {user.numPosts} 
+                  numLikes = {user.numLikes} 
+                />)
             }))}
           </AccordionPanel>
         </AccordionItem>

@@ -1,4 +1,5 @@
 import UserModel from '../models/userModel.js';
+import PostModel from '../models/postModel.js';
 import bcrypt from 'bcryptjs';
 
 class UserController {
@@ -297,6 +298,49 @@ class UserController {
             ],
          });
          return res.status(200).json({ data: user.bookmarkPost, message: 'successful' });
+      } catch (error) {
+         return res.status(500).json({ message: error.message });
+      }
+   }
+
+   async getTopAuthors(req, res) {
+      try {
+         const results = await PostModel.aggregate([
+            {
+               // Group by author and count number of posts
+               $group: {
+                  _id: '$author',
+                  numPosts: { $sum: 1 },
+                  numLikes: { $sum: { $size: '$likes' } },
+               },
+            },
+            {
+               // Sort by number of posts and likes
+               $sort: {
+                  numPosts: -1,
+                  numLikes: -1,
+               },
+            },
+            {
+               // Limit to top 5 authors
+               $limit: 5,
+            },
+         ]).exec();
+
+         // Extract the author IDs from the results
+         const authorIds = results.map((result) => result._id);
+
+         // Populate the author fields from the user collection
+         const authors = await UserModel.find({ _id: { $in: authorIds } })
+            .select('fullName urlAvatar email role teacherCode studentCode')
+            .exec();
+
+         // Map the results to include the author details
+         const topAuthors = results.map((result) => {
+            const author = authors.find((author) => author.id === result._id.toString());
+            return { author, numPosts: result.numPosts, numLikes: result.numLikes };
+         });
+         return res.status(200).json({ data: topAuthors, message: 'successful' });
       } catch (error) {
          return res.status(500).json({ message: error.message });
       }

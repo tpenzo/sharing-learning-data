@@ -9,6 +9,7 @@ router.get('/teacher/all/', verifyToken, userCtrl.getAllTeacherList);
 router.get('/student/all/:page', verifyToken, userCtrl.getAllStudent);
 router.get('/ministry/all/:page', verifyToken, userCtrl.getAllMinistry);
 router.get('/search', verifyToken, userCtrl.search);
+router.get('/topauthors', verifyToken, userCtrl.getTopAuthors);
 router.get('/bookmarks/:userId', verifyToken, userCtrl.getBookmarkPosts);
 router.get('/:userId', verifyToken, userCtrl.getUser);
 router.get('/student/:studentCode', verifyToken, userCtrl.getStudentByCode);

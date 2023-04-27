@@ -4,7 +4,9 @@ import { Wrap, Avatar } from "@chakra-ui/react";
 
 function PopularUserInfo(props) {
   const [chosen, setChosen] = useState(false);
-  const {user} = props
+  const { user, numPosts, numLikes } = props
+
+  console.log(user)
 
   const chooseItem = () => setChosen(!chosen);
 
@@ -18,11 +20,15 @@ function PopularUserInfo(props) {
       </div> */}
       <Wrap>
             <Avatar size='md' src={user?.urlAvatar}></Avatar>
-          </Wrap>
+      </Wrap>
       <div className="max-w-[75%] ml-3">
         <span className="text-sm font-semibold text-gray-700 whitespace-nowrap overflow-ellipsis overflow-hidden">
           {user?.fullName}
         </span>
+        <div className="text-xs font-thin overflow-hidden">
+          <p>Số bài viết: {numPosts}</p>
+          <p>Số lượt tương tác: {numLikes}</p>
+        </div>
       </div>
     </li>
     </Link>
