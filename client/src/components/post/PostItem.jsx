@@ -8,6 +8,8 @@ import VerifyModal from "../modal/VerifyModal";
 import FormPost from "../form/FormPost";
 import { removeDocs } from "../../utils/uploadDocs";
 import { deletePost, updateStatusPost } from "../../Api/postAPI";
+import { useLocation } from 'react-router-dom';
+
 function PostItem({
   dataItem,
   funcLikePost,
@@ -15,8 +17,11 @@ function PostItem({
   funcBookmarkPost,
   funcUnBookmarkPost,
 }) {
+  const location = useLocation();
+
   const { auth } = useSelector((state) => state);
   const { user } = auth;
+
 
   const [loved, setLoved] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -63,12 +68,19 @@ function PostItem({
   };
 
   const handleRemovePost = async (check, postId, docs) => {
-    console.log(check, postId, docs);
     if (check) {
       if (docs && docs.length > 0) {
         await removeDocs(docs);
       }
-      await deletePost(dispatch, postId);
+      let position = "home"
+      if(location.pathname.includes("/courses")){
+        position = "courses"
+      } else if(location.pathname.includes("/profile")){
+        position = "profile"
+      } else {
+        position = "home"
+      }
+      await deletePost(dispatch, postId, position);
     }
   };
   const handleUpdateStatus = async (postId, status) => {

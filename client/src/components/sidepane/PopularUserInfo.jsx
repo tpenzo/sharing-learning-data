@@ -6,8 +6,6 @@ function PopularUserInfo(props) {
   const [chosen, setChosen] = useState(false);
   const { user, numPosts, numLikes } = props;
 
-  console.log(user);
-
   const chooseItem = () => setChosen(!chosen);
 
   return (

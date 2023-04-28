@@ -9,6 +9,7 @@ import {
    removePost,
    saveEditPost,
    saveUpdateStatusPost,
+   removePostCourseList,
 } from '../redux/PostSlice';
 import showToast from './showToast';
 import { fetchCmtsAPI } from './commentAPI';
@@ -16,6 +17,7 @@ import {
    getBookmarksUser,
    getPostsUser,
    likePostProfile,
+   removePostProfile,
    unLikePostProfile,
 } from '../redux/ProfileSlice';
 
@@ -30,13 +32,17 @@ export const createPost = async (payload, dispatch) => {
       showToast(error.data.message, 'error');
    }
 };
-export const deletePost = async (dispatch, postId) => {
+export const deletePost = async (dispatch, postId, position) => {
    try {
       const res = await axiosClient.delete(`/api/post/${postId}`);
 
-      console.log(res);
-
-      dispatch(removePost(postId));
+      if (position === 'courses') {
+         dispatch(removePostCourseList(postId));
+      } else if (position === 'profile') {
+         dispatch(removePostProfile(postId));
+      } else {
+         dispatch(removePost(postId));
+      }
       showToast(res.message, 'success');
    } catch (error) {
       showToast(error.data.message, 'error');

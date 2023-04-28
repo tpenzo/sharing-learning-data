@@ -57,15 +57,16 @@ export const profileSlice = createSlice({
 
       addBookmarkProfile: (state, actions) => {
          const { post } = actions.payload;
-         state.bookmarks = [
-            post,
-            ...state.bookmarks,
-         ];
+         state.bookmarks = [post, ...state.bookmarks];
       },
 
       removeBookmarkProfile: (state, actions) => {
          const { potstId } = actions.payload;
          state.bookmarks = state.bookmarks.filter((item) => item._id !== potstId);
+      },
+
+      removePostProfile: (state, actions) => {
+         state.posts = state.posts.filter((item) => item._id !== actions.payload);
       },
 
       resetProfileSlice: () => initialState,
@@ -83,6 +84,7 @@ export const {
    getBookmarksUser,
    addBookmarkProfile,
    removeBookmarkProfile,
+   removePostProfile,
 } = profileSlice.actions;
 
 export default profileSlice.reducer;
