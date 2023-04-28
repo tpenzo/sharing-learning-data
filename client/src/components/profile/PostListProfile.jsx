@@ -54,11 +54,11 @@ export default function PostListProfile({ tab }) {
   return (
     <div
       className={
-        "mt-5 bg-gray-200/20 pr-1 grid grid-cols-2 gap-2 overflow-y-auto py-2 px-1" +
+        " pr-1 grid grid-cols-2 gap-2 py-2 px-1" +
         `${
           posts.length / 2 > 1
             ? ""
-            : " grid-rows-[repeat(2,minmax(200px,500px))] h-[63%] overflow-y-hidden"
+            : " grid-rows-[repeat(2,minmax(200px,500px))] h-full"
         } `
       }
     >
@@ -77,8 +77,8 @@ export default function PostListProfile({ tab }) {
                 />
               ))
             ) : (
-                <div className="flex justify-center text-lg text-gray-600 font-medium items-center translate-y-5 translate-x-1/2">
-                  Bạn chưa lưu bài viết nào
+                <div className="flex justify-center p-20 text-lg text-gray-600 font-medium items-center translate-x-1/2">
+                  Chưa lưu bài viết nào
                 </div>
             )}
         </>: 
@@ -95,7 +95,7 @@ export default function PostListProfile({ tab }) {
                 />
               ))
             ) : (
-                <div className="flex justify-center text-lg text-gray-600 font-medium items-center translate-y-5 translate-x-1/2">
+                <div className="flex justify-center p-20 text-lg text-gray-600 font-medium items-center translate-x-1/2">
                    Chưa đăng bài viết nào
                 </div>
             )}
