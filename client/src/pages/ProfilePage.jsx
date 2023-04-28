@@ -24,7 +24,7 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="w-[90%] mx-auto h-screen ">
+    <div className="w-[90%] mx-auto h-screen overflow-y-hidden">
       <div className="container mx-auto h-screen">
         <header className="header sticky top-0 w-full h-[10%] rounded-t-lg z-50 ">
           <Header />
@@ -83,7 +83,9 @@ export default function ProfilePage() {
                 Đã Lưu
               </span>
             </div>
-            <PostListProfile tab={tab}/>
+            <div className="overflow-y-auto h-[65%] bg-gray-200/20">
+              <PostListProfile tab={tab}/>
+            </div>
           </div>
         </div>
       </div>

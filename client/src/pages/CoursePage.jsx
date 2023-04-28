@@ -107,7 +107,7 @@ export default function CoursePage() {
             </span>
           </div>
           {tab !== "doc" ? (
-            <div className="post-list px-3 max-h-[92%] overflow-y-auto">
+            <div className="post-list h-[90%] px-3 overflow-y-auto">
               {postCourseList && postCourseList.length > 0 ? (
                 postCourseList.map((postItem) => {
                   return (
@@ -128,7 +128,7 @@ export default function CoursePage() {
               )}
             </div>
           ) : (
-            <div className="post-list px-3 max-h-[92%] overflow-y-auto">
+            <div className="post-list px-3 h-[90%] overflow-y-auto">
               {docCourseList && docCourseList.length > 0 ? (
                 docCourseList.map((docItem) => {
                   return (
