@@ -151,7 +151,7 @@ function PostItem({
             {options && (
             <ul className="absolute top-12 right-0 w-36 bg-white shadow-xl rounded-xl flex flex-col items-start justify-start overflow-hidden">
               <li
-                className="w-full px-3 py-2 font-semibold cursor-pointer flex items-center justify-start hover:bg-gray-200"
+                className="w-full px-3 py-2 font-semibold cursor-pointer flex items-center justify-between hover:bg-gray-200"
                 onClick={onOpen}
               >
                 <span className="mr-2">Chỉnh sửa</span>

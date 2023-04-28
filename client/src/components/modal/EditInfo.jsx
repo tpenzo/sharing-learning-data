@@ -179,23 +179,6 @@ function EditInfo(props) {
 											Nữ
 										</label>
 									</div>
-									<div className="flex items-center mb-4">
-										<input
-											id="other"
-											type="radio"
-											value="other"
-											name="gender"
-											onChange={() => setGender("other")}
-											checked={gender === 'other'}
-											className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 "
-										/>
-										<label
-											htmlFor="other"
-											className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-										>
-											Khác
-										</label>
-									</div>
 								</div>
 							</div>
 						</div>

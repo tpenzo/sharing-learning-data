@@ -32,8 +32,8 @@ function ListOfUser(props) {
                 <PopularUserInfo 
                   key = {user._id} 
                   user = {idCourse ? user: user.author} 
-                  numPosts = {idCourse ? undefined : user.numPosts} 
-                  numLikes = {idCourse ? undefined : user.numLikes} 
+                  numPosts = {idCourse ? undefined : user.numPosts ? user.numPosts : "0"} 
+                  numLikes = {idCourse ? undefined : user.numLikes ? user.numLikes : "0"} 
                 />)
             }))}
           </AccordionPanel>
