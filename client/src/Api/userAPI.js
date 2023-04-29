@@ -90,7 +90,7 @@ export const searchAPI = async (value) => {
       const res = await axiosClient.get(`/api/user/search?info=${value}`);
       return res.data;
    } catch (error) {
-      return [];
+      return { userList: [], postList: [] };
    }
 };
 

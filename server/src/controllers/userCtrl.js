@@ -85,12 +85,14 @@ class UserController {
                { studentCode: { $regex: info } },
             ],
          }).select('fullName urlAvatar email role teacherCode studentCode');
-         // Search course here
 
-         if (userList.length === 0) {
-            return res.status(400).json({ message: 'Data does not match' });
-         }
-         return res.status(200).json({ message: 'successful', data: userList });
+         // Search post here
+         const postList = await PostModel.find({
+            $or: [{ tag: { $regex: info } }, { title: { $regex: info } }],
+         })
+            .select('title tag author')
+            .populate('author', 'fullName urlAvatar email role teacherCode studentCode');
+         return res.status(200).json({ message: 'successful', data: { userList ,postList } });
       } catch (error) {
          return res.status(500).json({ message: error.message });
       }

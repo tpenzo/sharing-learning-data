@@ -95,7 +95,7 @@ function Header() {
         )}
         <div
           ref={ref}
-          className="absolute z-10 w-full top-14 left-0 bg-light-gray rounded-lg shadow-xl overflow-hidden peer-focus:visible"
+          className="absolute z-10 w-full max-h-[570px] top-14 left-0 bg-light-gray rounded-lg shadow-xl overflow-auto peer-focus:visible scrollbar-hide"
         >
           {keyword && <SearchResult searchResult={searchResult} />}
         </div>
