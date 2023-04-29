@@ -119,6 +119,18 @@ function PostItem({
           </p>
         </div>
       </div>
+      { // tag
+		!dataItem.course && (
+			<div>
+				<div
+				className="mt-3 text-xs inline-flex items-center font-bold leading-sm uppercase px-3 py-1 rounded-full bg-white text-gray-700 border"
+				>
+				 <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24" style={{fill: 'rgba(0, 0, 0, 1)', transform: '', msfilter: ''}}><path d="M17.868 4.504A1 1 0 0 0 17 4H3a1 1 0 0 0-.868 1.496L5.849 12l-3.717 6.504A1 1 0 0 0 3 20h14a1 1 0 0 0 .868-.504l4-7a.998.998 0 0 0 0-.992l-4-7zM16.42 18H4.724l3.145-5.504a.998.998 0 0 0 0-.992L4.724 6H16.42l3.429 6-3.429 6z" /></svg>
+				<span className="ml-1">{dataItem.tag}</span>
+				</div>
+      		</div>
+		)
+	  }
       <div className="">
       <Link to={`/post/${dataItem?._id}`}>
         <p className="mt-5 text-sm cursor-pointer hover:font-semibold">

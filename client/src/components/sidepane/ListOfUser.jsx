@@ -26,16 +26,15 @@ function ListOfUser(props) {
           </h2>
           <AccordionPanel className="overflow-y-auto h-44 2xl:h-72">
             {
-            userList && userList.length>0 &&
-            userList.map((user=>{
-              return (
-                <PopularUserInfo 
-                  key = {user._id} 
-                  user = {idCourse ? user: user.author} 
-                  numPosts = {idCourse ? undefined : user.numPosts ? user.numPosts : "0"} 
-                  numLikes = {idCourse ? undefined : user.numLikes ? user.numLikes : "0"} 
-                />)
-            }))}
+            userList && userList.length > 0 &&
+            userList.map((user=>(
+               <PopularUserInfo 
+                    key = {user._id} 
+                    user = {idCourse ? user: user.author} 
+                    numPosts = {idCourse ? undefined : user.numPosts ? user.numPosts : "0"} 
+                    numLikes = {idCourse ? undefined : user.numLikes ? user.numLikes : "0"} 
+                  />
+            )))}
           </AccordionPanel>
         </AccordionItem>
       </Accordion>

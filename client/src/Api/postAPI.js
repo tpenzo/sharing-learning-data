@@ -24,9 +24,12 @@ import {
 export const createPost = async (payload, dispatch) => {
    try {
       const res = await axiosClient.post('/api/post/newpost', payload);
-
-      await dispatch(createNewPost(res));
-      showToast('Thêm bài viết thành công!', 'success');
+      if (!res.data.course) {
+          await dispatch(createNewPost(res));
+          showToast('Thêm bài viết thành công!', 'success');
+      } else{
+         showToast('Thêm bài viết thành công vào nhóm học phần!', 'success');
+      }
       return res;
    } catch (error) {
       showToast(error.data.message, 'error');

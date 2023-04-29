@@ -4,7 +4,7 @@ import { Wrap, Avatar } from "@chakra-ui/react";
 
 function PopularUserInfo(props) {
   const [chosen, setChosen] = useState(false);
-  const { user, numPosts, numLikes } = props;
+  const { user, numPosts, numLikes} = props;
 
   const chooseItem = () => setChosen(!chosen);
 
