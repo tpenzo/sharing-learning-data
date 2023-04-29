@@ -54,12 +54,7 @@ export default function PostListProfile({ tab }) {
   return (
     <div
       className={
-        " pr-1 grid grid-cols-2 gap-2 py-2 px-1" +
-        `${
-          posts.length / 2 > 1
-            ? ""
-            : " grid-rows-[repeat(2,minmax(200px,500px))] h-full"
-        } `
+        " pr-1 grid grid-cols-2 gap-2 py-2 px-1"
       }
     >
       {
