@@ -7,7 +7,6 @@ import FormPost from "../form/FormPost";
 function InfoPane(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { course } = props;
-
   return (
     <>
       <div className="absolute flex-col flex h-full max-h-full w-full">
@@ -19,20 +18,15 @@ function InfoPane(props) {
             <span className=" translate-y-1">
               <box-icon size="sm" color="white" name="plus"></box-icon>
             </span>
-            <span className="block font-semibold text-base pb-1 pr-2 ml-1 mt-2">
-              Đăng bài
-            </span>
+            <span className="block font-semibold text-base pb-1 pr-2 ml-1 mt-2">Đăng bài</span>
           </div>
         </div>
 
         <div className=" mt-8">
-          <TeacherInfo teacherInfo={course?.teacher} />
+          <TeacherInfo teacherInfo={course?.teacher} idCourse={course._id} />
         </div>
         <div className="my-4 overflow-hidden">
-          <ListOfUser
-            title={"Danh sách sinh viên"}
-            userList={course.studentList}
-          />
+          <ListOfUser title={"Danh sách sinh viên"} userList={course.studentList} />
         </div>
       </div>
       <ModalInstance

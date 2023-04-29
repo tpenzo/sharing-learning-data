@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Button,
-  FormControl,
-  FormLabel,
-  Input,
-  Select,
-  FormErrorMessage,
-} from "@chakra-ui/react";
+import { Button, FormControl, FormLabel, Input, Select, FormErrorMessage } from "@chakra-ui/react";
 import courses from "../../data/CoursesData";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -24,9 +17,7 @@ function FormPost(props) {
   const [scope, setScope] = useState(false);
   const [docs, setDocs] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { followingCourses, managedCourses, role } = useSelector(
-    (state) => state.auth.user
-  );
+  const { followingCourses, managedCourses, role } = useSelector((state) => state.auth.user);
 
   const dispatch = useDispatch();
   const handleSelectedFile = (e) => {
@@ -44,15 +35,7 @@ function FormPost(props) {
     await deleteDoc(doc._id);
     setOldDocs(oldDocs.filter((doc, i) => i !== index));
   };
-  const {
-    values,
-    errors,
-    handleChange,
-    handleBlur,
-    handleSubmit,
-    touched,
-    setValues,
-  } = useFormik({
+  const { values, errors, handleChange, handleBlur, handleSubmit, touched, setValues } = useFormik({
     initialValues: {
       title: "",
       description: "",
@@ -64,9 +47,7 @@ function FormPost(props) {
         .min(10, "Ít nhất có 10 kí tự")
         .max(155, "Tối đa 155 kí tự")
         .required("Vui lòng nhập tiêu đề!"),
-      courseId: scope
-        ? Yup.string().required("Vui lòng chọn lớp học phần!")
-        : Yup.string(),
+      courseId: scope ? Yup.string().required("Vui lòng chọn lớp học phần!") : Yup.string(),
       description: Yup.string().max(255, "Tối đa 255 kí tự"),
       tag: Yup.string().min(5, "Tối thiểu 5 kí tự"),
     }),
@@ -101,7 +82,7 @@ function FormPost(props) {
         courseId: post?.course?._id,
         title: post?.title,
         description: post?.description,
-        tag: post?.tag
+        tag: post?.tag,
       });
       setScope(post?.course?._id ? true : false);
       setContent(post?.content);
@@ -133,103 +114,82 @@ function FormPost(props) {
             </Select>
           </FormControl>
           {
-          //public
-          scope &&  
-          <FormControl
-            className="mt-4"
-            isInvalid={errors.courseId && touched.courseId && scope}
-          >
-            <FormLabel>Lớp học phần:</FormLabel>
-            <Select
-              name="courseId"
-              placeholder="Chọn Lớp học phần"
-              size={"md"}
-              isDisabled={!scope}
-              value={values.courseId || " "}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            >
-              {role === "student"
-                ? followingCourses &&
-                  followingCourses.length > 0 &&
-                  followingCourses.map((course) => {
-                    return (
-                      <option key={course._id} value={course._id}>{`${
-                        course.courseID
-                      }-${
-                        course.groupNumber.length < 2
-                          ? `0${course.groupNumber}`
-                          : course.groupNumber
-                      }-HK${course.semester} ${course.schoolyear} ${course.name}`}</option>
-                    );
-                  })
-                : managedCourses &&
-                  managedCourses.length > 0 &&
-                  managedCourses.map((course) => {
-                    return (
-                      <option key={course._id} value={course._id}>{`${
-                        course.courseID
-                      }-${
-                        course.groupNumber.length < 2
-                          ? `0${course.groupNumber}`
-                          : course.groupNumber
-                      }-HK${course.semester} ${course.schoolyear}`}</option>
-                    );
-                  })}
-            </Select>
-            {errors.courseId && touched.courseId && scope && (
-              <FormErrorMessage>{errors.courseId}</FormErrorMessage>
-            )}
-          </FormControl>}
+            //public
+            scope && (
+              <FormControl className="mt-4" isInvalid={errors.courseId && touched.courseId && scope}>
+                <FormLabel>Lớp học phần:</FormLabel>
+                <Select
+                  name="courseId"
+                  placeholder="Chọn Lớp học phần"
+                  size={"md"}
+                  isDisabled={!scope}
+                  value={values.courseId || " "}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                >
+                  {role === "student"
+                    ? followingCourses &&
+                      followingCourses.length > 0 &&
+                      followingCourses.map((course) => {
+                        return (
+                          <option key={course._id} value={course._id}>{`${course.courseID}-${
+                            course.groupNumber.length < 2 ? `0${course.groupNumber}` : course.groupNumber
+                          }-HK${course.semester} ${course.schoolyear} ${course.name}`}</option>
+                        );
+                      })
+                    : managedCourses &&
+                      managedCourses.length > 0 &&
+                      managedCourses.map((course) => {
+                        return (
+                          <option key={course._id} value={course._id}>{`${course.courseID}-${
+                            course.groupNumber.length < 2 ? `0${course.groupNumber}` : course.groupNumber
+                          }-HK${course.semester} ${course.schoolyear}`}</option>
+                        );
+                      })}
+                </Select>
+                {errors.courseId && touched.courseId && scope && <FormErrorMessage>{errors.courseId}</FormErrorMessage>}
+              </FormControl>
+            )
+          }
 
           {
             //private
-            !scope && 
-            <FormControl className="mt-4" isInvalid={errors.tag && touched.tag && !scope}>
-            <FormLabel>Môn học liên quan:</FormLabel>
-            <Input
-              type="text"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              name="tag"
-              value={values.tag}
-              list="courseIDList"
-              autoComplete="off"
-              placeholder="Mã môn"
-            />
-            {/* suggestion for courseID */}
-            <datalist id="courseIDList">
-              {values?.tag && values?.tag.length > 1 && courses.map((course) => {
-                return (
-                  <option key={course.courseId} value={`${course.courseId} - ${course.courseName}`}>
-                    {course.courseId + " - " + course.courseName}
-                  </option>
-                );
-              })}
-            </datalist>
-            {errors.tag && touched.tag && !scope && (
-              <FormErrorMessage>{errors.tag}</FormErrorMessage>
-            )}
-          </FormControl>
+            !scope && (
+              <FormControl className="mt-4" isInvalid={errors.tag && touched.tag && !scope}>
+                <FormLabel>Môn học liên quan:</FormLabel>
+                <Input
+                  type="text"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  name="tag"
+                  value={values.tag}
+                  list="courseIDList"
+                  autoComplete="off"
+                  placeholder="Mã môn"
+                />
+                {/* suggestion for courseID */}
+                <datalist id="courseIDList">
+                  {values?.tag &&
+                    values?.tag.length > 1 &&
+                    courses.map((course) => {
+                      return (
+                        <option key={course.courseId} value={`${course.courseId} - ${course.courseName}`}>
+                          {course.courseId + " - " + course.courseName}
+                        </option>
+                      );
+                    })}
+                </datalist>
+                {errors.tag && touched.tag && !scope && <FormErrorMessage>{errors.tag}</FormErrorMessage>}
+              </FormControl>
+            )
           }
         </div>
         <FormControl className="mt-4" isInvalid={errors.title && touched.title}>
           <FormLabel>Tiêu đề:</FormLabel>
-          <Input
-            type="text"
-            value={values.title || ""}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            name="title"
-          />
-          {errors.title && touched.title && (
-            <FormErrorMessage>{errors.title}</FormErrorMessage>
-          )}
+          <Input type="text" value={values.title || ""} onChange={handleChange} onBlur={handleBlur} name="title" />
+          {errors.title && touched.title && <FormErrorMessage>{errors.title}</FormErrorMessage>}
         </FormControl>
-        <FormControl
-          className="mt-4"
-          isInvalid={errors.description && touched.description}
-        >
+        <FormControl className="mt-4" isInvalid={errors.description && touched.description}>
           <FormLabel>Mô tả:</FormLabel>
           <Input
             type="text"
@@ -238,17 +198,12 @@ function FormPost(props) {
             onBlur={handleBlur}
             name="description"
           />
-          {errors.description && touched.description && (
-            <FormErrorMessage>{errors.description}</FormErrorMessage>
-          )}
+          {errors.description && touched.description && <FormErrorMessage>{errors.description}</FormErrorMessage>}
         </FormControl>
         <FormControl className="mt-4">
           <FormLabel>Nội dung:</FormLabel>
 
-          <QuillEditor
-            content={content || ""}
-            handleChangeQuill={handleChangeQuill}
-          />
+          <QuillEditor content={content || ""} handleChangeQuill={handleChangeQuill} />
         </FormControl>
         <FormControl className="mt-4">
           <FormLabel htmlFor="doc" className="cursor-pointer">
@@ -257,15 +212,7 @@ function FormPost(props) {
                 <span>Kéo và thả tập tin </span>&nbsp;
                 <span>của bạn vào hoặc</span>
               </p>
-              <input
-                id="hidden-input"
-                type="file"
-                multiple
-                className="hidden"
-              />
-              <span className="mt-2 rounded-sm px-3 py-1 bg-gray-200 hover:bg-gray-300 focus:shadow-outline focus:outline-none">
-                Đăng tải tệp
-              </span>
+              <span className="mt-2 rounded-sm px-3 py-1 bg-gray-200 hover:bg-gray-300">Đăng tải tệp</span>
             </div>
           </FormLabel>
 
@@ -293,21 +240,11 @@ function FormPost(props) {
             </div>
           ) : null}
 
-          <Input
-            hidden={true}
-            id="doc"
-            type="file"
-            accept="*"
-            onChange={handleSelectedFile}
-            name="docs"
-            multiple
-          />
+          <Input hidden={true} id="doc" type="file" accept="*" onChange={handleSelectedFile} name="docs" multiple />
         </FormControl>
         {oldDocs && oldDocs.length > 0 ? (
           <div>
-            <span className="text-sm font-bold">
-              {oldDocs.length} Tài liệu hiện tại
-            </span>
+            <span className="text-sm font-bold">{oldDocs.length} Tài liệu hiện tại</span>
             <ul className="flex gap-2">
               {oldDocs.map((doc, index) => {
                 console.log(doc);
@@ -329,12 +266,7 @@ function FormPost(props) {
             </ul>
           </div>
         ) : null}
-        <Button
-          colorScheme="blue"
-          className="mt-4 mr-3"
-          type="submit"
-          isLoading={loading}
-        >
+        <Button colorScheme="blue" className="mt-4 mr-3" type="submit" isLoading={loading}>
           Lưu
         </Button>
         <Button className="mt-4" onClick={onClose}>

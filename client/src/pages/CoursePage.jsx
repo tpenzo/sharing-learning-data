@@ -5,7 +5,7 @@ import PostItem from "../components/post/PostItem";
 import Header from "../components/header/Header";
 import { getCourseAPI } from "../Api/coursesAPI";
 import { useParams } from "react-router-dom";
-import { getCoursePostAPI, likePost, unLikePost } from "../Api/postAPI";
+import { getCoursePostAPI, likePost, unLikePost, updateStatusPost } from "../Api/postAPI";
 import { useDispatch, useSelector } from "react-redux";
 import { resetSelectCourse, selectCourse } from "../redux/AllCoursesSlice";
 import { getCourseDocList } from "../Api/documentAPI";
@@ -16,6 +16,7 @@ export default function CoursePage() {
   const [tab, setTab] = useState("post");
   const { idCourse } = useParams();
   const { postCourseList } = useSelector((state) => state.post);
+  const { user } = useSelector((state) => state.auth);
   const { docCourseList } = useSelector((state) => state.document.docs);
   const dispatch = useDispatch();
   const handleChangeTab = (e) => {
@@ -57,6 +58,10 @@ export default function CoursePage() {
     await unLikePost(postId, userId, dispatch);
   };
 
+  const updateStatus = async (postId, status) => {
+    await updateStatusPost(dispatch, postId, { status });
+    setTab("posted");
+  };
   return (
     <div className="container mx-auto h-screen items-center self-center flex flex-col">
       <header className="header sticky top-0 w-full h-[10%] rounded-t-lg z-50">
@@ -75,8 +80,7 @@ export default function CoursePage() {
               className={
                 (tab === "post"
                   ? "border-primary-blue border-b-2 text-primary-blue"
-                  : "text-gray-400 hover:bg-gray-200") +
-                " py-1 w-full text-center text-lg font-semibold cursor-pointer"
+                  : "text-gray-400 hover:bg-gray-200") + " py-1 w-full text-center text-lg font-semibold cursor-pointer"
               }
             >
               Bài Viết
@@ -93,18 +97,20 @@ export default function CoursePage() {
             >
               Tài liệu
             </span>
-            <span
-              id="pending-post"
-              onClick={handleChangeTab}
-              className={
-                (tab === "pending-post"
-                  ? "border-primary-blue border-b-2 text-primary-blue"
-                  : "text-gray-400 hover:bg-gray-200 ") +
-                " py-1 w-full text-center text-lg font-semibold cursor-pointer"
-              }
-            >
-              Bài viết chưa duyệt
-            </span>
+            {user.role === "teacher" && (
+              <span
+                id="pending-post"
+                onClick={handleChangeTab}
+                className={
+                  (tab === "pending-post"
+                    ? "border-primary-blue border-b-2 text-primary-blue"
+                    : "text-gray-400 hover:bg-gray-200 ") +
+                  " py-1 w-full text-center text-lg font-semibold cursor-pointer"
+                }
+              >
+                Bài viết chưa duyệt
+              </span>
+            )}
           </div>
           {tab !== "doc" ? (
             <div className="post-list h-[90%] px-3 overflow-y-auto">
@@ -116,14 +122,13 @@ export default function CoursePage() {
                       dataItem={postItem}
                       funcLikePost={likePostHome}
                       funcUnLikePost={unLikePostHome}
+                      updateStatus={updateStatus}
                     />
                   );
                 })
               ) : (
                 <div className="flex justify-center">
-                  <span className="font-semibold text-lg mt-16 text-blue-800">
-                    Chưa có bài viết nào
-                  </span>
+                  <span className="font-semibold text-lg mt-16 text-blue-800">Chưa có bài viết nào</span>
                 </div>
               )}
             </div>
@@ -145,9 +150,7 @@ export default function CoursePage() {
                 })
               ) : (
                 <div className="flex justify-center">
-                  <span className="font-semibold text-lg mt-16 text-blue-800">
-                    Chưa có tài liệu nào
-                  </span>
+                  <span className="font-semibold text-lg mt-16 text-blue-800">Chưa có tài liệu nào</span>
                 </div>
               )}
             </div>

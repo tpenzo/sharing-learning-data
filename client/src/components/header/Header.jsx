@@ -11,7 +11,7 @@ import { Avatar, Wrap } from "@chakra-ui/react";
 function Header() {
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  const {idCourse} = useParams()
+  const { idCourse } = useParams();
 
   const [keyword, setKeyword] = useState("");
   const [closeX, setCloseX] = useState(false);
@@ -47,7 +47,6 @@ function Header() {
     }
   }, [keyword]);
 
-
   const handleLogout = async () => {
     await logoutAPI(dispatch);
   };
@@ -64,42 +63,40 @@ function Header() {
             CTU SHARE
             <br />
           </span>
-          <span className="text-primary-blue text-xs font-semibold">
-            Chia sẻ dữ liệu học tập
-          </span>
+          <span className="text-primary-blue text-xs font-semibold">Chia sẻ dữ liệu học tập</span>
         </div>
       </div>
-      {
-        (auth?.user.role==="student" || auth?.user.role==="teacher") &&
+      {(auth?.user.role === "student" || auth?.user.role === "teacher") && (
         <div className="xl:w-[50%] flex relative">
-        <span className="cursor-pointer pl-1 absolute top-2 xl:top-3 left-2">
-          <box-icon name="search-alt-2" color="gray"></box-icon>
-        </span>
-        <input
-          value={keyword}
-          onChange={handleSearching}
-          className="w-full py-2 xl:py-3 px-10 outline-none rounded-lg bg-gray-100 focus:outline-primary-blue peer"
-          type="text"
-          placeholder="Tìm kiếm..."
-        />
-        {closeX && (
-          <span
-            className="cursor-pointer absolute top-2 xl:top-3 right-2"
-            onClick={() => {
-              setKeyword("");
-              setSearchResult([]);
-            }}
-          >
-            <box-icon name="x" color="gray"></box-icon>
+          <span className="cursor-pointer pl-1 absolute top-2 xl:top-3 left-2">
+            <box-icon name="search-alt-2" color="gray"></box-icon>
           </span>
-        )}
-        <div
-          ref={ref}
-          className="absolute z-10 w-full max-h-[570px] top-14 left-0 bg-light-gray rounded-lg shadow-xl overflow-auto peer-focus:visible scrollbar-hide"
-        >
-          {keyword && <SearchResult searchResult={searchResult} />}
+          <input
+            value={keyword}
+            onChange={handleSearching}
+            className="w-full py-2 xl:py-3 px-10 outline-none rounded-lg bg-gray-100 focus:outline-primary-blue peer"
+            type="text"
+            placeholder="Tìm kiếm..."
+          />
+          {closeX && (
+            <span
+              className="cursor-pointer absolute top-2 xl:top-3 right-2"
+              onClick={() => {
+                setKeyword("");
+                setSearchResult([]);
+              }}
+            >
+              <box-icon name="x" color="gray"></box-icon>
+            </span>
+          )}
+          <div
+            ref={ref}
+            className="absolute z-10 w-full max-h-[570px] top-14 left-0 bg-light-gray rounded-lg shadow-xl overflow-auto peer-focus:visible scrollbar-hide"
+          >
+            {keyword && <SearchResult searchResult={searchResult} />}
+          </div>
         </div>
-      </div>}
+      )}
       {/* user */}
       <div className="flex items-center gap-2 relative pr-5">
         <div className="text-right">
@@ -108,7 +105,7 @@ function Header() {
         </div>
         <figure className="relative">
           <Wrap>
-            <Avatar size='md' src={auth.user.urlAvatar}></Avatar>
+            <Avatar size="md" src={auth.user.urlAvatar}></Avatar>
           </Wrap>
           <p
             className="absolute top-7 -right-2 h-6 rounded-full bg-white scale-[70%] cursor-pointer"
@@ -121,31 +118,23 @@ function Header() {
         </figure>
         {dropdown && (
           <ul className="absolute z-[9999] bg-white w-44 top-14 -right-5 rounded-xl shadow-xl border overflow-hidden">
-            {
-              (auth?.user.role==="student" || auth?.user.role==="teacher") && 
+            {(auth?.user.role === "student" || auth?.user.role === "teacher") && (
               <>
-              <Link to={`/profile/${auth.user._id}`}>
-                <li className="p-2 font-semibold hover:bg-bold-gray flex items-center justify-start cursor-pointer">
-                  <box-icon name="user"></box-icon>
-                  <span className="ml-2">Trang cá nhân</span>
-                </li>
-              </Link>
-              <Link to={"/chat"}>
-                <li className="p-2 font-semibold hover:bg-bold-gray flex items-center justify-start cursor-pointer">
-                  <box-icon name="message-square-dots"></box-icon>
-                  <span className="ml-2">Nhắn tin</span>
-                </li>
-              </Link></>
-            }
-            {
-              (idCourse && auth?.user.role==="teacher") &&
-              <Link to={`/courses/${idCourse}/manage`}>
-                <li className="p-2 font-semibold hover:bg-bold-gray flex items-center justify-start cursor-pointer">
-                <box-icon name='book-content'></box-icon>
-                  <span className="ml-2">Quản lý nhóm học</span>
-                </li>
-              </Link>
-            }
+                <Link to={`/profile/${auth.user._id}`}>
+                  <li className="p-2 font-semibold hover:bg-bold-gray flex items-center justify-start cursor-pointer">
+                    <box-icon name="user"></box-icon>
+                    <span className="ml-2">Trang cá nhân</span>
+                  </li>
+                </Link>
+                <Link to={"/chat"}>
+                  <li className="p-2 font-semibold hover:bg-bold-gray flex items-center justify-start cursor-pointer">
+                    <box-icon name="message-square-dots"></box-icon>
+                    <span className="ml-2">Nhắn tin</span>
+                  </li>
+                </Link>
+              </>
+            )}
+
             <li
               className="p-2 font-semibold hover:bg-bold-gray flex items-center justify-start cursor-pointer"
               onClick={handleLogout}

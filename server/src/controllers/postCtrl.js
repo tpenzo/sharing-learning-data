@@ -28,8 +28,7 @@ class postController {
           refDocs.push(newDocument);
         }
       }
-      let status = "posted";
-      status = role === "student" && courseId ? "pending" : "posted";
+      let status = role === "student" ? "pending" : "posted";
       const newPost = new postModel({
         author: _id,
         title,
@@ -59,19 +58,18 @@ class postController {
       page: +req.query.page || 0,
       limit: +req.query.limit || 6,
     };
+    const status = req.query.status;
     const showMore = (pageOptions.page + 1) * pageOptions.limit;
     try {
-      const countPost = await postModel.countDocuments({ course: null });
+      const countPost = await postModel.countDocuments({ course: null, status });
       const postList = await postModel
-        .find({ course: null })
+        .find({ course: null, status })
         .skip(0)
         .limit(showMore)
         .populate("author", "fullName urlAvatar teacherCode studentCode")
         .sort({ createdAt: -1 })
         .populate("docs");
-      res
-        .status(200)
-        .json({ message: "successful!", data: { postList, countPost } });
+      res.status(200).json({ message: "successful!", data: { postList, countPost } });
     } catch (error) {
       return res.status(500).json({ message: error.message });
     }
@@ -192,10 +190,7 @@ class postController {
     try {
       if (!postId) return res.status(404).json({ message: "post not found" });
 
-      const post = await postModel
-        .findOne({ _id: postId, author: user._id })
-        .populate("author")
-        .populate("docs");
+      const post = await postModel.findOne({ _id: postId, author: user._id }).populate("author").populate("docs");
 
       // xóa docs
       if (post.docs && post.docs.length > 0) {
@@ -264,11 +259,7 @@ class postController {
     const postId = req.params.postId;
     const { status } = req.body;
     try {
-      const updatedPost = await postModel.findByIdAndUpdate(
-        { _id: postId },
-        { status },
-        { new: true }
-      );
+      const updatedPost = await postModel.findByIdAndUpdate({ _id: postId }, { status }, { new: true });
       res.status(200).json({ message: "successful!", data: updatedPost });
     } catch (error) {
       return res.status(500).json({ message: error.message });
