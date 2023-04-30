@@ -33,7 +33,9 @@ function TableAccount(props) {
       case "student":
         if(accounts.length < studentListTotal){
           setIsLoading(true);
-          setStudentPage(++studentPage);
+          if (maxPerPage.current * studentPage === studentAccounts.length){
+            setStudentPage(++studentPage);
+          }
           await appendStudentListAccountAPI(dispatch, studentPage)
           setAccounts(studentAccounts);
           setIsLoading(false);
@@ -46,7 +48,9 @@ function TableAccount(props) {
       case "teacher":
         setIsLoading(true);
         if(accounts.length < teacherListTotal ){
-          setTeacherPage(++teacherPage);
+          if (maxPerPage.current * teacherPage === teacherAccounts.length){
+            setTeacherPage(++teacherPage);
+          }
           await appendTeacherListAccountAPI(dispatch, teacherPage)
           setAccounts(teacherAccounts);
           setIsLoading(false);
@@ -60,7 +64,9 @@ function TableAccount(props) {
       case "ministry":
         setIsLoading(true);
         if(accounts.length < ministryListTotal){
-          setMinistryPage(++ministryPage);
+          if (maxPerPage.current * ministryPage === ministryAccounts.length){
+            setMinistryPage(++ministryPage);
+          }
           await appendMinistryListAccountAPI(dispatch, ministryPage)
           setAccounts(ministryAccounts);
           setIsLoading(false);
