@@ -121,7 +121,7 @@ function PostItem({ dataItem, funcLikePost, funcUnLikePost, funcBookmarkPost, fu
         // tag
         !dataItem.course && (
           <div>
-            <div className="mt-3 translate-y-2 text-[10px] inline-flex items-center font-bold leading-sm uppercase px-3 py-1 rounded-full bg-white text-gray-700 border">
+            <div className="mt-4 text-[10px] inline-flex items-center font-bold leading-sm uppercase px-3 py-1 rounded-full bg-white text-gray-700 border">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width={20}
@@ -248,12 +248,14 @@ function PostItem({ dataItem, funcLikePost, funcUnLikePost, funcBookmarkPost, fu
         
 
         {dataItem?.docs?.length > 0 && (
-          <Link to={`/post/${dataItem?._id}`}>
-            <p className="flex items-center " title="Tệp đính kèm">
+          <span className="ml-auto">
+            <Link to={`/post/${dataItem?._id}`}>
+            <p className="flex items-center  place-self-end" title="Tệp đính kèm">
               <box-icon name="file"></box-icon>
               <span>{dataItem.docs.length}</span>
             </p>
           </Link>
+          </span>
         )}
       </div>
     </div>
