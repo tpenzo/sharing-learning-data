@@ -92,7 +92,7 @@ function ManageAccount() {
       case "teacher":
         getTeacherListAccountAPI(dispatch);
         setAccounts(teacherAccounts);
-        setFilterResultList(teacherAccounts)
+        setFilterResultList(teacherAccounts);
       break;
 
       case "ministry":
