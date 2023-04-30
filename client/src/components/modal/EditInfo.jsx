@@ -77,57 +77,79 @@ function EditInfo(props) {
 									<div className="mb-3">
 										<div className="mb-2">Họ và tên *</div>
 										<input
-											className="bg-gray-50 block w-full mt-1 border outline-none border-gray-300 text-gray-400 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
+											className="bg-gray-50 block w-full mt-1 border outline-none border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
 											type="text"
 											value={fullName}
 											onChange={(e) => setFullName(e.target.value)}
 											required
 										/>
 									</div>
-									<div>
-										<div className="mb-2">Mã sinh viên *</div>
+									{
+										user?.role === 'student' ? (
+											<div>
+												<div className="mb-2">Mã sinh viên *</div>
+												<input
+													className="bg-gray-50 block w-full mt-1 border outline-none border-gray-300 text-gray-400 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
+													type="text"
+													value={user.studentCode}
+													readOnly
+												/>
+											</div>
+										) : (
+											<div className="mt-4">
+												<div className="mb-2">Email *</div>
+												<input
+													className="bg-gray-50 block w-full mt-1 border outline-none border-gray-300 text-gray-400 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
+													type="text"
+													value={user.email}
+													readOnly
+												/>
+											</div>
+										)
+									}
+								</div>
+							</div>
+							{
+								user?.role === 'student' && (
+									<div className="flex justify-center gap-2">
+										<div className="mt-4 w-1/2">
+											<div className="mb-2">Ngành học *</div>
+											<input
+												className="bg-gray-50 block w-full mt-1 border outline-none border-gray-300 text-gray-400 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
+												type="text"
+												value={user.major}
+												readOnly
+											/>
+										</div>
+										<div className="mt-4 w-1/2">
+											<div className="mb-2">Lớp *</div>
+											<input
+												className="bg-gray-50 block w-full mt-1 border outline-none border-gray-300 text-gray-400 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
+												type="text"
+												value={user.class}
+												readOnly
+											/>
+										</div>
+									</div>
+								)
+							}
+							{
+								user?.role === 'student' && (
+									<div className="mt-4">
+										<div className="mb-2">Email *</div>
 										<input
 											className="bg-gray-50 block w-full mt-1 border outline-none border-gray-300 text-gray-400 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
 											type="text"
-											value={user.studentCode}
+											value={user.email}
 											readOnly
 										/>
 									</div>
-								</div>
-							</div>
-							<div className="flex justify-center gap-2">
-								<div className="mt-4 w-1/2">
-									<div className="mb-2">Ngành học *</div>
-									<input
-										className="bg-gray-50 block w-full mt-1 border outline-none border-gray-300 text-gray-400 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
-										type="text"
-										value={user.major}
-										readOnly
-									/>
-								</div>
-								<div className="mt-4 w-1/2">
-									<div className="mb-2">Lớp *</div>
-									<input
-										className="bg-gray-50 block w-full mt-1 border outline-none border-gray-300 text-gray-400 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
-										type="text"
-										value={user.class}
-										readOnly
-									/>
-								</div>
-							</div>
-							<div className="mt-4">
-								<div className="mb-2">Email *</div>
-								<input
-									className="bg-gray-50 block w-full mt-1 border outline-none border-gray-300 text-gray-400 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
-									type="text"
-									value={user.email}
-									readOnly
-								/>
-							</div>
+								)
+							}
 							<div className="mt-4">
 								<div className="mb-2">Số điện thoại</div>
 								<input
-									className="bg-gray-50 block w-full mt-1 border outline-none border-gray-300 text-gray-400 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
+									className="bg-gray-50 block w-full mt-1 border outline-none border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
 									type="text"
 									value={phoneNumber}
 									onChange={(e) => setPhoneNumber(e.target.value)}
@@ -136,7 +158,7 @@ function EditInfo(props) {
 							<div className="mt-4">
 								<div className="mb-2">Địa chỉ</div>
 								<input
-									className="bg-gray-50 block w-full mt-1 border outline-none border-gray-300 text-gray-400 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
+									className="bg-gray-50 block w-full mt-1 border outline-none border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
 									type="text"
 									value={address}
 									onChange={(e) => setAddress(e.target.value)}

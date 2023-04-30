@@ -81,8 +81,8 @@ function PostItem({ dataItem, funcLikePost, funcUnLikePost, funcBookmarkPost, fu
       {
           (location.pathname.includes("/profile") && dataItem.status === "pending") && 
             <div className="mt-3">
-              <span className="inline-flex items-center rounded-md border-2 border-blue-200 bg-blue-200 px-2 py-1 text-sm font-semibold text-blue-600 shadow-sm">
-                Đang chờ duyệt
+              <span className="inline-flex items-center rounded-lg border-2 border-blue-200 bg-blue-200 px-2 py-1 text-sm font-semibold  shadow-sm">
+                Đang chờ phê duyệt
               </span>
             </div>
         }
@@ -154,7 +154,9 @@ function PostItem({ dataItem, funcLikePost, funcUnLikePost, funcBookmarkPost, fu
                 <span className="text-sm leading-4">Bình luận</span>
               </Link>
             </span>
-            <span
+            {
+              !dataItem.course && (
+                <span
               className="bg-gray-500/5 cursor-pointer pt-1 px-1 rounded-lg flex items-center"
               onClick={handleSavedPost}
             >
@@ -164,6 +166,8 @@ function PostItem({ dataItem, funcLikePost, funcUnLikePost, funcBookmarkPost, fu
                 // color={saved ? "yellow" : "black"}
               ></box-icon>
             </span>
+              )
+            }
 
             <div className="relative">
               {options && (

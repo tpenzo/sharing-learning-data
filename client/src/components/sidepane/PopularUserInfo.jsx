@@ -25,7 +25,7 @@ function PopularUserInfo(props) {
             {user?.fullName}
           </span>
           {numLikes && numPosts && (
-            <div className="text-xs font-thin overflow-hidden">
+            <div className="text-xs font-thin overflow-hidden mt-[2px]">
               <p>Số bài viết: {numPosts}</p>
               <p>Số lượt tương tác: {numLikes}</p>
             </div>

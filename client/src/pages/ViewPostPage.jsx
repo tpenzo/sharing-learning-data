@@ -38,6 +38,8 @@ export default function ViewPostPage() {
     }
   };
 
+
+
   const handleBookmarkPost = () => {
     setBookmarked(!bookmarked);
     //api
@@ -135,37 +137,9 @@ export default function ViewPostPage() {
               </h1>
               <div className="px-6 text-justify break-words overflow-x-hidden">
                 <div className="pb-3">
-                {post?.content ? (
-                  parse(post ? String(post?.content) : " ")
-                ) : (
-                  // <Spinner
-                  //   thickness="4px"
-                  //   speed="0.65s"
-                  //   emptyColor="gray.200"
-                  //   color="blue.500"
-                  //   size="xl"
-                  // />
-                      <>
-                        <SkeletonText
-                          mt="4"
-                          noOfLines={4}
-                          spacing="4"
-                          skeletonHeight="2"
-                        />
-                          <SkeletonText
-                            mt="4"
-                            noOfLines={4}
-                            spacing="4"
-                            skeletonHeight="2"
-                          />
-                          <SkeletonText
-                            mt="4"
-                            noOfLines={4}
-                            spacing="4"
-                            skeletonHeight="2"
-                          />
-                      </>
-                )}
+                {
+                  post?.content && ( parse(post ? String(post?.content) : " "))
+                }
                 </div>
                 <hr />
                 <div className="py-6">

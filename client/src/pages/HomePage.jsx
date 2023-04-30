@@ -70,7 +70,7 @@ export default function HomePage() {
                   (tab === "posted"
                     ? "border-primary-blue border-b-2 text-primary-blue"
                     : "text-gray-400 hover:bg-gray-200") +
-                  " py-1 w-full text-center text-lg font-semibold cursor-pointer"
+                  "py-1 w-full text-center text-lg font-semibold cursor-pointer text-gra relative flex items-center justify-center gap-2 rounded-lg bg-white px-3 shadow hover:bg-white hover:text-gray-700 mr-2"
                 }
               >
                 Bài Viết
@@ -83,7 +83,7 @@ export default function HomePage() {
                   (tab === "pending"
                     ? "border-primary-blue border-b-2 text-primary-blue"
                     : "text-gray-400 hover:bg-gray-200 ") +
-                  " py-1 w-full text-center text-lg font-semibold cursor-pointer"
+                  "py-1 w-full text-center text-lg font-semibold cursor-pointer text-gra relative flex items-center justify-center gap-2 rounded-lg bg-white px-3 shadow hover:bg-white hover:text-gray-700"
                 }
               >
                 Bài viết chưa duyệt

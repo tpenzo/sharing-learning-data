@@ -101,7 +101,7 @@ function Header() {
       <div className="flex items-center gap-2 relative pr-5">
         <div className="text-right">
           <p className="font-semibold text-sm">{auth.user.fullName}</p>
-          <span className="text-xs text-gray-400">{auth.user.role}</span>
+          <span className="text-xs text-gray-400">{auth.user.role.toUpperCase()}</span>
         </div>
         <figure className="relative">
           <Wrap>

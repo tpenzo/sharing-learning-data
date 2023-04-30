@@ -86,13 +86,17 @@ class UserController {
             ],
          }).select('fullName urlAvatar email role teacherCode studentCode');
 
-         // Search post here
          const postList = await PostModel.find({
-            $or: [{ tag: { $regex: info } }, { title: { $regex: info } }],
+            $and: [
+               { $or: [{ tag: { $regex: info } }, { title: { $regex: info } }] },
+               { status: 'posted' },
+            ],
          })
             .select('title tag author')
             .populate('author', 'fullName urlAvatar email role teacherCode studentCode');
-         return res.status(200).json({ message: 'successful', data: { userList ,postList } });
+         return res
+            .status(200)
+            .json({ message: 'successful', data: { userList, postList } });
       } catch (error) {
          return res.status(500).json({ message: error.message });
       }
@@ -308,6 +312,11 @@ class UserController {
    async getTopAuthors(req, res) {
       try {
          const results = await PostModel.aggregate([
+            {
+               $match: {
+                  $and: [{ status: 'posted' }, { course: null }],
+               },
+            },
             {
                // Group by author and count number of posts
                $group: {

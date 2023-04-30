@@ -5,10 +5,12 @@ import ModalInstance from "../modal/ModalInstance";
 import ListOfUser from "./ListOfUser";
 import PopularCoursesList from "./PopularCoursesList";
 import axiosClient from "../../Api/axiosClient";
+import { useSelector } from "react-redux";
 function InfoPane() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [topAuthors, setTopAuthors] = useState([])
 
+  const { postList } = useSelector((state) => state.post);
 
   const fetchTopAuthors = async () => {
     try {
@@ -21,7 +23,7 @@ function InfoPane() {
 
   useEffect(() => {
     fetchTopAuthors()
-  }, [])
+  }, [postList])
 
   return (
     <>

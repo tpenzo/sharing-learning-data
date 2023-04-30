@@ -78,6 +78,10 @@ export const profileSlice = createSlice({
          });
       },
 
+      createNewPostProfile: (state, actions) => {
+         state.posts.unshift(actions.payload.data);
+      },
+
       resetProfileSlice: () => initialState,
    },
 });
@@ -95,6 +99,7 @@ export const {
    removeBookmarkProfile,
    removePostProfile,
    saveEditPostsProfile,
+   createNewPostProfile
 } = profileSlice.actions;
 
 export default profileSlice.reducer;

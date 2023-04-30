@@ -16,6 +16,7 @@ import {
 import showToast from './showToast';
 import { fetchCmtsAPI } from './commentAPI';
 import {
+   createNewPostProfile,
    getBookmarksUser,
    getPostsUser,
    likePostProfile,
@@ -30,10 +31,11 @@ export const createPost = async (payload, dispatch) => {
       const res = await axiosClient.post('/api/post/newpost', payload);
       if (!res.data.course) {
          await dispatch(createNewPost(res));
-         showToast('Thêm bài viết thành công!', 'success');
+         await dispatch(createNewPostProfile(res));
+         showToast('Tạo bài viết thành công!', 'success');
       } else {
          await dispatch(createNewPostCourseList(res));
-         showToast('Thêm bài viết thành công vào nhóm học phần!', 'success');
+         showToast('Tạo bài viết thành công!', 'success');
       }
       return res;
    } catch (error) {
@@ -67,7 +69,7 @@ export const editPost = async (payload, dispatch, postId, position = 'home') => 
       } else {
          await dispatch(saveEditPost({ postId, post: res.data }));
       }
-      showToast("chỉnh sửa thành công", 'success');
+      showToast("chỉnh sửa thành công!", 'success');
       return res;
    } catch (error) {
       showToast(error.data.message, 'error');
