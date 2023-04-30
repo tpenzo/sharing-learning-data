@@ -41,9 +41,10 @@ class postController {
       await newPost.save();
       // get post
       const post = await postModel
-        .findOne({ _id: newPost._id })
-        .populate("author", "fullName urlAvatar teacherCode studentCode")
-        .populate("docs");
+         .findOne({ _id: newPost._id })
+         .populate('author', 'fullName urlAvatar teacherCode studentCode')
+         .populate('course')
+         .populate('docs');
       res.status(200).json({ message: "successful!", data: post });
     } catch (error) {
       return res.status(500).json({ message: error.message });

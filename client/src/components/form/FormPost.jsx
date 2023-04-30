@@ -9,9 +9,11 @@ import { createPost, editPost } from "../../Api/postAPI";
 import { useDispatch, useSelector } from "react-redux";
 import { uploadDocs, removeDocs } from "../../utils/uploadDocs";
 import { deleteDoc } from "../../Api/documentAPI";
+import { useLocation } from "react-router-dom";
 
 function FormPost(props) {
   const { onClose, isEdit, post } = props;
+
   const [content, setContent] = useState("");
   const [oldDocs, setOldDocs] = useState([]);
   const [scope, setScope] = useState(false);
@@ -20,6 +22,8 @@ function FormPost(props) {
   const { followingCourses, managedCourses, role } = useSelector((state) => state.auth.user);
 
   const dispatch = useDispatch();
+  const location = useLocation()
+
   const handleSelectedFile = (e) => {
     if (!e.target.files) return;
     setDocs([...docs, ...e.target.files]);
@@ -59,9 +63,17 @@ function FormPost(props) {
       }
       values.docs = arr;
       values.content = content;
-
+      
       if (isEdit) {
-        const { message } = await editPost(values, dispatch, post._id);
+        let position;
+        if (location.pathname.includes("/courses")) {
+          position = "courses";
+        } else if (location.pathname.includes("/profile")) {
+          position = "profile";
+        } else {
+          position = "home";
+        }
+        const { message } = await editPost(values, dispatch, post._id, position);
         if (message === "successful!") {
           setLoading(false);
           onClose();
@@ -77,7 +89,6 @@ function FormPost(props) {
   });
   useEffect(() => {
     if (isEdit) {
-      console.log(post);
       setValues({
         courseId: post?.course?._id,
         title: post?.title,
@@ -206,7 +217,7 @@ function FormPost(props) {
           <QuillEditor content={content || ""} handleChangeQuill={handleChangeQuill} />
         </FormControl>
         <FormControl className="mt-4">
-          <FormLabel htmlFor="doc" className="cursor-pointer">
+          <FormLabel htmlFor="docnek" className="cursor-pointer">
             <div className="w-[101.5%] border-dashed border-2 border-gray-400 py-12 flex flex-col justify-center items-center">
               <p className="mb-3 font-semibold text-gray-900 flex flex-wrap justify-center">
                 <span>Kéo và thả tập tin </span>&nbsp;
@@ -215,7 +226,6 @@ function FormPost(props) {
               <span className="mt-2 rounded-sm px-3 py-1 bg-gray-200 hover:bg-gray-300">Đăng tải tệp</span>
             </div>
           </FormLabel>
-
           {docs.length > 0 ? (
             <div>
               <span className="text-sm font-bold">{docs.length} Tài liệu</span>
@@ -240,7 +250,7 @@ function FormPost(props) {
             </div>
           ) : null}
 
-          <Input hidden={true} id="doc" type="file" accept="*" onChange={handleSelectedFile} name="docs" multiple />
+          <Input hidden={true} id="docnek" type="file" accept="*" onChange={handleSelectedFile} name="docs" multiple />
         </FormControl>
         {oldDocs && oldDocs.length > 0 ? (
           <div>
@@ -266,7 +276,7 @@ function FormPost(props) {
             </ul>
           </div>
         ) : null}
-        <Button colorScheme="blue" className="mt-4 mr-3" type="submit" isLoading={loading}>
+        <Button type="submit" isLoading={loading} colorScheme="blue" className="mt-4 mr-3">
           Lưu
         </Button>
         <Button className="mt-4" onClick={onClose}>

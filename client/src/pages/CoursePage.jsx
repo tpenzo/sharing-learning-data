@@ -28,7 +28,6 @@ export default function CoursePage() {
     getCourseAPI(idCourse).then((course) => {
       setCourse(course);
       dispatch(selectCourse(idCourse));
-      console.log(selectedCourse);
     });
   }, [idCourse]);
 

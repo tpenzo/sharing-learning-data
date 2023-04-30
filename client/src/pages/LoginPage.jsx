@@ -120,6 +120,7 @@ function LoginPage() {
                   name="password"
                   id="password"
                   placeholder={isShowPassWord ? "Mật khẩu" : "•••••••••"}
+                  autoComplete=""
                   value={formik.values.password}
                   onChange={formik.handleChange}
                 />

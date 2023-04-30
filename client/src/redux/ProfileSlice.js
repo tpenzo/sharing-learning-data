@@ -69,6 +69,15 @@ export const profileSlice = createSlice({
          state.posts = state.posts.filter((item) => item._id !== actions.payload);
       },
 
+      saveEditPostsProfile: (state, actions) => {
+         state.posts = state.posts.map((post) => {
+            if (post._id === actions.payload.postId) {
+               return actions.payload.post;
+            }
+            return post;
+         });
+      },
+
       resetProfileSlice: () => initialState,
    },
 });
@@ -85,6 +94,7 @@ export const {
    addBookmarkProfile,
    removeBookmarkProfile,
    removePostProfile,
+   saveEditPostsProfile,
 } = profileSlice.actions;
 
 export default profileSlice.reducer;

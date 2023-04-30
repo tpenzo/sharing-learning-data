@@ -78,6 +78,14 @@ function PostItem({ dataItem, funcLikePost, funcUnLikePost, funcBookmarkPost, fu
 
   return (
     <div className="w-full flex flex-col bg-white pb-4 pt-1 px-5 rounded-lg mb-5 shadow-sm h-auto">
+      {
+          (location.pathname.includes("/profile") && dataItem.status === "pending") && 
+            <div className="mt-3">
+              <span className="inline-flex items-center rounded-md border-2 border-blue-200 bg-blue-200 px-2 py-1 text-sm font-semibold text-blue-600 shadow-sm">
+                Đang chờ duyệt
+              </span>
+            </div>
+        }
       <div className="flex items-center gap-4 justify-between mt-5 flex-wrap-reverse">
         <div className="flex items-center gap-4">
           <Link to={`/profile/${dataItem?.author?._id}`}>
@@ -210,8 +218,8 @@ function PostItem({ dataItem, funcLikePost, funcUnLikePost, funcBookmarkPost, fu
               )}
             </div>
           </div>
-        ) : user?.role !== "student" && dataItem.status === "pending" ? (
-          <div className="flex gap-2 mt-4">
+        ) : user?.role !== "student" && dataItem.status === "pending" && !location.pathname.includes("/profile") ? (
+           <div className="flex gap-2 mt-4">
             <Button
               colorScheme="blue"
               variant="solid"
@@ -232,6 +240,8 @@ function PostItem({ dataItem, funcLikePost, funcUnLikePost, funcBookmarkPost, fu
             </Button>
           </div>
         ) : null}
+
+        
 
         {dataItem?.docs?.length > 0 && (
           <Link to={`/post/${dataItem?._id}`}>
