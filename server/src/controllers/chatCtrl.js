@@ -16,13 +16,15 @@ class ChatController {
             }
             // Find chat
             let isChat = await ChatModel.find({
-                isGroupChat: false, 
-                $and: [
-                    { participant: { $elemMatch: { $eq: req.userLogin._id } } },
-                    { participant: { $elemMatch: { $eq: userId } } }
-                ]
-            })
-                .populate('participant', 'fullName urlAvatar teacherCode studentCode')
+               isGroupChat: false,
+               $and: [
+                  { participant: { $elemMatch: { $eq: req.userLogin._id } } },
+                  { participant: { $elemMatch: { $eq: userId } } },
+               ],
+            }).populate(
+               'participant',
+               'fullName urlAvatar teacherCode studentCode email phoneNumber address role'
+            );
             if (isChat.length > 0) {
                 return res.status(200).json({message: 'successful', data: isChat[0]});
             }
@@ -33,9 +35,10 @@ class ChatController {
                 participant: [req.userLogin._id, userId],
             };
             const newChat = await ChatModel.create(chatData)
-            const fullChat = await ChatModel
-                .findOne({ _id: newChat._id })
-                .populate('participant', 'fullName urlAvatar teacherCode studentCode')
+            const fullChat = await ChatModel.findOne({ _id: newChat._id }).populate(
+               'participant',
+               'fullName urlAvatar teacherCode studentCode email phoneNumber address role'
+            );
             return res.status(200).json({message: 'successful', data: fullChat});
         } catch (error) {
             return res.status(500).json({message: error.message})
@@ -48,13 +51,21 @@ class ChatController {
     //@access          verifyToken
     async fetchChats(req, res){
         try {
-            const chats = await ChatModel.find({participant: { $elemMatch: { $eq:req.userLogin._id } }})
-                .populate('participant admin', 'fullName urlAvatar teacherCode studentCode')
-                .populate({path: 'lastestMessage', populate: {
-                    path: "sender",
-                    select: "email fullName urlAvatar",
-                }})
-                .sort({ updatedAt: -1 })
+            const chats = await ChatModel.find({
+               participant: { $elemMatch: { $eq: req.userLogin._id } },
+            })
+               .populate(
+                  'participant admin',
+                  'fullName urlAvatar teacherCode studentCode email phoneNumber address role'
+               )
+               .populate({
+                  path: 'lastestMessage',
+                  populate: {
+                     path: 'sender',
+                     select: 'email fullName urlAvatar',
+                  },
+               })
+               .sort({ updatedAt: -1 });
             return res.status(200).json({message: 'successful', data: chats})
         } catch (error) {
             return res.status(500).json({message: error.message})
@@ -83,8 +94,12 @@ class ChatController {
 				admin: req.body.adminId,
 			});
 			const newGroupChat = await ChatModel.create(groupChat)
-			const fullGroupChat = await ChatModel.findOne({ _id: newGroupChat._id })
-      			.populate('participant admin', 'fullName urlAvatar teacherCode studentCode')
+			const fullGroupChat = await ChatModel.findOne({
+            _id: newGroupChat._id,
+         }).populate(
+            'participant admin',
+            'fullName urlAvatar teacherCode studentCode email phoneNumber address role'
+         );
 			return res.status(200).json({message: 'successful', data: fullGroupChat})
        } catch (error) {
             return res.status(500).json({message: error.message})
@@ -111,10 +126,13 @@ class ChatController {
                 return res.status(404).json({message: "This user ID has joined the chat group"})
             }
             const added = await ChatModel.findByIdAndUpdate(
-                req.body.chatId,
-                { $push: { participant: req.body.userId }}, { new: true}
-            )
-                .populate('participant admin', 'fullName urlAvatar teacherCode studentCode')
+               req.body.chatId,
+               { $push: { participant: req.body.userId } },
+               { new: true }
+            ).populate(
+               'participant admin',
+               'fullName urlAvatar teacherCode studentCode email phoneNumber address role'
+            );
             if (!added) {
                 res.status(404).json({message:  "Chat Not Found"})
             } else {
@@ -145,10 +163,13 @@ class ChatController {
                 return res.status(404).json({message: "This user ID has been removed or is not in the group chat"})
             }
             const added = await ChatModel.findByIdAndUpdate(
-                req.body.chatId,
-                { $pull: { participant: req.body.userId }}, { new: true}
-            )
-               .populate('participant admin', 'fullName urlAvatar teacherCode studentCode')
+               req.body.chatId,
+               { $pull: { participant: req.body.userId } },
+               { new: true }
+            ).populate(
+               'participant admin',
+               'fullName urlAvatar teacherCode studentCode email phoneNumber address role'
+            );
             if (!added) {
                 res.status(404).json({message:  "Chat Not Found"})
             } else {
