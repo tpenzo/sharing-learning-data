@@ -62,7 +62,7 @@ export default function HomePage() {
         </div>
         <div className="basis-3/5 max-w-[56%] px-3 overflow-y-auto">
           {user.role === "teacher" && (
-            <div className="flex justify-between bg-inherit my-3 sticky top-3">
+            <div className="flex justify-between bg-inherit my-3 sticky top-0 z-20">
               <span
                 id="posted"
                 onClick={handleChangeTab}

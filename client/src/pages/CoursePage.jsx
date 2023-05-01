@@ -59,7 +59,7 @@ export default function CoursePage() {
 
   const updateStatus = async (postId, status) => {
     await updateStatusPost(dispatch, postId, { status });
-    setTab("posted");
+    setTab("post");
   };
   return (
     <div className="container mx-auto h-screen items-center self-center flex flex-col">
@@ -72,7 +72,7 @@ export default function CoursePage() {
         </div>
 
         <div className="basis-3/5 max-w-[56%] overflow-hidden">
-          <div className="flex justify-between bg-inherit my-3 sticky top-3">
+          <div className="flex justify-between bg-inherit my-3 sticky top-3 z-20">
             <span
               id="post"
               onClick={handleChangeTab}

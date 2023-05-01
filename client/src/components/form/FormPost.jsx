@@ -22,7 +22,7 @@ function FormPost(props) {
   const { followingCourses, managedCourses, role } = useSelector((state) => state.auth.user);
 
   const dispatch = useDispatch();
-  const location = useLocation()
+  const location = useLocation();
 
   const handleSelectedFile = (e) => {
     if (!e.target.files) return;
@@ -63,7 +63,7 @@ function FormPost(props) {
       }
       values.docs = arr;
       values.content = content;
-      
+
       if (isEdit) {
         let position;
         if (location.pathname.includes("/courses")) {
@@ -74,6 +74,7 @@ function FormPost(props) {
           position = "home";
         }
         const { message } = await editPost(values, dispatch, post._id, position);
+        console.log(message);
         if (message === "successful!") {
           setLoading(false);
           onClose();
@@ -104,7 +105,7 @@ function FormPost(props) {
     }
   }, [post]);
   return (
-    <>
+    <div>
       <form onSubmit={handleSubmit}>
         <div className="flex gap-10">
           <FormControl className="mt-4">
@@ -276,14 +277,14 @@ function FormPost(props) {
             </ul>
           </div>
         ) : null}
-        <Button type="submit" isLoading={loading} colorScheme="blue" className="mt-4 mr-3">
+        <Button type="submit" isLoading={loading} colorScheme="blue" className=" mt-4 mr-3">
           Lưu
         </Button>
         <Button className="mt-4" onClick={onClose}>
           Hủy
         </Button>
       </form>
-    </>
+    </div>
   );
 }
 

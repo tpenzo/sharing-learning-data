@@ -22,7 +22,7 @@ function ListOfUser(props) {
               userList.length > 0 &&
               userList.map((user) => (
                 <PopularUserInfo
-                  key={user._id}
+                  key={`u${user?._id}`}
                   user={idCourse ? user : user.author}
                   numPosts={idCourse ? undefined : user.numPosts ? user.numPosts : "0"}
                   numLikes={idCourse ? undefined : user.numLikes ? user.numLikes : "0"}
