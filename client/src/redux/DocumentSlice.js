@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    docs: [],
-}
+  docs: [],
+};
 
 export const DocumentSlice = createSlice({
   name: "document",
@@ -11,7 +11,7 @@ export const DocumentSlice = createSlice({
     setAllDocument: (state, action) => {
       state.docs = action.payload.data;
     },
-    resetDocumentSlice: () => initialState
+    resetDocumentSlice: () => initialState,
   },
 });
 

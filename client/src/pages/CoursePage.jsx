@@ -10,18 +10,24 @@ import { useDispatch, useSelector } from "react-redux";
 import { resetSelectCourse, selectCourse } from "../redux/AllCoursesSlice";
 import { getCourseDocList } from "../Api/documentAPI";
 import moment from "moment";
+import ModalInstance from "../components/modal/ModalInstance";
+import PreviewFile from "../components/post/PreviewFile";
+import { useDisclosure } from "@chakra-ui/react";
 export default function CoursePage() {
   const [course, setCourse] = useState({});
   const { selectedCourse } = useSelector((state) => state.allCoursesList);
   const [tab, setTab] = useState("post");
+  const [file, setFile] = useState(null);
   const { idCourse } = useParams();
   const { postCourseList } = useSelector((state) => state.post);
   const { user } = useSelector((state) => state.auth);
-  const { docCourseList } = useSelector((state) => state.document.docs);
+  const docs = useSelector((state) => state.document.docs);
   const dispatch = useDispatch();
   const handleChangeTab = (e) => {
     setTab(e.target.id);
   };
+  // Modal
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   //get course info
   useEffect(() => {
@@ -47,6 +53,12 @@ export default function CoursePage() {
     };
     tab === "doc" ? fetchDocList() : fetchPostList();
   }, [idCourse, tab]);
+
+  // Handle Preview
+  const handlePreview = (url) => {
+    setFile(url);
+    onOpen();
+  };
 
   // Call API and update store HomePage
   const likePostHome = async (postId, userId) => {
@@ -133,17 +145,30 @@ export default function CoursePage() {
             </div>
           ) : (
             <div className="post-list px-3 h-[90%] overflow-y-auto">
-              {docCourseList && docCourseList.length > 0 ? (
-                docCourseList.map((docItem) => {
+              {docs && docs.length > 0 ? (
+                docs.map((docItem) => {
                   return (
-                    <div className="flex items-center justify-between">
-                      <p className="flex items-center gap-4">
+                    <div className="flex items-center justify-between bg-gray-200 mt-4 rounded p-2">
+                      <p
+                        className="flex items-center gap-2 w-2/3 cursor-pointer"
+                        onClick={() => handlePreview(docItem.urlDoc)}
+                      >
                         <span>
-                          <box-icon type="solid" name="file"></box-icon>
+                          <box-icon type="solid" name="file" size="md"></box-icon>
                         </span>
-                        <span>{docItem.title}</span>
+                        <span className="text-sm font-semibold truncate" title={docItem.name}>
+                          {docItem.name}
+                        </span>
                       </p>
-                      <span>{moment(docItem.createdAt).fromNow()}</span>
+                      <span className="text-sm ml-auto">{moment(docItem.createdAt).fromNow()}</span>
+                      <div>
+                        <ModalInstance
+                          isOpen={isOpen}
+                          onClose={onClose}
+                          modalBody={<PreviewFile file={file} onClose={onClose} />}
+                          modalName={"Xem trước"}
+                        />
+                      </div>
                     </div>
                   );
                 })
