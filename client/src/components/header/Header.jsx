@@ -134,6 +134,15 @@ function Header() {
                 </Link>
               </>
             )}
+            {
+              (idCourse && auth?.user.role==="teacher") &&
+              <Link to={`/courses/${idCourse}/manage`}>
+                <li className="p-2 font-semibold hover:bg-bold-gray flex items-center justify-start cursor-pointer">
+                <box-icon name='book-content'></box-icon>
+                  <span className="ml-2">Quản lý nhóm học</span>
+                </li>
+              </Link>
+            }
 
             <li
               className="p-2 font-semibold hover:bg-bold-gray flex items-center justify-start cursor-pointer"
