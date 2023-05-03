@@ -211,7 +211,7 @@ class postController {
 
   async editPost(req, res) {
     const postId = req.params.postId;
-    const { title, content, description, courseId, docs, tag } = req.body;
+    const { title, content, description, courseId, docs, tag, oldDocs } = req.body;
     const { _id, role } = req.userLogin;
     try {
       const refDocs = [];
@@ -232,6 +232,7 @@ class postController {
           refDocs.push(newDocument);
         }
       }
+      console.log("test", docs, "old", oldDocs, "ref", refDocs);
       let status = role === "student" ? "pending" : "posted";
       const updatedPost = {
         author: _id,
@@ -239,7 +240,7 @@ class postController {
         content,
         course: courseId || null,
         status,
-        docs: refDocs,
+        docs: refDocs.concat(oldDocs),
         tag: tag || null,
       };
       await postModel.findOneAndUpdate({ _id: postId }, updatedPost, {
@@ -249,7 +250,8 @@ class postController {
       const post = await postModel
         .findOne({ _id: postId })
         .populate("author", "fullName urlAvatar teacherCode studentCode")
-        .populate("docs");
+        .populate("docs")
+        .populate("course");
       res.status(200).json({ message: "successful!", data: post });
     } catch (error) {
       return res.status(500).json({ message: error.message });

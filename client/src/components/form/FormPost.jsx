@@ -44,7 +44,7 @@ function FormPost(props) {
       title: "",
       description: "",
       courseId: "",
-      tag: "Riêng tư",
+      tag: "",
     },
     validationSchema: Yup.object().shape({
       title: Yup.string()
@@ -65,6 +65,7 @@ function FormPost(props) {
       values.content = content;
 
       if (isEdit) {
+        values.oldDocs = oldDocs;
         let position;
         if (location.pathname.includes("/courses")) {
           position = "courses";

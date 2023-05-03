@@ -38,8 +38,6 @@ export default function ViewPostPage() {
     }
   };
 
-
-
   const handleBookmarkPost = () => {
     setBookmarked(!bookmarked);
     //api
@@ -96,9 +94,7 @@ export default function ViewPostPage() {
                   name="heart"
                 ></box-icon>
               </span>
-              <span className="text-black">
-                {post?.likes?.length > 0 ? post?.likes?.length : null}
-              </span>
+              <span className="text-black">{post?.likes?.length > 0 ? post?.likes?.length : null}</span>
             </div>
             <div
               onClick={handleScrollComment}
@@ -107,7 +103,7 @@ export default function ViewPostPage() {
               <box-icon size="md" name="message-square-dots"></box-icon>
               <span>{countCmt(comments)}</span>
             </div>
-            <div
+            {/* <div
               onClick={handleBookmarkPost}
               className="like flex flex-col items-center justify-center rounded-lg py-2 px-4 cursor-pointer"
             >
@@ -117,7 +113,7 @@ export default function ViewPostPage() {
                 name="bookmark"
               ></box-icon>
               <span>149</span>
-            </div>
+            </div> */}
             <div
               size="md"
               className="like flex flex-col items-center justify-center hover:bg-gray-300 rounded-full py-2 px-2 cursor-pointer"
@@ -132,15 +128,9 @@ export default function ViewPostPage() {
         <div className=" basis-4/6 h-full max-h-full sticky self-start bg-white rounded-lg z-1 overflow-y-auto">
           <div className="h-auto scroll-smooth">
             <div id="post" className="post-content h-auto">
-              <h1 className="text-center font-bold text-2xl my-4">
-                {post?.title}
-              </h1>
+              <h1 className="text-center font-bold text-2xl my-4">{post?.title}</h1>
               <div className="px-6 text-justify break-words overflow-x-hidden">
-                <div className="pb-3">
-                {
-                  post?.content && ( parse(post ? String(post?.content) : " "))
-                }
-                </div>
+                <div className="pb-3">{post?.content && parse(post ? String(post?.content) : " ")}</div>
                 <hr />
                 <div className="py-6">
                   <h4 className="font-bold">Tệp đính kèm</h4>
@@ -156,23 +146,15 @@ export default function ViewPostPage() {
                             }}
                             title={doc.title}
                           >
-                            <span
-                              className="font-bold text-sm text-gray-400"
-                              title={doc.title}
-                            >
-                              <box-icon
-                                name={renderDocType("file")}
-                                type={"solid"}
-                              ></box-icon>
+                            <span className="font-bold text-sm text-gray-400" title={doc.title}>
+                              <box-icon name={renderDocType("file")} type={"solid"}></box-icon>
                             </span>
                             <span>{doc.name}</span>
                           </li>
                         );
                       })
                     ) : (
-                      <span className="font-bold text-sm text-gray-400">
-                        Không có tệp nào
-                      </span>
+                      <span className="font-bold text-sm text-gray-400">Không có tệp nào</span>
                     )}
                   </ul>
                   <div>
