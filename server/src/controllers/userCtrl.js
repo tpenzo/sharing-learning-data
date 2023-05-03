@@ -166,7 +166,6 @@ class UserController {
          const teacherList = await UserModel.find({ role: 'teacher' })
             .skip(perPage * page - perPage)
             .limit(perPage)
-            .sort({ createdAt: -1 });
          return res
             .status(200)
             .json({ message: 'successful', data: { teacherList, teacherListCount } });
@@ -200,7 +199,6 @@ class UserController {
          const studentList = await UserModel.find({ role: 'student' })
             .skip(perPage * page - perPage)
             .limit(perPage)
-            .sort({ createdAt: -1 });
          return res
             .status(200)
             .json({ message: 'successful', data: { studentList, studentListCount } });
@@ -221,7 +219,6 @@ class UserController {
          const ministryList = await UserModel.find({ role: 'ministry' })
             .skip(perPage * page - perPage)
             .limit(perPage)
-            .sort({ createdAt: -1 });
          return res
             .status(200)
             .json({ message: 'successful', data: { ministryList, ministryListCount } });

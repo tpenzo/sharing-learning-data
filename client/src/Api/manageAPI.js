@@ -17,6 +17,7 @@ export const appendStudentListAccountAPI = async (dispatch, page) => {
     try {
         const response = await axiosClient.get(`/api/user/student/all/${page}`);
         if(response.data.studentList.length>0){
+            console.log(response.data.studentList);
             await dispatch(appendStudentList(response.data.studentList))
         } else {
             showToast("Không còn sinh viên nào nữa ok", "warning")
