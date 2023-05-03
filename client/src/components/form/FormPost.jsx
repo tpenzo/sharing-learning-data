@@ -39,7 +39,7 @@ function FormPost(props) {
     await deleteDoc(doc._id);
     setOldDocs(oldDocs.filter((doc, i) => i !== index));
   };
-  const { values, errors, handleChange, handleBlur, handleSubmit, touched, setValues } = useFormik({
+  const { values, errors, handleChange, handleBlur, handleSubmit, touched, setValues, submitForm } = useFormik({
     initialValues: {
       title: "",
       description: "",
@@ -277,9 +277,11 @@ function FormPost(props) {
             </ul>
           </div>
         ) : null}
+
         <Button type="submit" isLoading={loading} colorScheme="blue" className=" mt-4 mr-3">
-          Lưu
+          {isEdit ? "Lưu" : "Đăng bài"}
         </Button>
+
         <Button className="mt-4" onClick={onClose}>
           Hủy
         </Button>
