@@ -44,7 +44,7 @@ function FormPost(props) {
       title: "",
       description: "",
       courseId: "",
-      tag: "",
+      tag: "Riêng tư",
     },
     validationSchema: Yup.object().shape({
       title: Yup.string()
@@ -94,7 +94,7 @@ function FormPost(props) {
         courseId: post?.course?._id,
         title: post?.title,
         description: post?.description,
-        tag: post?.tag,
+        tag: post?.tag || "Riêng tư",
       });
       setScope(post?.course?._id ? true : false);
       setContent(post?.content);
