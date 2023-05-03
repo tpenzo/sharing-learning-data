@@ -61,16 +61,17 @@ function ManageAccount() {
   useEffect(() => {
     setVersion(version);
   }, [version]);
-  //get first data
-  useEffect(() => {
-    getStudentListAccountAPI(dispatch).then((response)=>{
-      setAccounts(response);
-    });
-    getTeacherListAccountAPI(dispatch);
-    getMinistryListAccountAPI(dispatch);
+  
+  // //get first data
+  // useEffect(() => {
+  //   getStudentListAccountAPI(dispatch).then((response)=>{
+  //     setAccounts(response);
+  //   });
+  //   getTeacherListAccountAPI(dispatch);
+  //   getMinistryListAccountAPI(dispatch);
     
-    setFilterResultList(accounts);
-  }, []);
+  //   setFilterResultList(accounts);
+  // }, []);
 
   useEffect(() => {
     setFilterResultList(accounts);
