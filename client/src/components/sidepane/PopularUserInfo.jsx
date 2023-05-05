@@ -17,10 +17,12 @@ function PopularUserInfo(props) {
         {/* <div className="inline-block border-[1px] border-gray-300 rounded-[100%] mt-1 text-center ">
           <img className="w-8 h-8 rounded-full" src={user.urlAvatar} alt="Rounded avatar"/>
       </div> */}
+        <div className="">
         <Wrap>
           <Avatar size="md" src={user?.urlAvatar}></Avatar>
         </Wrap>
-        <div className="max-w-[75%] ml-3">
+        </div>
+        <div title={user?.fullName ? user?.fullName : "Tên người dùng"} className="max-w-[75%] ml-3">
           <span className="text-sm font-semibold text-gray-700 whitespace-nowrap overflow-ellipsis overflow-hidden">
             {user?.fullName}
           </span>
