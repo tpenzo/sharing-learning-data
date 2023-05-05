@@ -63,7 +63,7 @@ console.log(selectedChat?.participant[1]?._id === auth.user._id)
                     </Box>
                   </AccordionButton>
                 </h2>
-                <AccordionPanel className="overflow-y-auto">
+                <AccordionPanel className="overflow-y-auto h-44 2xl:h-72">
                   <ul>
                     {
                         selectedChat?.participant.map(user => 
