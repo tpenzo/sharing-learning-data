@@ -10,8 +10,7 @@ function ChatSidePane() {
   const { chat, auth } = useSelector(state => state)
   const { selectedChat } = chat
 
-  console.log(selectedChat)
-
+console.log(selectedChat?.participant[1]?._id === auth.user._id)
   return (
     <div className="flex flex-col justify-center p-3">
       <div className="font-semibold text-base mb-4 pl-2 text-center">
@@ -77,7 +76,7 @@ function ChatSidePane() {
                                 </Wrap>
                                 <div className="max-w-[75%] ml-3">
                                     <span className="text-sm font-semibold text-gray-700 whitespace-nowrap overflow-ellipsis overflow-hidden">
-                                    {user?.fullName}
+                                      {user?.fullName}
                                     </span>
                                 </div>
                             </li>
@@ -90,23 +89,20 @@ function ChatSidePane() {
           </div>
         </>
        ) : (
-		<div className="mt-1 info-description relative max-w-full text-center bg-white/80 rounded-xl shadow-md px-4 py-2">
+		      <div className="mt-1 info-description relative max-w-full text-center bg-white/80 rounded-xl shadow-md px-4 py-2">
             <span className="text-xs font-medium flex items-center text-gray-700 mt-2 whitespace-nowrap overflow-ellipsis overflow-hidden">
             	<box-icon color="#4b5563" name="envelope"></box-icon>
-				<span className="ml-3">{selectedChat?.participant[1]?.email}</span>
+				        <span className="ml-3">
+                  {selectedChat?.participant[0]?._id === auth.user._id ? selectedChat?.participant[1]?.email : selectedChat?.participant[0]?.email}
+                </span>
             </span>
             <span className="text-xs flex font-medium items-center text-gray-700 mt-2 whitespace-nowrap overflow-ellipsis overflow-hidden">
             	<box-icon color="#4b5563" name="phone"></box-icon>
-				<span className="ml-3">{selectedChat?.participant[1]?.phoneNumber}</span>
+				        <span className="ml-3">
+                  {selectedChat?.participant[0]?._id === auth.user._id ? selectedChat?.participant[1]?.phoneNumber : selectedChat?.participant[0]?.phoneNumber}
+                </span>
             </span>
-			<span className="text-xs flex font-medium items-center text-gray-700 mt-2 whitespace-nowrap overflow-ellipsis overflow-hidden">
-            	<box-icon name='buildings' ></box-icon>
-				<span className="ml-3">{selectedChat?.participant[1]?.address}</span>
-            </span>
-            <div className="py-1 absolute text-xs shadow-sm -top-2 text-center left-1/2 -translate-x-1/2 rounded-lg w-3/5 max-w-[75%] bg-cyan-50 text-cyan-300">
-               {selectedChat?.participant[1]?.role === 'teacher' ? "Giảng viên": "Sinh viên"}
-            </div>
-      	</div>
+          </div>
 	   )
     }
     </div>

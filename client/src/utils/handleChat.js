@@ -19,3 +19,4 @@ export const showCode = (chat, idUser) => {
     const user = chat?.participant.find(user => user._id !== idUser)
     return user?.teacherCode || user?.studentCode
 }
+
