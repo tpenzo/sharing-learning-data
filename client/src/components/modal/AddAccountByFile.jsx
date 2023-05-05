@@ -70,11 +70,8 @@ function ModalAddAccountByFile(props) {
         major: account.major,
         class: account.class,
       };
-      console.log(submitData, account);
       return { ...submitData, ...specificStudentData };
     } else if (account.role === "teacher" || account.role === "ministry") {
-      let submited = {...submitData, teacherCode: account.teacherCode.toUpperCase()}
-      console.log(submited, account);
       return { ...submitData, teacherCode: account.teacherCode.toUpperCase() };
     }
   };
