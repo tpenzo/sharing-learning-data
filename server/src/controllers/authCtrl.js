@@ -176,15 +176,16 @@ class AuthControlller {
     //check account is existed
     if (req.body?.accounts.length>0) {
       for await (const account of req.body.accounts) {
-        const accountInfo = await UserModel.findOne({ email: account.email })
+        if(account?.email){
+          const accountInfo = await UserModel.findOne({ email: account?.email })
           if (accountInfo) {
             rejectAccounts.push(account);
           } else {
              approveAccounts.push(account);
           }
+        }
         };
     };
-
        try {
         if (approveAccounts) {
           const newAccountList = await UserModel.create(approveAccounts);

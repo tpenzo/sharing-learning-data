@@ -62,6 +62,7 @@ function ModalAddAccountByFile(props) {
       gender: account.gender === "nam" ? "male" : "female",
       phoneNumber: account.phoneNumber,
       address: account.address,
+      role: account.role,
     };
     if (account.role === "student") {
       const specificStudentData = {
@@ -69,8 +70,11 @@ function ModalAddAccountByFile(props) {
         major: account.major,
         class: account.class,
       };
+      console.log(submitData, account);
       return { ...submitData, ...specificStudentData };
-    } else {
+    } else if (account.role === "teacher" || account.role === "ministry") {
+      let submited = {...submitData, teacherCode: account.teacherCode.toUpperCase()}
+      console.log(submited, account);
       return { ...submitData, teacherCode: account.teacherCode.toUpperCase() };
     }
   };
