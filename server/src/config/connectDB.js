@@ -11,6 +11,7 @@ async function connectDB() {
     try {
         mongoose.set('strictQuery', false)
         await mongoose.connect(uri, options)
+        // await mongoose.connect('mongodb://127.0.0.1:27017/ctushare');
         console.log('==> Connected to mongoDB')
     } catch (error) {
         console.log("==> Connection failed to database with error: " + error.message)
